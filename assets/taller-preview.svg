@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1220 760" role="img" aria-label="Vista previa de TALLER NORTE, proyecto ficticio">
+<defs><radialGradient id="g"><stop offset="0" stop-color="#ddf790" stop-opacity=".18"/><stop offset="1" stop-color="#1b2c34"/></radialGradient><pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#ddf790" stroke-opacity=".055"/></pattern></defs>
+<rect width="1220" height="760" fill="#1b2c34"/><rect width="1220" height="760" fill="url(#g)"/><rect width="1220" height="760" fill="url(#grid)"/>
+<circle cx="965" cy="364" r="255" fill="none" stroke="#ddf790" stroke-opacity=".48" stroke-width="2"/><circle cx="965" cy="364" r="192" fill="none" stroke="#ddf790" stroke-opacity=".5"/><circle cx="965" cy="364" r="118" fill="none" stroke="#ddf790" stroke-opacity=".55"/>
+<text x="955" y="452" text-anchor="middle" font-family="Georgia,serif" font-size="205" fill="#ddf790" opacity=".84">◈</text>
+<text x="80" y="110" font-family="Arial,sans-serif" font-weight="700" font-size="19" letter-spacing="3" fill="#ddf790">ABEL LÓPEZ GARCÍA · PORTFOLIO</text>
+<text x="78" y="333" font-family="Arial,sans-serif" font-size="73" font-weight="800" letter-spacing="-2" fill="#ddf790">TALLER NORTE</text>
+<text x="82" y="399" font-family="Arial,sans-serif" font-size="24" letter-spacing="2" fill="#ddf790">AUTOMOCIÓN · CONCEPTO</text>
+<rect x="80" y="497" width="245" height="76" rx="38" fill="none" stroke="#ddf790" stroke-opacity=".8" stroke-width="2"/>
+<text x="116" y="543" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#ddf790">ABRIR DEMO ↗</text>
+<text x="80" y="696" font-family="Arial,sans-serif" font-size="17" letter-spacing="2" fill="#ddf790">MARCA FICTICIA · PROTOTIPO INTERACTIVO</text></svg>
