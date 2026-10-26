@@ -1,4 +1,4 @@
-# AL Studio Digital — Manual de marca (V9)
+# AL Studio Digital — Manual de marca (V13 · azul)
 
 > Proyecto y portfolio personal de Abel López García. No es una marca o sociedad registrada verificada.
 
@@ -15,6 +15,7 @@
 - [Logo horizontal](assets/al-studio-logo.svg)
 - [Monograma / favicon](assets/al-studio-mark.svg)
 - [Hoja de estilos premium](assets/brand-v9.css)
+- [Correcciones de contraste y paleta azul V13](assets/blue-fix-v13.css)
 - [Animaciones accesibles](assets/brand-v9.js)
 
 ## Tipografía
@@ -27,11 +28,11 @@
 
 | Nombre | Hex | Aplicación |
 |---|---|---|
-| Verde noche | #0B1816 | Fondo principal |
-| Verde bosque | #10251D | Tarjetas y fondos |
-| Lima | #D9FF8D | Acción primaria y logotipo |
-| Marfil | #F9FFF4 | Texto principal |
-| Verde tenue | #B3C8B9 | Texto secundario |
+| Azul noche | #082653 | Fondo de contraste y logotipo |
+| Azul principal | #1379D4 | Marca, acciones y detalles |
+| Cian eléctrico | #2CCBE9 | Acentos y destacados |
+| Azul marino | #0A3772 | Secciones de color |
+| Hielo | #F3FAFF | Fondos claros y tarjetas |
 
 ## Comunicación
 
@@ -46,3 +47,7 @@ Tono cercano, claro y profesional. Evitar promesas de ventas, reseñas inventada
 - Preservar siempre los 15 archivos HTML de demostración en `demos/`.
 - Trabajar únicamente en este repositorio; no modificar otros proyectos.
 - Animaciones opcionales compatibles con `prefers-reduced-motion`.
+
+## Corrección V13
+
+Se ha renovado el logotipo vectorial, monograma y favicon en azules. Se han aclarado las zonas de ejemplos de la portada y se ha reparado un estado de animación de V10 que podía dejar un bloque visualmente vacío. La web mantiene páginas de demostración ficticia, sin atribuir trabajos reales a los negocios mencionados.
