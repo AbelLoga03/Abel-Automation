@@ -7,7 +7,7 @@
  document.title=d.name+" · Demostración ficticia";
  document.body.dataset.theme=d.theme;
  const set=(id,v)=>{if(el(id))el(id).textContent=v};
- set("brand-name",d.name);set("brand-mark",d.symbol);set("kicker",d.category);set("hero-title",d.title);set("hero-desc",d.desc);set("hero-symbol",d.symbol);set("sticker1",d.stickers[0]);set("sticker2",d.stickers[1]);set("offer-title",d.offerTitle);set("offer-desc",d.offerDesc);set("feature-tag",d.category.toUpperCase());set("banner-title",d.bannerTitle);
+ set("brand-name",d.name);set("brand-mark",d.symbol);set("kicker",d.category);const heroTitle=el("hero-title");if(heroTitle){const pieces=d.title.split(/<em>|<\/em>/);heroTitle.replaceChildren();if(pieces.length===3){heroTitle.append(document.createTextNode(pieces[0]));const emphasis=document.createElement("em");emphasis.textContent=pieces[1];heroTitle.append(emphasis,document.createTextNode(pieces[2]));}else heroTitle.textContent=d.title;}set("hero-desc",d.desc);set("hero-symbol",d.symbol);set("sticker1",d.stickers[0]);set("sticker2",d.stickers[1]);set("offer-title",d.offerTitle);set("offer-desc",d.offerDesc);set("feature-tag",d.category.toUpperCase());set("banner-title",d.bannerTitle);
  set("stat1",d.stats[0][0]);set("stat1-label",d.stats[0][1]);set("stat2",d.stats[1][0]);set("stat2-label",d.stats[1][1]);set("stat3",d.stats[2][0]);set("stat3-label",d.stats[2][1]);
  const list=el("products"),tags=["Todo",...new Set(d.items.map(x=>x.type))],filters=el("filters");let picked=[];
  function button(label,click,active=false){const b=document.createElement("button");b.type="button";b.textContent=label;b.setAttribute("aria-pressed",String(active));b.addEventListener("click",click);return b}
