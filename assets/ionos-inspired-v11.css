@@ -188,3 +188,26 @@ body:before{display:none!important}
 #contacto button,#contacto a.btn.primary{border-color:#006eae}
 footer.foot{background:#071f43!important;color:#bed8e9!important;padding:26px max(20px,calc((100vw - 1200px)/2))!important;width:100%;max-width:none}
 footer.foot span{color:#bed8e9}
+
+/* V12 · selector interactivo y acceso directo a landings comerciales */
+.v12-finder-section{padding:66px 0;background:linear-gradient(130deg,#eaf8fe,#f7fcfe);border-block:1px solid #d5e9f4;color:#0a2c54}
+.v12-finder-header{max-width:790px}.v12-finder-header h2{font:800 clamp(31px,4vw,52px)/1.12 'Space Grotesk',sans-serif;letter-spacing:-.05em;color:#092e60;margin:12px 0 16px}
+.v12-finder-header p{color:#60788b;max-width:740px;font-size:16px}
+.v12-finder-panel{display:grid;grid-template-columns:1fr .9fr;gap:21px;margin-top:28px;align-items:stretch}
+.v12-finder-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v12-finder-options button{display:flex;gap:12px;align-items:center;text-align:left;background:white;border:1px solid #c6dee9;border-radius:14px;padding:18px;font:800 14px 'DM Sans',sans-serif;color:#103961;transition:transform .2s,box-shadow .2s,border-color .2s}
+.v12-finder-options button:hover{transform:translateY(-3px);box-shadow:0 12px 27px #155c8f1a;border-color:#4ebcde}
+.v12-finder-options button[aria-pressed="true"]{border:2px solid #007cad;background:#edfaff;box-shadow:0 12px 28px #095d9430}
+.v12-finder-options button .v12-ico{display:grid;place-items:center;min-width:41px;height:41px;border-radius:12px;background:#e4f7fc;color:#0576a9;font-size:21px}
+.v12-finder-result{background:linear-gradient(135deg,#073a72,#08254c);color:white;border-radius:18px;padding:29px;box-shadow:0 20px 45px #0a497539;display:flex;flex-direction:column;justify-content:center;gap:11px}
+.v12-finder-result small{color:#89eafa;font-size:10px;letter-spacing:.17em;font-weight:900}
+.v12-finder-result h3{font:800 clamp(23px,2.3vw,32px)/1.14 'Space Grotesk',sans-serif;letter-spacing:-.045em;color:white;margin:0}
+.v12-finder-result p{font-size:14px;color:#d7eaf5;margin:0}
+.v12-finder-result .v12-tag{border:1px solid #8ccce885;color:#def5ff;background:#ffffff0c;border-radius:999px;padding:7px 12px;font-size:11px;align-self:flex-start;margin:4px 0 6px}
+.v12-finder-result a{align-self:flex-start;padding:12px 18px;border-radius:9px;background:#1ed4ee;color:#002d51;font-weight:900;font-size:12px}
+.ion-service-card .ion-card-link{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:900;color:#006ba5;font-size:12px}
+.ion-service-card .ion-card-link:hover{text-decoration:underline}
+.ion-compare-cta{display:inline-flex;align-items:center;gap:9px;margin-top:19px;color:#0074ad;font-weight:900;font-size:13px}
+.ion-compare-cta:hover{text-decoration:underline}
+@media(max-width:800px){.v12-finder-panel{grid-template-columns:1fr}.v12-finder-section{padding:43px 0}}
+@media(max-width:490px){.v12-finder-options{grid-template-columns:1fr}.v12-finder-result{padding:20px}}
