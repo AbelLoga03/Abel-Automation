@@ -1,0 +1,81 @@
+/* V13 · Corrección de la zona oscura y unificación en azul */
+/* La página combina CSS V9, V10, V11 y V12. Esta capa se carga al final
+   para corregir exclusivamente las zonas heredadas y evitar contrastes negros. */
+:root{
+  --al-primary:#1379D4;
+  --al-primary-hover:#0758A6;
+  --al-electric:#2CCBE9;
+  --al-ink:#082D5B;
+  --al-midnight:#082653;
+  --al-pale:#EDF7FF;
+  --al-text:#184569;
+}
+/* Asegurar que los bloques anteriores nunca quedan ocultos por una clase de animación
+   que no recibía el estado de entrada (V10). La animación ya no es necesaria para ver contenido. */
+.v10-enter,.v9-reveal{opacity:1!important;transform:none!important}
+.v10-enter.v10-visible,.v9-reveal.in{animation:v13-enter .65s cubic-bezier(.2,.65,.28,1) both}
+@keyframes v13-enter{from{filter:brightness(.97);transform:translateY(12px)}to{filter:brightness(1);transform:translateY(0)}}
+/* Zona de casos: antes casi negra, ahora clara con contraste real. */
+#casos{background:linear-gradient(145deg,#EDF7FF,#DFF0FE)!important;color:var(--al-ink)!important}
+#casos .v9-heading h2,#casos .v9-cases h3{color:#07366A!important}
+#casos .v9-heading p{color:#466781!important}
+#casos .v9-kicker{color:#0478BA!important}
+#casos .mini-v9-card{background:#fff!important;border:1px solid #C6DDEB!important;box-shadow:0 14px 34px #134D8314!important}
+#casos .mini-v9-card .content h3{color:#0C386C!important}
+#casos .mini-v9-card .content p{color:#526E83!important}
+#casos .mini-v9-card .content a{background:#0876C5!important;color:#fff!important}
+#casos .mini-v9-card .content a:hover{background:#04599C!important}
+/* El segundo bloque promocional V10 conserva su estilo, pero evita una gran tarjeta negra. */
+.v10-proof{background:linear-gradient(125deg,#0D4C8D,#0B3273)!important;border-color:#4CA0D5!important;color:white!important}
+.v10-proof h2{color:#fff!important}
+.v10-proof>div>p{color:#D9EEFF!important}
+.v10-proof .v10-eyebrow{color:#77E5FC!important}
+.v10-preview{background:#0E3971!important;border-color:#4699CD!important}
+.v10-preview h3{color:#78E6FF!important}
+.v10-preview p{color:#D3E7FA!important}
+.v10-preview .v10-bars i{background:linear-gradient(#7EEAFE,#177CBD)!important}
+.v10-proof .btn.primary{background:#28C9E8!important;color:#052B53!important;border-color:#28C9E8!important}
+/* Fondo azul sólido, no negro, en las secciones originalmente oscuras. */
+#marca{background:linear-gradient(135deg,#0D4281,#0A3170)!important;color:#F6FBFF!important}
+#marca .v9-heading h2{color:#F8FCFF!important}
+#marca .v9-heading p,#marca .v9-highlights small{color:#D6E9F7!important}
+#marca .v9-kicker{color:#7AEAFB!important}
+#marca .v9-highlights div{background:#14508B!important;border-color:#397AB0!important;color:#fff!important}
+#marca .v9-brand-panel{background:linear-gradient(135deg,#0E4586,#082653)!important;border-color:#4798CE!important}
+#marca .v9-brand-panel .v9-swatch:nth-child(1){background:#2CCBE9!important;color:#06305A!important}
+#marca .v9-brand-panel .v9-swatch:nth-child(2){background:#0A3772!important;color:#EAF9FF!important}
+#marca .v9-brand-panel .v9-swatch:nth-child(3){background:#F3FAFF!important;color:#0A3772!important}
+#sobre-mi{background:linear-gradient(115deg,#0E4B8C,#0A3474)!important;color:#fff!important}
+#sobre-mi h2,#sobre-mi p{color:#F5FAFF!important}
+#sobre-mi h2 span[style]{color:#80E5FC!important}
+#cordoba{background:linear-gradient(120deg,#0D4D8E,#0A3475)!important;color:#fff!important}
+#cordoba .sectionhead h2{color:#fff!important}
+#cordoba .eyebrow{color:#85E9FF!important}
+#cordoba .sectionhead p{color:#E0F2FC!important}
+#cordoba article{background:#164D87!important;border-color:#3F82B5!important}
+#cordoba article small{color:#86E9FB!important}
+#cordoba article p{color:#D4E9F7!important}
+#cordoba article a{background:#27CAE6!important;color:#063A6D!important}
+/* La sección de herramientas es clara: evitar títulos lima sobre fondo blanco. */
+#herramientas{background:#F1F8FF!important}
+#herramientas .v10-heading span[style]{color:#087EC1!important}
+#herramientas .v10-card{background:#fff!important;border-color:#C9DEEF!important}
+#herramientas .v10-card h3{color:#0A376A!important}
+#herramientas .v10-card p{color:#55738D!important}
+#herramientas .v10-num{color:#087CB9!important}
+#herramientas .v10-card .v10-link{background:#0877BE!important;color:#fff!important}
+/* Gradientes claros junto a secciones con texto oscuro, sin afectar a los hero. */
+#v7-nuevas-demos{background:#F0F8FF!important;color:#082D5B!important}
+#v7-nuevas-demos>div>p{color:#537288!important}
+#v7-nuevas-demos article h3{color:#092D58!important}
+#v7-nuevas-demos article p{color:#526C84!important}
+#v7-nuevas-demos article a{background:#0876BE!important;color:#fff!important}
+/* Accentos y botones de marca, sin cambiar enlaces de terceros ni todos los botones. */
+.ion-brand strong,.v9-brand b,.ion-section-kicker{color:inherit}
+.ion-links .ion-nav-cta{background:#0877C7!important;color:#fff!important}
+.ion-links .ion-nav-cta:hover{background:#05599E!important}
+#proyectos .actionrow a,#proyectos .actionrow button{background:#1ABDE0!important;color:#08325D!important}
+#proyectos .filter.active,#proyectos .filter[aria-pressed="true"]{background:#31CDEA!important;color:#07325B!important}
+/* El logo se muestra nítido incluso en cabeceras blancas. */
+.ion-brand img,.logo img,.v9-brand img{filter:drop-shadow(0 5px 9px #0A488B22)}
+@media(prefers-reduced-motion:reduce){.v10-enter.v10-visible,.v9-reveal.in{animation:none!important}}
