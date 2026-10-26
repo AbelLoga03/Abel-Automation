@@ -1,5 +1,5 @@
 import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';
-const root=process.cwd();const must=['index.html','assets/brand-v9.css','assets/brand-v9.js','assets/brand-v10.css','assets/ionos-inspired-v11.css','assets/ionos-inspired-v11.js','assets/og-al-studio.png','robots.txt','sitemap.xml','herramientas/presupuestos.html','herramientas/automatizaciones.html','herramientas/crm.html','herramientas/marca.html','servicios/landing.css','servicios/landing.js','assets/selector-v12.js',...['web','catalogos','automatizaciones','comparar'].map(n=>'servicios/'+n+'.html')];
+const root=process.cwd();const must=['index.html','assets/brand-v9.css','assets/brand-v9.js','assets/brand-v10.css','assets/ionos-inspired-v11.css','assets/ionos-inspired-v11.js','assets/blue-fix-v13.css','assets/og-al-studio.png','robots.txt','sitemap.xml','herramientas/presupuestos.html','herramientas/automatizaciones.html','herramientas/crm.html','herramientas/marca.html','servicios/landing.css','servicios/landing.js','assets/selector-v12.js',...['web','catalogos','automatizaciones','comparar'].map(n=>'servicios/'+n+'.html')];
 const demoNames=['pasteleria','joyeria','taller','barberia','libreria','pizzeria','fruteria','floristeria','auto-mecanica-reco','peluqueria-r-munoz','taberna-lo-nuestro','cafeteria-rocio','mascotas','estetica','cafeteria'];
 for(const n of demoNames)must.push('demos/'+n+'.html');
 let failed=0;const check=(ok,msg)=>{console.log((ok?'OK  ':'FAIL  ')+msg);if(!ok)failed++};
@@ -31,4 +31,15 @@ check(demoAuto.includes('id="flow-start"')&&demoAuto.includes('data-flow="taller
 const compare=fs.readFileSync(path.join(root,'servicios/comparar.html'),'utf8');
 check(compare.includes('id="recommended-title"')&&compare.includes('data-need="productos"'),'Comparador y recomendador de plan');
 for(const src of ['assets/selector-v12.js','servicios/landing.js']){try{new vm.Script(fs.readFileSync(path.join(root,src),'utf8'),{filename:src});check(true,'JS V12 válido '+src)}catch(e){check(false,'JS V12 inválido '+src+': '+e.message)}}
+// V13: cobertura de identidad azul y de la sección que podía quedar invisible.
+const css13=fs.readFileSync(path.join(root,'assets/blue-fix-v13.css'),'utf8');
+const icon=fs.readFileSync(path.join(root,'assets/al-studio-mark.svg'),'utf8');
+const logo=fs.readFileSync(path.join(root,'assets/al-studio-logo.svg'),'utf8');
+const motion=fs.readFileSync(path.join(root,'assets/brand-v9.js'),'utf8');
+check(index.includes('href="assets/blue-fix-v13.css"'),'Corrección azul V13 cargada en portada');
+check(icon.includes('#1973DA')&&logo.includes('#1973DA')&&!icon.includes('#d9ff8d'),'Logo y favicon de marca en azul');
+check(css13.includes('.v10-enter,.v9-reveal{opacity:1!important;transform:none!important}'),'Bloques V9/V10 nunca invisibles sin JS');
+check(motion.includes('.v9-reveal, .v10-enter')&&motion.includes('v10-visible'),'Animación de V10 conectada');
+check(css13.includes('#casos{background:linear-gradient')&&css13.includes('#casos .mini-v9-card .content h3'),'Zona antigua oscura y títulos corregidos');
+check(index.includes('#2CCBE9 · CIAN')&&index.includes('#0A3772 · AZUL'),'Muestrario en azul actualizado');
 if(failed){console.error(failed+' comprobaciones fallidas');process.exit(1)}else console.log('Todas las pruebas básicas superadas');
