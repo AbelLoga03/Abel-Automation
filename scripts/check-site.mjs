@@ -15,7 +15,7 @@ try{const png=fs.readFileSync(path.join(root,'assets/og-al-studio.png'));const w
 // Pruebas del rediseño comercial V11
 for(const anchor of ['inicio','soluciones','dominios','precios','proyectos','herramientas','preguntas','contacto'])check(index.includes('id="'+anchor+'"'),'V11 sección '+anchor);
 check((index.match(/id="precios"/g)||[]).length===1,'Única sección de planes');
-check(index.includes('ion-domain-form')&&index.includes('no confirma disponibilidad'),'Buscador de ideas sin fingir disponibilidad');
+check(index.includes('ion-domain-form')&&index.includes('ni confirma disponibilidad'),'Buscador de ideas sin fingir disponibilidad');
 check(index.includes('ion-mobile-toggle')&&index.includes('ion-menu'),'Navegación móvil accesible');
 check(index.includes('15 demostraciones')&&demoNames.length===15,'Quince demostraciones anunciadas y conservadas');
 for(const src of ['assets/brand-v9.js','assets/ionos-inspired-v11.js']){try{new vm.Script(fs.readFileSync(path.join(root,src),'utf8'),{filename:src});check(true,'JS externo válido '+src)}catch(e){check(false,'JS externo '+src+': '+e.message)}}
