@@ -8,11 +8,11 @@
   addEventListener("scroll",()=>{if(!pending){pending=true;requestAnimationFrame(update)}},{passive:true});
   update();
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const els=[...document.querySelectorAll(".v9-reveal")];
+  const els=[...document.querySelectorAll(".v9-reveal, .v10-enter")];
   if(!reduced && "IntersectionObserver" in window){
-    const ob=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting){e.target.classList.add("in");ob.unobserve(e.target);}}},{rootMargin:"0px 0px -35px 0px",threshold:.07});
+    const ob=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting){e.target.classList.add("in");if(e.target.classList.contains("v10-enter"))e.target.classList.add("v10-visible");ob.unobserve(e.target);}}},{rootMargin:"0px 0px -35px 0px",threshold:.07});
     els.forEach(el=>ob.observe(el));
-  }else els.forEach(el=>el.classList.add("in"));
+  }else els.forEach(el=>{el.classList.add("in");if(el.classList.contains("v10-enter"))el.classList.add("v10-visible")});
   const orb=document.getElementById("v9-orb");
   if(orb && !reduced && matchMedia("(pointer:fine)").matches){
     let mx=0,my=0,frame=0;
