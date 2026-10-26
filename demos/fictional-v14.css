@@ -26,3 +26,6 @@ footer{background:var(--night);color:#ffffffd4;padding:33px 0;margin-top:0}.foot
 @media(max-width:850px){.hero-layout{grid-template-columns:1fr;padding:45px 0}.hero-art{min-height:300px}.hero-symbol{font-size:160px}.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:550px){nav.main{flex-wrap:wrap;padding:13px 0}nav.main .navlinks{gap:1px}nav .navlinks a{padding:9px;font-size:11px}.hero h1{font-size:45px}.hero-art{min-height:250px}.art-ring{width:215px;height:215px}.hero-symbol{font-size:125px}.sticker{font-size:10px;padding:9px}.products,.process{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:16px 9px}.stat strong{font-size:21px}.banner{padding:25px;flex-direction:column;align-items:flex-start}.section{padding:52px 0}.selection{left:12px;right:12px;bottom:12px;justify-content:space-between}}
 @media(prefers-reduced-motion:reduce){.hero-symbol{animation:none}.product,.btn,.toast{transition:none}}
+
+/* [hidden] must override the fixed selection bar layout. */
+.selection[hidden],.product[hidden]{display:none!important}
