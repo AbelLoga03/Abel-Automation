@@ -125,7 +125,7 @@ function budgetNumbers(){
  const subtotal=base.price+extras.reduce((sum,x)=>sum+x.price,0);
  const pack=state.bundle?PRICE_DATA.bundles[state.bundle]:null;
  const discount=pack?subtotal-pack.price:0;
- return {base,extras,maint,pack,discount,subtotal,total:subtotal-discount,approx:[base,...extras,maint].some(x=>x.desde)};
+ return {base,extras,maint,pack,discount,subtotal,total:subtotal-discount,approx:[base,...extras].some(x=>x.desde)};
 }
 function renderBudget(){
  el('budget-base').value=state.base;el('budget-maintenance').value=state.maintenance;
