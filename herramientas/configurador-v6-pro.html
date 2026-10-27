@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#072b51">
+<meta name="description" content="Calculadora interactiva de precios de diseño web, catálogos, cartas QR y automatizaciones. Presupuestos orientativos de AL Studio Digital.">
+<title>Configura tu proyecto · V6 PRO · AL Studio Digital</title>
+<link rel="icon" type="image/svg+xml" href="../assets/al-studio-mark.svg">
+<style>
+:root{--navy:#071c35;--blue:#0b3c72;--cyan:#37d4e8;--ice:#ecf9ff;--ink:#142d45;--muted:#536a81;--line:#d8e8f1;--shadow:0 15px 44px #11314e14}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:#f3f9fd;font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}button,input,select{font:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid #19b5d5;outline-offset:3px}
+.wrap{width:min(1200px,calc(100% - 36px));margin:auto}
+.top{background:#081f3b;color:white;border-bottom:1px solid #ffffff22;position:sticky;top:0;z-index:10}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:74px;flex-wrap:wrap;padding-block:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:19px;font-weight:850;letter-spacing:-.04em}
+.logo img{width:40px;height:40px}.navlinks{display:flex;gap:17px;flex-wrap:wrap;font-size:13px}.navlinks a{text-decoration:none;color:#c9e7fa}.navlinks a:hover{color:#fff}
+.hero{color:white;background:radial-gradient(circle at 85% 12%,#0a66a1 0,transparent 38%),linear-gradient(135deg,#06284c,#0b407b 65%,#07305b);padding:66px 0 82px}
+.hero-inner{display:grid;grid-template-columns:1.25fr .75fr;align-items:center;gap:25px}
+.kicker{font-size:12px;text-transform:uppercase;font-weight:800;letter-spacing:.15em;color:#6deaff}
+.hero h1{font-size:clamp(38px,5.5vw,68px);line-height:1.05;letter-spacing:-.065em;max-width:800px;margin:15px 0}
+.hero h1 span{color:#7eefff}.hero p{color:#c5e2f5;font-size:17px;max-width:660px}
+.hero-panel{border:1px solid #ffffff52;border-radius:24px;padding:25px;background:#ffffff14;box-shadow:var(--shadow);backdrop-filter:blur(13px)}
+.hero-panel strong{font-size:48px;display:block;line-height:1.1;margin:14px 0}.hero-panel small{color:#d9eefe}.hero-panel .tick{margin:15px 0;color:#e6f8ff}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;border:1px solid #a8d9ec;border-radius:11px;padding:12px 18px;text-decoration:none;font-weight:800;background:white;color:#06365b;min-height:45px}
+.btn.primary{background:var(--cyan);color:#022741;border-color:var(--cyan)}.btn.outline{background:transparent;color:white;border-color:#ffffff80}.btn.dark{background:#092e56;color:white;border-color:#092e56}.btn:hover{filter:brightness(.96)}
+.page{padding:36px 0 70px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 365px;gap:22px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:19px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{font-size:24px;letter-spacing:-.045em;margin:0 0 5px}.subtitle{color:var(--muted);margin:0 0 18px}
+.step{display:inline-flex;background:#dff8fc;color:#07536b;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.07em;padding:5px 10px;margin-bottom:10px}
+.base-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.base-radio{display:block;position:relative;cursor:pointer}.base-radio input{position:absolute;opacity:0;width:1px;height:1px}
+.base-body{display:flex;align-items:center;justify-content:space-between;gap:13px;border:2px solid #dceaf3;border-radius:14px;padding:15px;background:#f8fcff;min-height:90px}
+.base-body strong{display:block;line-height:1.25}.base-body small{color:#5c7589;display:block;margin-top:6px}.base-body b{white-space:nowrap;font-size:20px;color:#073967}
+.base-radio input:checked+.base-body{border-color:#0c9fc3;background:#e4faff;box-shadow:0 0 0 2px #0c9fc31e}
+.base-radio input:focus-visible+.base-body{outline:3px solid #15bdda;outline-offset:2px}
+.split-title{margin:30px 0 13px;border-top:1px solid var(--line);padding-top:24px}
+.chips{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}.chip{border:1px solid #c8dce8;border-radius:99px;background:#fff;color:#28526b;font-size:12px;font-weight:750;padding:8px 12px}
+.chip[aria-pressed=true]{background:#063a6e;border-color:#063a6e;color:white}
+.search{width:100%;padding:12px 14px;border:1px solid #b8d1de;border-radius:12px;color:var(--ink)}
+.extras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}
+.extra{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:13px;padding:13px;cursor:pointer;min-height:80px}
+.extra:hover{background:#f6fcff}.extra input{margin-top:5px;accent-color:#0877a8;width:17px;height:17px;flex:none}
+.extra .name{display:block;font-size:13px;font-weight:750;line-height:1.3}.extra .meta{display:block;color:#5c7385;font-size:12px;margin-top:6px}.extra .price{font-weight:850;color:#075078}
+.empty{color:var(--muted);padding:12px}.control-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field{display:grid;gap:7px;font-size:13px;font-weight:750}.field select,.field input{width:100%;padding:12px;border-radius:11px;border:1px solid #c4d8e4;background:white;color:var(--ink)}
+.checkline{display:flex;align-items:flex-start;gap:9px;margin-top:18px;font-size:13px}.checkline input{margin-top:4px;accent-color:#0b83b8}
+.sidebar{position:sticky;top:98px}.quote-card{border-radius:21px;background:#082c50;color:#ecf9ff;box-shadow:0 25px 60px #0b365233;padding:26px}
+.quote-card h2{color:white}.quote-card p{color:#b9d6eb;margin:6px 0 16px}.line{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #ffffff27;font-size:13px}
+.line strong{white-space:nowrap}.grand{font-size:44px;font-weight:900;letter-spacing:-.055em;line-height:1.1;margin:13px 0;color:#79ecfa}
+.monthly{padding:12px 0;color:#e0f5ff}.quote-card small{display:block;color:#b5cee3;font-size:11px;line-height:1.6}
+.quote-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}.quote-actions .btn{padding:11px 8px;font-size:12px}.quote-actions .wide{grid-column:1/-1}
+#feedback{color:#9cfaef;min-height:19px;font-size:12px;margin-top:11px}
+.notice{margin-top:15px;font-size:12px;color:#587287;background:#e6f4fa;border:1px solid #c9e2ed;border-radius:11px;padding:12px}
+.bottom{margin-top:24px;border-radius:20px;background:#dff4ff;padding:25px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.bottom h2{margin:0}.bottom p{margin:5px 0;color:#506d82}
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:23px}.faq details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px}
+.faq summary{font-weight:800;cursor:pointer}.faq p{color:#526b7b;margin:10px 0 0}
+.footer{padding:30px 0;color:#507083;font-size:12px}
+#print-quote{display:none}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.sidebar{position:static}.hero-inner{grid-template-columns:1fr}.hero-panel{display:none}}
+@media(max-width:650px){.base-grid,.extras,.control-row,.faq{grid-template-columns:1fr}.hero{padding:38px 0 50px}.panel{padding:17px}.navlinks{font-size:12px}.bottom{flex-direction:column;align-items:start}}
+@media print{
+  @page{margin:16mm}body{background:#fff;color:#111;font:12pt/1.45 Arial,sans-serif}
+  .top,.hero,.page,.footer{display:none!important}#print-quote{display:block!important}
+  #print-quote h1{font-size:26pt;color:#073a62}#print-quote h2{font-size:17pt;margin:24px 0 8px}
+  #print-quote .pl{display:flex;justify-content:space-between;border-bottom:1px solid #bbb;padding:7px 0}
+  #print-quote strong{font-size:18pt}
+}
+</style>
+</head>
+<body>
+<header class="top"><nav class="wrap nav" aria-label="Navegación principal"><a class="logo" href="../index.html"><img src="../assets/al-studio-mark.svg" alt="">AL Studio Digital</a><div class="navlinks"><a href="../index.html#proyectos">Proyectos</a><a href="../explorar-demos.html">21 demos</a><a href="../servicios/comparar.html">Comparar planes</a><a href="../index.html#contacto">Contacto</a></div></nav></header>
+<section class="hero"><div class="wrap hero-inner"><div><span class="kicker">PORTFOLIO V6 PRO · CONFIGURADOR</span><h1>Construye tu idea.<br><span>Conoce su precio.</span></h1><p>Elige un diseño web, incorpora las funciones que te interesan y genera un presupuesto orientativo con desglose. Sin registro ni envío automático de datos.</p><div class="hero-actions"><a class="btn primary" href="#configurar">Crear mi presupuesto</a><a class="btn outline" href="../explorar-demos.html">Inspirarme con 21 demos</a></div></div><div class="hero-panel"><small>UNA PROPUESTA A TU MEDIDA</small><strong>10 planes</strong><div class="tick">✓ Extras por categorías</div><div class="tick">✓ Mantenimiento opcional</div><div class="tick">✓ Descargar, imprimir o consultar</div><small>Precios de partida, no vinculantes.</small></div></div></section>
+<main id="configurar" class="page"><div class="wrap layout">
+<div>
+<section class="panel" aria-labelledby="plans-title"><span class="step">PASO 01</span><h2 id="plans-title">Selecciona el tipo de proyecto</h2><p class="subtitle">Puedes cambiar de opción en cualquier momento. Los importes son de pago único y no incluyen IVA.</p><div id="bases" class="base-grid"></div></section>
+<section class="panel" style="margin-top:19px" aria-labelledby="extras-title"><span class="step">PASO 02</span><h2 id="extras-title">Personaliza con servicios adicionales</h2><p class="subtitle">Añade solo lo que aporte valor a tu negocio.</p><input id="extra-search" class="search" type="search" placeholder="Buscar: QR, SEO, reservas, automatización..." aria-label="Buscar servicios adicionales"><div id="categories" class="chips" role="group" aria-label="Categorías de extras"></div><div id="extras" class="extras"></div><p id="no-extras" class="empty" hidden>No hay servicios con ese filtro.</p></section>
+<section class="panel" style="margin-top:19px" aria-labelledby="final-title"><span class="step">PASO 03</span><h2 id="final-title">Mantenimiento e impuestos</h2><p class="subtitle">Estos importes se muestran separados para evitar confundir un pago único con una mensualidad.</p><div class="control-row"><label class="field">Mantenimiento mensual<select id="maintenance"><option value="0">Sin mantenimiento</option><option value="15">Esencial · 15 €/mes</option><option value="29">Negocio · 29 €/mes</option><option value="49">Profesional · 49 €/mes</option><option value="79">Premium · desde 79 €/mes</option></select></label><label class="field">Nombre del negocio (opcional)<input id="business" maxlength="80" placeholder="Ej. Mi negocio"></label></div><label class="checkline"><input id="include-tax" type="checkbox"><span>Mostrar cálculo de IVA al 21 % como referencia. El impuesto aplicable se confirmará en el presupuesto definitivo.</span></label><div class="notice">El cálculo se realiza en tu navegador. No se procesa un pago, no se confirma una reserva y no se guardan datos personales en servidores propios.</div></section>
+</div>
+<aside class="sidebar" aria-label="Resumen del presupuesto"><div class="quote-card"><span class="kicker">TU PRESUPUESTO</span><h2>Resumen en directo</h2><p>Importes aproximados</p><div id="lines" aria-live="polite"></div><div class="line"><span>Base imponible estimada</span><strong id="net">0 €</strong></div><div class="line" id="tax-line" hidden><span>IVA estimado (21 %)</span><strong id="tax">0 €</strong></div><div class="kicker" style="margin-top:15px">PAGO ÚNICO ESTIMADO</div><div id="total" class="grand" aria-live="polite">0 €</div><div id="monthly" class="monthly">Sin cuota mensual</div><small>Dominio, hosting, licencias y servicios externos no incluidos salvo pacto expreso. El precio final depende de los requisitos y alcance acordados.</small><div class="quote-actions"><button id="copy" class="btn" type="button">Copiar resumen</button><button id="download" class="btn" type="button">Guardar TXT</button><button id="print" class="btn" type="button">Imprimir / PDF</button><a id="email" class="btn" href="mailto:abellopezgarcia27@gmail.com">Consultar por email</a><a class="btn primary wide" href="../index.html#contacto">Enviar una consulta desde la web</a></div><div id="feedback" role="status" aria-live="polite"></div></div></aside>
+</div><div class="wrap">
+<section class="bottom"><div><span class="kicker" style="color:#08738d">EJEMPLOS REALES DE FUNCIONAMIENTO, MARCAS FICTICIAS</span><h2>¿Quieres ver primero cómo quedaría?</h2><p>Explora los 21 proyectos de demostración y elige el estilo que más te guste.</p></div><a class="btn dark" href="../explorar-demos.html">Explorar todas las demos</a></section>
+<section class="faq" aria-label="Dudas frecuentes"><details><summary>¿Estos precios son definitivos?</summary><p>No. Son referencias para preparar propuestas. Cada presupuesto se ajusta según la complejidad, número de páginas, contenido, revisiones y servicios externos.</p></details><details><summary>¿El precio de mantenimiento se suma al diseño web?</summary><p>Se muestra por separado: el proyecto es un pago único y el mantenimiento es opcional y recurrente.</p></details><details><summary>¿Puedo pedir solo una carta QR o una automatización?</summary><p>Sí. Selecciona el plan personalizado de 0 € como base y añade el servicio que necesites. Se revisará si hace falta una web o infraestructura adicional.</p></details><details><summary>¿Esta calculadora transmite mis datos?</summary><p>No. Calcula localmente en tu navegador. Solo se prepara un correo si decides abrir voluntariamente tu aplicación de email o un formulario externo si decides enviarlo.</p></details></section>
+</div></main>
+<footer class="wrap footer">© 2026 AL Studio Digital · <a href="../privacidad.html">Privacidad</a> · Prototipos y presupuestos orientativos · No se realizan compras ni reservas desde esta herramienta.</footer>
+<div id="print-quote" aria-hidden="true"></div>
+<script>
+(function(){
+'use strict';
+const bases=[
+{id:'micro',name:'Página de contacto',price:99,desc:'Información esencial'},
+{id:'landing',name:'Landing promocional',price:149,desc:'Campaña o producto'},
+{id:'essential',name:'Web esencial',price:199,desc:'Presencia digital'},
+{id:'business',name:'Web profesional',price:299,desc:'Hasta cuatro secciones'},
+{id:'catalog',name:'Web con catálogo',price:349,desc:'Galería y productos'},
+{id:'restaurant',name:'Web para restaurante',price:379,desc:'Menú y presentación'},
+{id:'booking',name:'Web con citas',price:449,desc:'Solicitud de reservas'},
+{id:'premium',name:'Web premium',price:499,desc:'Diseño y funciones extra'},
+{id:'shop',name:'Tienda online básica',price:599,desc:'A valorar por alcance'},
+{id:'corporate',name:'Corporativa avanzada',price:799,desc:'Desde este importe'},
+{id:'custom',name:'Solo extras / a medida',price:0,desc:'Sin paquete inicial'}];
+const extras=[
+{id:'qr-basic',name:'Carta QR sencilla',price:49,category:'Restauración'},
+{id:'qr-photo',name:'Carta QR con fotografías',price:89,category:'Restauración'},
+{id:'qr-pro',name:'Carta QR interactiva',price:129,category:'Restauración'},
+{id:'catalog',name:'Catálogo digital básico',price:119,category:'Comercio'},
+{id:'whatsapp',name:'Botón de WhatsApp',price:19,category:'Contacto'},
+{id:'form',name:'Formulario de contacto',price:39,category:'Contacto'},
+{id:'map',name:'Google Maps',price:25,category:'Contacto'},
+{id:'gallery',name:'Galería de fotos',price:49,category:'Diseño'},
+{id:'copy',name:'Textos e imágenes (actualización)',price:29,category:'Diseño'},
+{id:'revamp',name:'Mejora visual de web',price:79,category:'Diseño'},
+{id:'seo',name:'SEO básico',price:79,category:'Visibilidad'},
+{id:'analytics',name:'Analítica básica',price:45,category:'Visibilidad'},
+{id:'booking',name:'Solicitud de citas',price:99,category:'Contacto'},
+{id:'domain',name:'Configuración de dominio',price:29,category:'Técnico'},
+{id:'performance',name:'Revisión de rendimiento',price:59,category:'Técnico'},
+{id:'auto',name:'Automatización sencilla con n8n',price:129,category:'Automatización'},
+{id:'notifications',name:'Avisos por WhatsApp',price:179,category:'Automatización'},
+{id:'dashboard',name:'Panel básico de indicadores',price:149,category:'Automatización'},
+{id:'branding',name:'Kit de identidad visual',price:99,category:'Diseño'},
+{id:'multi-lang',name:'Segunda versión de idioma',price:89,category:'Técnico'}];
+const $=id=>document.getElementById(id);
+let current='catalog',category='Todos';
+const selected=new Set();
+const euro=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(n);
+const money=n=>Number.isFinite(n)?euro(n):'0 €';
+function el(tag,cl,txt){const e=document.createElement(tag);if(cl)e.className=cl;if(txt!==undefined)e.textContent=txt;return e}
+function renderBases(){
+const root=$('bases');root.textContent='';
+bases.forEach(p=>{const label=el('label','base-radio'),input=el('input');
+input.type='radio';input.name='package';input.value=p.id;input.checked=p.id===current;
+input.addEventListener('change',()=>{current=p.id;update()});
+const body=el('span','base-body'),info=el('span'),strong=el('strong','',p.name),desc=el('small','',p.desc),price=el('b','',p.price?euro(p.price):'A medida');
+info.append(strong,desc);body.append(info,price);label.append(input,body);root.append(label)});
+}
+function renderCategories(){
+const c=$('categories');c.textContent='';
+['Todos',...new Set(extras.map(x=>x.category))].forEach(n=>{const b=el('button','chip',n);
+b.type='button';b.setAttribute('aria-pressed',String(n===category));b.addEventListener('click',()=>{category=n;renderCategories();renderExtras()});c.append(b)});
+}
+function renderExtras(){
+const root=$('extras');root.textContent='';const query=$('extra-search').value.trim().toLocaleLowerCase('es');
+let count=0;extras.forEach(x=>{
+if(category!=='Todos'&&x.category!==category)return;
+if(query&&!(x.name+' '+x.category).toLocaleLowerCase('es').includes(query))return;
+count++;
+const label=el('label','extra'),input=el('input');input.type='checkbox';input.checked=selected.has(x.id);input.value=x.id;
+input.addEventListener('change',()=>{input.checked?selected.add(x.id):selected.delete(x.id);update()});
+const info=el('span'),title=el('span','name',x.name),meta=el('span','meta',x.category+' · '+(x.price===29&&x.id==='copy'?'desde ':'')+euro(x.price));
+info.append(title,meta);label.append(input,info);root.append(label)});
+$('no-extras').hidden=!!count;
+}
+function summary(){
+const base=bases.find(x=>x.id===current)||bases[0],addons=extras.filter(x=>selected.has(x.id));
+const net=base.price+addons.reduce((acc,x)=>acc+x.price,0);
+const iva=$('include-tax').checked?Math.round(net*21)/100:0;
+const monthly=Number($('maintenance').value);
+return{base,addons,net,iva,total:net+iva,monthly,business:$('business').value.trim().slice(0,80)};
+}
+function makeSummary(s){
+return 'AL Studio Digital · Presupuesto orientativo\n'
++'Negocio: '+(s.business||'Sin indicar')+'\n'
++'Base: '+s.base.name+' — '+money(s.base.price)+'\n'
++(s.addons.length?s.addons.map(x=>'Extra: '+x.name+' — '+money(x.price)).join('\n')+'\n':'Extras: Ninguno\n')
++'Subtotal sin IVA: '+money(s.net)+'\n'
++(s.iva?'IVA estimado (21 %): '+money(s.iva)+'\n':'')
++'PAGO ÚNICO: '+money(s.total)+'\n'
++'Mantenimiento: '+(s.monthly?money(s.monthly)+'/mes (opcional)':'No solicitado')+'\n'
++'Precios orientativos, sujetos a revisión del alcance. Impuestos, dominio, hosting y costes externos no incluidos salvo acuerdo expreso.';
+}
+function update(){
+const s=summary();const l=$('lines');l.textContent='';
+const items=[{name:s.base.name,price:s.base.price},...s.addons.map(x=>({name:x.name,price:x.price}))];
+items.forEach(x=>{const row=el('div','line');row.append(el('span','',x.name),el('strong','',money(x.price)));l.append(row)});
+$('net').textContent=money(s.net);$('tax-line').hidden=!$('include-tax').checked;
+$('tax').textContent=money(s.iva);$('total').textContent=money(s.total);
+$('monthly').textContent=s.monthly?'Mantenimiento opcional: '+money(s.monthly)+'/mes':'Sin mantenimiento mensual';
+$('email').href='mailto:abellopezgarcia27@gmail.com?subject='+encodeURIComponent('Consulta de presupuesto · AL Studio Digital')+'&body='+encodeURIComponent(makeSummary(s)+'\n\nHola, me gustaría recibir una propuesta definitiva.');
+const print=$('print-quote');print.textContent='';
+print.append(el('h1','','AL Studio Digital'),el('p','','Propuesta orientativa · '+new Date().toLocaleDateString('es-ES')));
+print.append(el('h2','',s.business||'Proyecto sin nombre'));
+items.forEach(x=>{const row=el('div','pl');row.append(el('span','',x.name),el('span','',money(x.price)));print.append(row)});
+print.append(el('p','','Subtotal sin IVA: '+money(s.net)));
+if($('include-tax').checked)print.append(el('p','','IVA estimado 21 %: '+money(s.iva)));
+print.append(el('h2','','Pago único estimado: '+money(s.total)));
+print.append(el('p','',s.monthly?'Mantenimiento opcional: '+money(s.monthly)+'/mes':'Sin mantenimiento contratado'));
+print.append(el('p','','Precios orientativos, no vinculantes. El importe final, IVA aplicable, dominio, hosting y servicios externos se acordarán por escrito. Contacto: abellopezgarcia27@gmail.com'));
+}
+function status(msg){$('feedback').textContent=msg}
+async function copy(){
+const text=makeSummary(summary());
+try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text)}else{
+const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.append(ta);ta.select();if(!document.execCommand('copy'))throw Error('No compatible');ta.remove()}
+status('Resumen copiado al portapapeles.')}catch(e){status('No se pudo copiar automáticamente. Usa «Guardar TXT».')}}
+function download(){
+const a=document.createElement('a'),url=URL.createObjectURL(new Blob([makeSummary(summary())],{type:'text/plain;charset=utf-8'}));
+a.href=url;a.download='presupuesto-al-studio-digital.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);status('Presupuesto de texto preparado para guardar.')}
+$('extra-search').addEventListener('input',renderExtras);
+$('maintenance').addEventListener('change',update);$('business').addEventListener('input',update);$('include-tax').addEventListener('change',update);
+$('copy').addEventListener('click',copy);$('download').addEventListener('click',download);$('print').addEventListener('click',()=>window.print());
+renderBases();renderCategories();renderExtras();update();
+})();
+</script>
+</body></html>
