@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#072b51">
+<meta name="description" content="Explora 21 demos interactivas de diseño web y experiencias digitales de AL Studio Digital. Prototipos conceptuales no oficiales.">
+<title>Explorar 21 demos · Portfolio V6 PRO · AL Studio Digital</title>
+<link rel="icon" type="image/svg+xml" href="assets/al-studio-mark.svg">
+<style>
+:root{--ink:#142c47;--navy:#071c35;--cyan:#53dcf1;--ice:#f1f9ff;--line:#d5e4f0}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f4f9fd;color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid #00b5d5;outline-offset:3px}
+.wrap{width:min(1240px,calc(100% - 36px));margin:auto}
+.navbar{background:#082542;color:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid #ffffff26}
+.nav{min-height:75px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:10px 0}
+.logo{font-size:19px;font-weight:900;letter-spacing:-.04em;display:flex;align-items:center;gap:10px}.logo img{width:40px;height:40px}
+.navitems{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:#c6e4f8}.navitems a:hover{color:#fff}
+.hero{padding:65px 0 75px;background:radial-gradient(circle at 80% 25%,#0a67a2,transparent 40%),linear-gradient(120deg,#082b50,#094475 70%,#0b315c);color:white}
+.eyebrow{font-size:11px;font-weight:850;letter-spacing:.17em;text-transform:uppercase;color:#8bedff}
+.hero h1{font-size:clamp(40px,6vw,75px);line-height:1.06;letter-spacing:-.06em;margin:12px 0}.hero h1 em{font-style:normal;color:#8bedff}
+.hero p{font-size:17px;color:#c6e4f7;max-width:700px}
+.stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}.stat{padding:11px 16px;border:1px solid #8cc6eb65;border-radius:12px;background:#ffffff13}
+.stat strong{font-size:22px;display:block}.stat small{color:#bfdaf0}
+.notice{background:#e5f7fd;border-bottom:1px solid #c9e8ef;padding:13px 0;color:#26546a;font-size:13px}
+.content{padding:38px 0 70px}.heading{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:23px}
+.heading h2{font-size:clamp(28px,4vw,41px);letter-spacing:-.05em;margin:0}.heading p{margin:5px 0;color:#5d7385}
+.controls{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:17px}
+.search{flex:1 1 310px;border:1px solid #bfdaea;background:white;border-radius:12px;padding:13px 16px}
+.sort{padding:13px;background:white;border:1px solid #bfdaea;border-radius:12px;color:#244969}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0 24px}.filter{background:#fff;border:1px solid #b5d2e4;border-radius:99px;color:#265570;font-size:12px;padding:9px 15px;font-weight:750}
+.filter[aria-pressed=true]{background:#063c6d;color:white;border-color:#063c6d}
+.results{font-size:13px;color:#607486}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.card{background:#fff;border:1px solid #dce8f2;border-radius:17px;overflow:hidden;box-shadow:0 12px 30px #0639610b;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 20px 42px #0b396320}
+.card[hidden]{display:none}
+.visual{height:190px;position:relative;overflow:hidden;display:grid;place-items:center;background:linear-gradient(125deg,var(--a),var(--b));color:white}
+.visual img{width:100%;height:100%;object-fit:cover;display:block}
+.visual:has(img):after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#071d3577,transparent 50%)}
+.visual .symbol{font-size:64px;filter:drop-shadow(0 9px 18px #0004)}
+.flag{position:absolute;top:13px;left:13px;z-index:1;background:#082844cf;color:#e6faff;padding:6px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.07em;font-size:10px;font-weight:850}
+.body{padding:19px;flex:1;display:flex;flex-direction:column}.body .type{color:#17759d;font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:850}
+.body h3{font-size:22px;letter-spacing:-.045em;margin:7px 0}.body p{color:#5d7282;font-size:13px;line-height:1.65;margin:0 0 19px;flex:1}
+.buttons{display:flex;gap:8px}.btn{display:inline-flex;justify-content:center;align-items:center;flex:1;border-radius:10px;padding:11px 10px;font-weight:800;font-size:12px;background:#093d70;color:#fff;border:1px solid #093d70}
+.btn.light{background:#f1f8fc;color:#18527b;border-color:#c8dfec}
+.empty{display:none;text-align:center;padding:48px 15px;background:white;border:1px dashed #b6d4e8;border-radius:16px;color:#5b7589}
+.cta{margin-top:38px;border-radius:18px;background:#062c51;color:white;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:28px}
+.cta h2{margin:0;font-size:30px;letter-spacing:-.04em}.cta p{margin:8px 0 0;color:#c6e6f5}
+.cta a{padding:13px 20px;border-radius:9px;background:#64e2f5;color:#063653;font-weight:850;white-space:nowrap}
+footer{padding:28px 0;color:#567287;font-size:12px}
+dialog{width:min(1050px,calc(100vw - 24px));height:min(90vh,850px);padding:0;border:0;border-radius:16px;box-shadow:0 26px 80px #061a32a3}
+dialog::backdrop{background:#081627b8}
+.dialogtop{height:56px;background:#0a325d;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:10px 16px}
+.dialogtop button{color:white;background:transparent;border:1px solid #ffffff78;border-radius:8px;padding:5px 11px;font-size:20px}
+dialog iframe{display:block;width:100%;height:calc(100% - 107px);border:0}
+.dialogfoot{padding:10px 15px;background:white;display:flex;justify-content:space-between;gap:10px;align-items:center;color:#61788a;font-size:12px}
+.dialogfoot a{color:#07517f;font-weight:750;text-decoration:underline}
+@media(max-width:920px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.hero{padding:40px 0 52px}.cta{flex-direction:column;align-items:start}.navitems{gap:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="navbar"><nav class="wrap nav" aria-label="Menú principal"><a href="index.html" class="logo"><img src="assets/al-studio-mark.svg" alt="">AL Studio Digital</a><div class="navitems"><a href="index.html">Inicio</a><a href="herramientas/configurador-v6-pro.html">Calculadora PRO</a><a href="servicios/comparar.html">Tarifas</a><a href="index.html#contacto">Contacto</a></div></nav></header>
+<section class="hero"><div class="wrap"><span class="eyebrow">PORTFOLIO V6 PRO · GALERÍA INTERACTIVA</span><h1>21 formas de <em>imaginar tu web.</em></h1><p>Cafeterías, talleres, peluquerías, tiendas, marcas creativas y mucho más. Explora los ejemplos interactivos, filtra por sector y descubre posibilidades para tu negocio.</p><div class="stats"><div class="stat"><strong>21</strong><small>Demostraciones conservadas</small></div><div class="stat"><strong>5</strong><small>Sectores para filtrar</small></div><div class="stat"><strong>100 %</strong><small>Prototipos no oficiales</small></div></div></div></section>
+<div class="notice"><div class="wrap"><strong>Aviso de transparencia:</strong> todos los proyectos son demos conceptuales. No representan acuerdos con empresas reales ni procesan compras o reservas de verdad.</div></div>
+<main class="content"><div class="wrap">
+<div class="heading"><div><span class="eyebrow" style="color:#087398">BUSCA TU INSPIRACIÓN</span><h2>Explora todos los proyectos</h2><p>Puedes usar la búsqueda, filtrar por sector y abrir cada web.</p></div><div class="results" id="result-count" aria-live="polite">21 proyectos</div></div>
+<div class="controls"><input id="search" type="search" class="search" placeholder="Busca un negocio, estilo o funcionalidad..." aria-label="Buscar entre las demostraciones"><select id="sort" class="sort" aria-label="Ordenar proyectos"><option value="default">Orden original</option><option value="alpha">Nombre A–Z</option><option value="sector">Por sector</option></select></div>
+<div class="filters" id="filters" role="group" aria-label="Filtrar por tipo de negocio"></div>
+<div id="grid" class="grid"></div>
+<div id="empty" class="empty" role="status">No hay proyectos con ese filtro. Prueba otra palabra o selecciona «Todos».</div>
+<div class="cta"><div><h2>¿Ya tienes una idea?</h2><p>Combina los elementos que más te gusten y calcula un presupuesto sin compromiso.</p></div><a href="herramientas/configurador-v6-pro.html">Configurar mi presupuesto ↗</a></div>
+</div></main>
+<footer class="wrap">© 2026 AL Studio Digital · <a href="privacidad.html">Privacidad</a> · Todas las demos son conceptuales, no oficiales y no permiten compras ni reservas reales.</footer>
+<dialog id="preview" aria-labelledby="preview-title"><div class="dialogtop"><strong id="preview-title">Vista previa</strong><button id="close" type="button" aria-label="Cerrar vista previa">×</button></div><iframe id="frame" title="Vista previa interactiva de demostración" loading="lazy"></iframe><div class="dialogfoot"><span>Demostración ficticia. Algunas funciones pueden requerir pantalla completa.</span><a id="full" href="#" target="_blank" rel="noopener noreferrer">Abrir demo en pestaña nueva</a></div></dialog>
+<script>
+(function(){
+'use strict';
+const data=[
+['bruma-cafe','Bruma Café','Hostelería','Una cafetería de especialidad con menú visual y ambiente cálido.','☕','#815234','#bf9373',''],
+['pulso-club','Pulso Club','Bienestar','Centro deportivo ficticio con clases y presentación de servicios.','◉','#1a3d6f','#107f94',''],
+['nido-mascotas','Nido Mascotas','Comercio','Productos para mascotas en una tienda atractiva y sencilla.','🐾','#5d5f8a','#a393c8',''],
+['lumen-home','Lumen Home','Comercio','Decoración del hogar en un catálogo contemporáneo.','✦','#62563f','#c9ae84',''],
+['horizonte-escapes','Horizonte Escapes','Servicios','Escapadas ficticias con propuestas visuales y filtros locales.','🌄','#175c78','#6aa6c8',''],
+['orbita-creativa','Órbita Creativa','Creativo','Estudio creativo con proyectos y presentación de servicios.','✳','#4a3272','#9675c3',''],
+['pasteleria','Pastelería artesana','Hostelería','Tartas, dulces, catálogo fotográfico y contacto directo.','🥐','#684c46','#bf907d','assets/portfolio-pasteleria.webp'],
+['joyeria','Joyería de autor','Comercio','Colecciones, detalles del producto y escaparate elegante.','◆','#2b4551','#a69b7f','assets/portfolio-joyeria.webp'],
+['taller','Taller mecánico','Servicios','Servicios, revisiones y solicitudes de presupuesto.','⚙','#183953','#547d9f','assets/portfolio-taller.webp'],
+['barberia','Barbería contemporánea','Bienestar','Cortes, servicios y presentación de cita sin reserva real.','✂','#28364d','#6b8297','assets/portfolio-barberia.webp'],
+['libreria','Librería independiente','Comercio','Descubre libros, novedades y categorías de catálogo.','📚','#504535','#b0a184','assets/portfolio-libreria.webp'],
+['pizzeria','Pizzería de barrio','Hostelería','Carta visual, especialidades y pedidos de ejemplo.','🍕','#673e2e','#c58d6b','assets/portfolio-pizzeria.webp'],
+['fruteria','Frutería de proximidad','Comercio','Catálogo de productos frescos y presentación visual.','🍎','#345e37','#90b478','assets/portfolio-fruteria.webp'],
+['floristeria','Floristería creativa','Comercio','Ramos, ocasiones especiales y catálogo fotográfico.','🌺','#694866','#b98aaf','assets/portfolio-floristeria.webp'],
+['auto-mecanica-reco','Taller urbano · concepto','Servicios','Un ejemplo alternativo de taller con servicios y contacto.','🚘','#144766','#498da8','assets/portfolio-taller.webp'],
+['peluqueria-r-munoz','Peluquería local · concepto','Bienestar','Servicios de peluquería y presentación cuidada.','✂','#675359','#ac858f','assets/portfolio-barberia.webp'],
+['taberna-lo-nuestro','Taberna tradicional · concepto','Hostelería','Carta, tapas y experiencia visual para un restaurante.','🍽','#6b4739','#be9874','assets/portfolio-pizzeria.webp'],
+['cafeteria-rocio','Cafetería de barrio · concepto','Hostelería','Desayunos y meriendas en una web sencilla de usar.','☕','#865438','#e2b67f','assets/portfolio-pasteleria.webp'],
+['mascotas','Tienda animal · concepto','Comercio','Un segundo estilo de comercio orientado a mascotas.','🐶','#375f6a','#8ab4b8',''],
+['estetica','Centro de estética · concepto','Bienestar','Tratamientos, presentación de servicios y consultas.','✧','#8c5b77','#d3a5be',''],
+['cafeteria','Cafetería moderna · concepto','Hostelería','Una segunda propuesta visual para hostelería.','☕','#705644','#bfa083','']
+];
+const $=id=>document.getElementById(id);
+let category='Todos';
+let cards=data.map((a,i)=>({id:a[0],title:a[1],type:a[2],desc:a[3],symbol:a[4],a:a[5],b:a[6],img:a[7],order:i}));
+const kinds=['Todos','Hostelería','Comercio','Servicios','Bienestar','Creativo'];
+function drawFilters(){const root=$('filters');root.textContent='';kinds.forEach(k=>{
+const btn=document.createElement('button');btn.className='filter';btn.type='button';btn.textContent=k;btn.setAttribute('aria-pressed',String(category===k));
+btn.addEventListener('click',()=>{category=k;drawFilters();drawCards()});root.append(btn);
+})}
+function make(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n}
+function openPreview(p){const dialog=$('preview');$('preview-title').textContent=p.title+' · Demo no oficial';$('frame').src='demos/'+p.id+'.html';$('full').href='demos/'+p.id+'.html';if(!dialog.open)dialog.showModal();}
+function drawCards(){
+const needle=$('search').value.trim().toLocaleLowerCase('es');
+let visible=cards.filter(p=>(category==='Todos'||p.type===category)&&(!needle||(p.title+' '+p.type+' '+p.desc).toLocaleLowerCase('es').includes(needle)));
+if($('sort').value==='alpha')visible.sort((a,b)=>a.title.localeCompare(b.title,'es'));else if($('sort').value==='sector')visible.sort((a,b)=>a.type.localeCompare(b.type,'es')||a.title.localeCompare(b.title,'es'));else visible.sort((a,b)=>a.order-b.order);
+const root=$('grid');root.textContent='';
+visible.forEach(p=>{
+const art=make('article','card');
+const visual=make('div','visual');visual.style.setProperty('--a',p.a);visual.style.setProperty('--b',p.b);
+if(p.img){const img=make('img');img.src=p.img;img.alt='Vista previa visual de '+p.title;img.loading='lazy';visual.append(img)}else visual.append(make('span','symbol',p.symbol));
+visual.append(make('span','flag','DEMO NO OFICIAL'));
+const body=make('div','body');body.append(make('span','type',p.type),make('h3','',p.title),make('p','',p.desc));
+const controls=make('div','buttons'),preview=make('button','btn light','Vista previa'),full=make('a','btn','Abrir demo ↗');
+preview.type='button';preview.addEventListener('click',()=>openPreview(p));
+full.href='demos/'+p.id+'.html';full.target='_blank';full.rel='noopener noreferrer';
+controls.append(preview,full);body.append(controls);art.append(visual,body);root.append(art)
+});
+$('empty').style.display=visible.length?'none':'block';
+$('result-count').textContent=visible.length+' de '+data.length+' proyectos';
+}
+function close(){if($('preview').open)$('preview').close();$('frame').src='about:blank';}
+$('search').addEventListener('input',drawCards);$('sort').addEventListener('change',drawCards);
+$('close').addEventListener('click',close);$('preview').addEventListener('click',e=>{if(e.target===$('preview'))close()});
+$('preview').addEventListener('close',()=>{$('frame').src='about:blank'});
+drawFilters();drawCards();
+})();
+</script></body></html>

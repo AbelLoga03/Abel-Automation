@@ -1,6 +1,8 @@
 name: Validate AL Studio Digital
 on:
   push:
+    branches: [main, portfolio-v6-pro-2026]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 jobs:
@@ -14,3 +16,4 @@ jobs:
         with:
           node-version: '22'
       - run: node scripts/check-site.mjs
+      - run: node scripts/check-v6-pro.mjs
