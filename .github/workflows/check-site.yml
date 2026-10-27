@@ -1,6 +1,8 @@
-name: Validate AL Studio Digital
+name: Validate Abel Automation V6 PRO
 on:
   push:
+    branches: [main, "feature/**"]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 jobs:
@@ -13,4 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node scripts/check-site.mjs
+      - name: Validate preserved legacy website
+        run: node scripts/check-site.mjs
+      - name: Validate V6 PRO project and calculator
+        run: node scripts/check-v6.mjs
