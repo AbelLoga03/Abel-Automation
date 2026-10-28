@@ -19,7 +19,17 @@ function build(){
  const allowed=new Set(engine.CATALOG.extras.map(x=>x[0]));
  const selected=new Set((params.get('extras')||'').split(',').filter(x=>allowed.has(x)));
  $('q-extras').querySelectorAll('input').forEach(input=>input.checked=selected.has(input.value));
- $('q-date').value=new Date().toLocaleDateString('en-CA');
+ const offers={
+  local:{base:'basica',extras:['whatsapp','maps'],total:239},
+  restaurante:{base:'restaurante',extras:['qr-basic','whatsapp'],total:409},
+  empresa:{base:'profesional',extras:['form','seo'],total:389}
+ };
+ const offer=offers[params.get('pack')];
+ if(offer&&base.value===offer.base&&selected.size===offer.extras.length&&offer.extras.every(id=>selected.has(id))){
+  const initial=engine.normalize({base:base.value,extras:[...selected]});
+  $('q-discount').value=String(Math.max(0,initial.gross-offer.total));
+ }
+ const today=new Date();$('q-date').value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
  if(params.get('project'))$('q-project').value=params.get('project').slice(0,150);
  $('editor').addEventListener('input',render);
  $('editor').addEventListener('change',render);
