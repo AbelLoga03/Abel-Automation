@@ -177,5 +177,19 @@ function initContact(){
  el('contact-draft').value=lines.join('\n');el('contact-output').hidden=false;el('contact-status').textContent='Borrador generado. Cópialo y envíalo utilizando el formulario de contacto disponible.';el('contact-output').scrollIntoView({block:'nearest'});
  });
  el('copy-contact').addEventListener('click',async()=>{el('contact-status').textContent=await copyText(el('contact-draft').value)?'Solicitud copiada. Puedes enviarla desde el formulario anterior.':'Selecciona el borrador y cópialo manualmente.';});
+ try{
+  const raw=sessionStorage.getItem('abel-v10-contact-draft');
+  if(raw&&raw.length<6500){
+   const draft=JSON.parse(raw);
+   if(draft.version===10&&typeof draft.message==='string'&&typeof draft.sector==='string'){
+    const field=el('client-sector');
+    if([...field.options].some(x=>x.value===draft.sector))field.value=draft.sector;
+    el('client-message').value=draft.message.slice(0,3000);
+    el('contact-status').textContent='El asistente V10 ha preparado tu consulta. Revisa el contenido, indica tus datos y decide si deseas enviarlo. No se ha enviado nada.';
+    sessionStorage.removeItem('abel-v10-contact-draft');
+   }
+  }
+ }catch{el('contact-status').textContent='No se ha podido recuperar el borrador anterior. Puedes escribir tu solicitud directamente.';}
+ 
 }
 document.addEventListener('DOMContentLoaded',()=>{initNav();initMotion();initDemos();initPrices();initBudget();initContact();});
