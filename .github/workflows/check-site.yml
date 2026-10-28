@@ -1,4 +1,4 @@
-name: Validate Abel Automation · Growth
+name: Validate Abel Automation V8
 on:
   push:
     branches: [main, "feature/**"]
@@ -21,3 +21,5 @@ jobs:
         run: node scripts/check-v6.mjs
       - name: Validate Growth Studio, conversion, accessibility and form
         run: node scripts/check-growth.mjs
+      - name: Validate V8 proposals, sector landings and encrypted CRM
+        run: node scripts/check-v8.mjs
