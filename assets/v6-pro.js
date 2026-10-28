@@ -114,6 +114,7 @@ function initBudget(){
  el('budget-copy').addEventListener('click',async()=>{const ok=await copyText(budgetText());el('budget-status').textContent=ok?'Presupuesto copiado al portapapeles.':'No se pudo copiar; prueba la descarga TXT.';});
  el('budget-download').addEventListener('click',()=>{const blob=new Blob([budgetText()],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='abel-automation-presupuesto.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);el('budget-status').textContent='Presupuesto descargado en formato TXT.';});
  el('budget-print').addEventListener('click',()=>window.print());
+ el('budget-proposal').addEventListener('click',()=>{const p=new URLSearchParams({base:state.base,maintenance:state.maintenance});if(state.extras.size)p.set('extras',[...state.extras].join(','));if(state.bundle)p.set('pack',state.bundle);window.location.href='herramientas/propuestas-v8.html?'+p.toString();});
  el('budget-contact').addEventListener('click',()=>{el('client-message').value='Me gustaría solicitar información sobre el siguiente proyecto:\n\n'+budgetText();el('contacto').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});el('client-name').focus({preventScroll:true});});
  renderBudget();
 }
