@@ -240,6 +240,13 @@ function createPdf(){
   status('Propuesta PDF generada. Confirma el alcance y las condiciones antes de enviarla.');
  }catch(e){status('No se pudo crear el PDF. Revisa la configuración.');}
 }
+function editProposal(){
+ try{
+  const packet={version:9,config:Core.normalize(state)};
+  sessionStorage.setItem('abel-v9-proposal-draft',JSON.stringify(packet));
+  location.href='../herramientas/propuestas-v8.html?studio=v9';
+ }catch{status('No se pudo abrir el editor de propuesta. Inténtalo desde la página de presupuestos.');}
+}
 function moveToCrm(){
  try{
   const quote=Core.quote(state,Engine),p={version:9,name:state.brand,sector:Core.SECTORS[state.sector].name,estimate:quote.total,notes:Core.brief(state)};
@@ -272,6 +279,7 @@ function init(){
  setupTabs();renderOptions();restoreLink();renderAll();
  controlBindings();
  $('builder-pdf').addEventListener('click',createPdf);
+ $('builder-edit-proposal').addEventListener('click',editProposal);
  $('builder-crm').addEventListener('click',moveToCrm);
  $('save-config').addEventListener('click',saveJson);
  $('load-config').addEventListener('click',()=>$('load-config-file').click());
