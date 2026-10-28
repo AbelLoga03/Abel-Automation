@@ -276,7 +276,10 @@ function restoreLink(){
  catch{status('El enlace no contiene una configuración válida. Se cargó la plantilla inicial.');}
 }
 function init(){
- setupTabs();renderOptions();restoreLink();renderAll();
+ setupTabs();renderOptions();
+ const sectorParam=new URLSearchParams(location.search).get('sector');
+ if(!location.hash.startsWith('#config=')&&Object.prototype.hasOwnProperty.call(Core.SECTORS,sectorParam))state=Core.defaults(sectorParam);
+ restoreLink();renderAll();
  controlBindings();
  $('builder-pdf').addEventListener('click',createPdf);
  $('builder-edit-proposal').addEventListener('click',editProposal);
