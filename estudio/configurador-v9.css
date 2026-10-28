@@ -8,3 +8,15 @@
 @media(max-width:640px){.layout-width,.app-header-inner{width:min(1550px,calc(100% - 24px))}.app-header-inner{height:67px}.brand{font-size:12px}.brand-mark{height:33px;width:33px;font-size:21px}.brand small{font-size:7px}.header-nav{gap:8px}.header-nav a:not(:last-child){display:none}.header-nav a{font-size:10px}.intro h1{font-size:43px}.intro p:not(.eyebrow){font-size:13px}.intro-badges{flex-wrap:wrap}.intro-badges span{flex:1 1 40%}.editor-heading,.tab-panel,.editor-footer{padding-left:17px;padding-right:17px}.palette-grid{grid-template-columns:repeat(3,1fr)}.preview-toolbar{flex-direction:column;align-items:stretch}.device-picker{align-self:flex-start}.device{font-size:11px}.browser-shell{padding:8px}.address-pill{font-size:8px;padding:6px}.s-title{font-size:31px!important}.site-canvas .s-hero{display:block}.site-canvas .s-hero-content{padding:25px 18px}.site-canvas .s-photo{min-height:210px}.s-section{padding:27px 16px}.s-cards,.s-gallery{grid-template-columns:1fr 1fr}.s-gallery img{height:90px}.export-bar{display:block}.next-grid{grid-template-columns:1fr 1fr}.app-footer .layout-width{display:block}.app-footer a{margin:12px 13px 0 0;display:inline-block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.site-canvas{transition:none!important}}
 @media print{.app-header,.editor,.export-bar,.next-steps,.app-footer,.intro,.preview-disclaimer,.preview-toolbar,.browser-top{display:none!important}.workspace{display:block;padding:0}.browser-shell{border:0;box-shadow:none}.preview-viewport{overflow:visible;max-height:none}.site-canvas{overflow:visible;max-height:none}}
+
+/* Guardar vista visual como PDF desde la impresión del navegador */
+@page{size:A4 portrait;margin:12mm}
+@media print{
+ html,body,.workspace,.preview-column,.site-canvas,.s-section,.s-hero,.s-photo{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ html,body{background:white;color:black}
+ .preview-column{width:100%;max-width:none}
+ .browser-shell,.preview-viewport{background:white;padding:0;width:100%;max-height:none;overflow:visible}
+ .site-canvas{width:100%!important;max-height:none;overflow:visible}
+ .site-canvas .s-hero{break-inside:avoid}
+ .s-section{break-inside:avoid-page}
+}
