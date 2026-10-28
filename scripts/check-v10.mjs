@@ -35,7 +35,7 @@ check(J.withPrice(d,P).quote.total===785,'Total complejo 379+129+49+129+99=785')
 check(B.quote(J.builderPreset(d,B),P).total===785,'Precio complejo trasladado V9 sin desviación');
 check(J.builderPreset(d,B).sections.includes('automation'),'Automatización visible en V9');
 check(r.notes.some(x=>x.includes('250'))&&r.notes.some(x=>x.includes('urgente'))&&r.notes.some(x=>x.includes('contenidos')),'Alertas sobre presupuesto, plazo y contenidos');
-check(J.brief(d).includes('No se garantiza')===false&&J.brief(d).includes('no garantiza resultados'),'Brief expresa límites y no garantías');
+check(J.brief(d).includes('No se garantiza')===false&&J.brief(d).includes('ni garantiza resultados'),'Brief expresa límites y no garantías');
 const pdfInput=J.withPrice(d,P);
 const buf=Buffer.from(P.pdfDocument({base:pdfInput.base,extras:r.extras,scope:J.brief(d),project:'Propuesta V10 de ejemplo'}));
 check(buf.subarray(0,8).toString('latin1')==='%PDF-1.4','PDF válido generado desde V10');
