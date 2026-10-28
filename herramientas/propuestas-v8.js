@@ -31,6 +31,24 @@ function build(){
  }
  const today=new Date();$('q-date').value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
  if(params.get('project'))$('q-project').value=params.get('project').slice(0,150);
+ if(params.get('studio')==='v9'){
+  try{
+   const raw=sessionStorage.getItem('abel-v9-proposal-draft');
+   if(raw&&raw.length<18000&&globalThis.AbelBuilderV9){
+    const packet=JSON.parse(raw);if(packet.version!==9)throw Error('Versión incorrecta');
+    const c=globalThis.AbelBuilderV9.normalize(packet.config),pricing=globalThis.AbelBuilderV9.priceIds(c);
+    if(engine.lookup('web',pricing.base))base.value=pricing.base;
+    if(engine.lookup('maintenance',pricing.maintenance))maint.value=pricing.maintenance;
+    const allowedExtras=new Set(pricing.extras);
+    $('q-extras').querySelectorAll('input').forEach(input=>input.checked=allowedExtras.has(input.value));
+    $('q-project').value=('Proyecto web para '+c.brand).slice(0,150);
+    $('q-scope').value=globalThis.AbelBuilderV9.brief(c).slice(0,3000);
+    $('q-notes').value='Borrador derivado del configurador V9. Contenidos, imágenes, tiempos y extras deben acordarse por escrito.';
+    sessionStorage.removeItem('abel-v9-proposal-draft');
+   }
+  }catch{sessionStorage.removeItem('abel-v9-proposal-draft');}
+ }
+
  $('editor').addEventListener('input',render);
  $('editor').addEventListener('change',render);
  $('q-copy').addEventListener('click',copy);
