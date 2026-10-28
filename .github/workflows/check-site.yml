@@ -1,4 +1,4 @@
-name: Validate Abel Automation V6 PRO
+name: Validate Abel Automation · Growth
 on:
   push:
     branches: [main, "feature/**"]
@@ -19,3 +19,5 @@ jobs:
         run: node scripts/check-site.mjs
       - name: Validate V6 PRO project and calculator
         run: node scripts/check-v6.mjs
+      - name: Validate Growth Studio, conversion, accessibility and form
+        run: node scripts/check-growth.mjs
