@@ -181,6 +181,9 @@ function displaySection(id,sector){
   a.placeholder='Tu nombre (demo)';b.placeholder='Tu correo (demo)';c.placeholder='Cuéntanos tu idea (demo)';
   for(const x of [a,b,c]){x.disabled=true;x.setAttribute('aria-label',x.placeholder);}
   put(f,a,b,c);put(p,f,html('p','s-note','Formulario visual deshabilitado, no envía información.'));break;
+ case 'automation':
+  p=section('Menos tareas repetitivas','AUTOMATIZACIONES');
+  put(p,html('p','','Un flujo digital podría conectar tus consultas y herramientas según las necesidades del negocio.'),html('p','s-note','Propuesta conceptual. Requiere confirmar integraciones, permisos, servicios externos y costes.'));break;
  case 'whatsapp':
   p=section('¿Hablamos?','CONTACTO DIRECTO');
   put(p,html('span','s-pill','WhatsApp (sin conexión en demo)'),html('p','s-note','Para el proyecto real se requiere un teléfono autorizado.'));break;
