@@ -282,6 +282,19 @@ function init(){
  setupTabs();renderOptions();
  const sectorParam=new URLSearchParams(location.search).get('sector');
  if(!location.hash.startsWith('#config=')&&Object.prototype.hasOwnProperty.call(Core.SECTORS,sectorParam))state=Core.defaults(sectorParam);
+ if(new URLSearchParams(location.search).get('source')==='v10'&&!location.hash.startsWith('#config=')){
+  try{
+   const raw=sessionStorage.getItem('abel-v10-builder-draft');
+   if(raw&&raw.length<14000){
+    const packet=JSON.parse(raw);
+    if(packet.version===10&&packet.config?.version===9){
+     state=Core.normalize(packet.config);
+     sessionStorage.removeItem('abel-v10-builder-draft');
+     status('Propuesta del asistente V10 importada. Puedes editar cualquier sección, color y texto.');
+    }
+   }
+  }catch{status('No se pudo recuperar la propuesta V10. Puedes diseñar una nueva.');}
+ }
  restoreLink();renderAll();
  controlBindings();
  $('builder-pdf').addEventListener('click',createPdf);
