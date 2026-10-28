@@ -282,6 +282,7 @@ function init(){
  restoreLink();renderAll();
  controlBindings();
  $('builder-pdf').addEventListener('click',createPdf);
+ $('builder-print-design').addEventListener('click',()=>window.print());
  $('builder-edit-proposal').addEventListener('click',editProposal);
  $('builder-crm').addEventListener('click',moveToCrm);
  $('save-config').addEventListener('click',saveJson);
