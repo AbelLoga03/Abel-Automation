@@ -220,3 +220,12 @@ body{background:var(--bg);color:var(--text)}
 }
 @media(prefers-reduced-motion:reduce){.studio-site,.studio-sector,.studio-preview-frame{transition:none!important}}
 @media print{.studio-section,.studio-lead-section{display:none!important}}
+
+/* El menú pasa a modo móvil antes de que los enlaces invadan la marca */
+@media (min-width:761px) and (max-width:960px){
+ .menu-toggle{display:inline-block}
+ .nav-links{display:none;position:absolute;top:82px;left:0;right:0;background:#151925;border-bottom:1px solid #ffffff2b;box-shadow:0 16px 40px #0008;padding:20px 24px 25px;flex-direction:column;align-items:stretch;gap:0}
+ .nav-links.open{display:flex}
+ .nav-links>a{padding:13px;border-bottom:1px solid #ffffff1b}
+ .nav-links .nav-cta{text-align:center;margin-top:14px}
+}
