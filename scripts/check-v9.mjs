@@ -15,7 +15,7 @@ for(const f of ['assets/builder-v9-core.js','estudio/configurador-v9.js','herram
 ok(Object.keys(core.SECTORS).length===7,'7 sectores disponibles');
 ok(Object.keys(core.THEMES).length===6,'6 paletas');
 ok(core.STYLES.length===4&&core.FONTS.length===4&&core.LAYOUTS.length===3,'Estilos, fuentes y layouts');
-ok(core.SECTION_META.length===14,'14 tipos de secciones');
+ok(core.SECTION_META.length===15,'15 tipos de secciones');
 for(const id of Object.keys(core.SECTORS)){
  const d=core.defaults(id);
  ok(d.sector===id&&d.brand===core.SECTORS[id].brand,'Plantilla sectorial '+id);
@@ -31,7 +31,7 @@ d=core.normalize({...d,sections:['hero','qr','booking','seo','form']});
 ok(core.quote(d,pdf).total===379+129+99+79+39,'Todos los extras generan coste transparente');
 ok(core.quote(d,pdf).extras.length===4,'La portada nunca se cobra como extra');
 d=core.normalize({...d,order:['hero','contact','about','hero','xss','booking']});
-ok(new Set(d.order).size===14&&d.order.every(id=>core.DEFAULT_ORDER.includes(id)),'Orden sin duplicados ni ids maliciosos');
+ok(new Set(d.order).size===15&&d.order.every(id=>core.DEFAULT_ORDER.includes(id)),'Orden sin duplicados ni ids maliciosos');
 ok(!d.sections.includes('evil')&&d.sections.includes('hero'),'Lista de bloques filtrada');
 const userInput='<img src=x onerror=alert(1)>';
 d=core.normalize({...d,brand:userInput,headline:'Málaga y más',colors:{bg:'url(javascript:alert(1))',accent:'#aa5500'},custom:true});
