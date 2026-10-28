@@ -155,7 +155,21 @@ async function copyText(t){
  const area=document.createElement('textarea');area.value=t;area.style.position='fixed';area.style.left='-9999px';document.body.append(area);area.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}area.remove();return ok;
 }
 function initContact(){
- const form=el('contact-form');form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;
+ const form=el('contact-form');
+ const valid=()=>{
+  if(!form.reportValidity())return false;
+  const name=el('client-name').value.trim(),email=el('client-email').value.trim(),message=el('client-message').value.trim();
+  if(!name||!email||message.length<12){el('contact-status').textContent='Revisa tu nombre, correo y la descripción del proyecto (mínimo 12 caracteres reales).';return false;}
+  return true;
+ };
+ el('contact-send').addEventListener('click',()=>{
+  if(!valid())return;
+  if(!el('contact-consent').checked){el('contact-status').textContent='Para enviar la solicitud debes aceptar la información de privacidad.';el('contact-consent').focus();return;}
+  if(!form.action.startsWith('https://formsubmit.co/')){el('contact-status').textContent='El servicio de envío no está configurado correctamente.';return;}
+  el('contact-status').textContent='Se abrirá el servicio externo de envío. La recepción depende de que FormSubmit esté activado.';
+  HTMLFormElement.prototype.submit.call(form);
+ });
+ form.addEventListener('submit',e=>{e.preventDefault();if(!valid())return;
  const name=el('client-name').value.trim(),email=el('client-email').value.trim(),sector=el('client-sector').value,message=el('client-message').value.trim();
  if(!name||!email||message.length<12){el('contact-status').textContent='Revisa los datos y describe el proyecto con algo más de detalle.';return;}
  const lines=['SOLICITUD DE INFORMACIÓN · ABEL AUTOMATION','Nombre: '+name,'Email: '+email,'Sector: '+(sector||'No especificado'),'','Mi proyecto:',message,'','Preparado localmente desde el portfolio. No enviado automáticamente.'];
