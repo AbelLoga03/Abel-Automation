@@ -251,3 +251,15 @@ body{background:var(--bg);color:var(--text)}
 @media(max-width:470px){.sector-grid{grid-template-columns:1fr}.sector-tile{display:grid;grid-template-columns:120px 1fr}.sector-tile img{height:100%;min-height:145px;aspect-ratio:auto}.v8-action-buttons{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.sector-tile{transition:none}}
 @media print{.sectors-v8,.v8-action-band{display:none!important}}
+
+/* V9 · entrada visual hacia el constructor completo */
+.v9-promo{background:#131722;border-top:1px solid #ffffff20;border-bottom:1px solid #ffffff20}
+.v9-promo-inner{display:grid;grid-template-columns:90px minmax(0,1fr) 245px;gap:28px;align-items:center;padding-top:44px;padding-bottom:44px}
+.v9-promo-label{font-size:10px;font-weight:950;letter-spacing:.18em;line-height:1.7;color:#8de3dc;writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center}
+.v9-promo h2{font-size:clamp(26px,3vw,44px);letter-spacing:-.065em;line-height:1.18;margin:0 0 13px}
+.v9-promo h2 em{font-weight:400;font-family:Georgia,serif;color:#ffb188}
+.v9-promo p{margin:0;color:#bbc0cd;font-size:13px;line-height:1.7;max-width:700px}
+.v9-promo .v9-promo-fine{margin-top:9px;font-size:10px;color:#8fa1b0}
+.v9-promo .btn{min-height:57px;text-align:center}
+@media(max-width:810px){.v9-promo-inner{grid-template-columns:1fr;gap:13px}.v9-promo-label{writing-mode:initial;transform:none;justify-self:start}.v9-promo .btn{width:max-content;max-width:100%}}
+@media print{.v9-promo{display:none!important}}
