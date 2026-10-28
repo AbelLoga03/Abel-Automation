@@ -1,3 +1,5 @@
+> **Actualización 28/10/2026 — Growth V7:** Esta rama incluye el rediseño NIGHTSHIFT, el Creative Lab y un **envío de consultas opcional mediante FormSubmit** (pendiente de verificar recepción). La opción de borrador local sigue disponible. Consulta [V7_GROWTH_README.md](V7_GROWTH_README.md). La descripción del formulario V6 que figura más abajo se refiere al comportamiento anterior.
+
 # Abel Automation · Portfolio V6 PRO
 
 **Estado:** propuesta de actualización en rama, pendiente de revisión y publicación.
