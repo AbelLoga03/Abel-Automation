@@ -106,7 +106,7 @@ function download(bytes,filename,type){
 function proposalPdf(){
  try{
   const r=Core.withPrice(state,Engine);
-  const data={base:r.base,extras:r.extras,maintenance:'none',client:'Cliente por concretar',project:'Proyecto digital '+(state.brand||r.sector.label),scope:Core.brief(state)};
+  const data={base:r.base,extras:Core.recommend(state).extras,maintenance:'none',client:'Cliente por concretar',project:'Proyecto digital '+(state.brand||r.sector.label),scope:Core.brief(state)};
   const bytes=Engine.pdfDocument(data);
   download(bytes,'Abel-Automation-Plan-V10.pdf','application/pdf');
   resultStatus('PDF generado localmente. Comprueba el alcance antes de enviar una propuesta definitiva.');
