@@ -53,7 +53,7 @@ function recommend(input){
  if(x.goals.includes('reservas'))add('booking','Has indicado interés en solicitudes de cita sin confirmar disponibilidad.');
  if(x.goals.includes('tiempo'))add('n8n','Quieres ahorrar tareas repetitivas; conviene revisar un flujo inicial de automatización.');
  const sector=SECTORS[x.sector];
- const base=x.goals.includes('productos')&&x.sector==='otro'?'catalogo':sector.base;
+ const base=sector.base;
  const extras=[...chosen],notes=[];
  if(x.budget==='bajo')notes.push('Has indicado hasta 250 €. La estimación puede superarlo: se puede revisar el alcance y priorizar funciones.');
  if(x.timing==='urgente')notes.push('La fecha urgente requiere confirmar disponibilidad y alcance; no está garantizada.');
@@ -91,7 +91,7 @@ function builderPreset(input,core){
  const r=recommend(input);if(!core)throw Error('Constructor V9 no disponible');
  const state=core.defaults(r.sector.builder);
  const extraToBlock={whatsapp:'whatsapp',gallery:'gallery',seo:'seo','qr-interactive':'qr',form:'form',booking:'booking',maps:'map',n8n:'automation'};
- const selected=new Set(state.sections);
+ const selected=new Set(state.sections.filter(id=>!core.SECTION_META.some(m=>m.id===id&&m.extra)));
  for(const id of r.extras){const section=extraToBlock[id];if(section)selected.add(section);}
  return core.normalize({...state,brand:r.data.brand||state.brand,sections:[...selected]});
 }
