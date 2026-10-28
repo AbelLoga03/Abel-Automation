@@ -263,3 +263,27 @@ body{background:var(--bg);color:var(--text)}
 .v9-promo .btn{min-height:57px;text-align:center}
 @media(max-width:810px){.v9-promo-inner{grid-template-columns:1fr;gap:13px}.v9-promo-label{writing-mode:initial;transform:none;justify-self:start}.v9-promo .btn{width:max-content;max-width:100%}}
 @media print{.v9-promo{display:none!important}}
+
+/* V10 · cualificación comercial y comparación visual */
+.v10-discovery{padding:66px 0;background:radial-gradient(circle at 75% 30%,#77445341,transparent 58%),#151925;border-top:1px solid #ffffff24;border-bottom:1px solid #ffffff24}
+.v10-discovery-inner{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:55px;align-items:center}
+.v10-discovery h2{font-size:clamp(34px,4.6vw,62px);letter-spacing:-.073em;line-height:1.08;margin:10px 0 18px}
+.v10-discovery h2 em{font-family:Georgia,serif;font-weight:400;color:#ffaf85}
+.v10-discovery-copy>p:not(.eyebrow){font-size:14px;line-height:1.8;color:#bdc2cd;max-width:690px}
+.v10-discovery-actions{display:flex;flex-wrap:wrap;gap:11px;margin:26px 0}
+.v10-discovery .v10-discovery-fine{font-size:11px!important;color:#a6b2c0!important}
+.v10-discovery-art{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;transform:rotate(-2deg)}
+.v10-discovery-art>div{border-radius:15px;min-height:320px;box-shadow:0 20px 60px #0006;padding:24px;display:flex;flex-direction:column;justify-content:center}
+.v10-question{background:#f7ece0;color:#32262b}
+.v10-question small,.v10-preview small{color:#a96348;font-size:9px;letter-spacing:.15em;font-weight:950}
+.v10-question b{font-size:22px;line-height:1.2;letter-spacing:-.06em;margin:18px 0}
+.v10-question>span{display:block;padding:9px 10px;background:#ffffffbd;border-radius:7px;margin-top:7px;font-size:11px;font-weight:800}
+.v10-question>span:first-of-type{background:#ffd6bb;border:1px solid #bf7656}
+.v10-preview{background:#2a2637;color:#f7ebe2;transform:translateY(18px)}
+.v10-preview small{color:#8ce7df}
+.v10-preview strong{font-size:clamp(25px,3vw,40px);letter-spacing:-.075em;line-height:1.1;margin:20px 0;display:block}
+.v10-preview strong em{display:block;color:#ffb188;font-family:Georgia,serif;font-weight:400}
+.v10-preview i{font-size:10px;letter-spacing:.12em;color:#bcbaca;font-style:normal;font-weight:900}
+@media(max-width:950px){.v10-discovery-inner{grid-template-columns:1fr}.v10-discovery-art{max-width:620px}.v10-discovery-art>div{min-height:230px}}
+@media(max-width:540px){.v10-discovery{padding:48px 0}.v10-discovery-art>div{padding:14px;min-height:220px}.v10-question b{font-size:17px}.v10-question>span{font-size:9px}.v10-preview strong{font-size:25px}.v10-discovery-actions .btn{width:100%}}
+@media print{.v10-discovery{display:none!important}}
