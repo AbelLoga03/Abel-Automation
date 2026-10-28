@@ -229,3 +229,25 @@ body{background:var(--bg);color:var(--text)}
  .nav-links>a{padding:13px;border-bottom:1px solid #ffffff1b}
  .nav-links .nav-cta{text-align:center;margin-top:14px}
 }
+
+/* V8 · páginas comerciales sectoriales y herramientas */
+.sectors-v8{background:#111520}
+.sector-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.sector-tile{display:flex;flex-direction:column;border:1px solid #ffffff2a;border-radius:14px;overflow:hidden;background:#1f2532;transition:transform .2s,border-color .2s}
+.sector-tile:hover{transform:translateY(-5px);border-color:#ffaf7f}
+.sector-tile img{width:100%;aspect-ratio:1.4;object-fit:cover}
+.sector-tile>div{padding:17px;display:flex;flex-direction:column;gap:7px;flex:1}
+.sector-tile span{font-size:9px;font-weight:900;color:#8de3dc;letter-spacing:.15em}
+.sector-tile h3{font-size:18px;line-height:1.25;letter-spacing:-.05em;margin:0}
+.sector-tile p{font-size:11px;color:#acb7c5;margin:0 0 8px}
+.sector-tile b{margin-top:auto;font-size:11px;color:#ffaf7f}
+.v8-action-band{padding:55px 0;background:#242733}
+.v8-action-inner{display:flex;align-items:center;justify-content:space-between;gap:30px}
+.v8-action-inner h2{font-size:clamp(28px,3.2vw,43px);letter-spacing:-.065em;line-height:1.15;margin:0 0 12px}
+.v8-action-inner p:not(.eyebrow){color:#c4c3cd;font-size:13px;margin:0;max-width:680px}
+.v8-action-buttons{display:flex;flex-direction:column;gap:9px;min-width:230px}
+@media(max-width:1050px){.sector-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.sector-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.v8-action-inner{display:block}.v8-action-buttons{flex-direction:row;margin-top:22px;flex-wrap:wrap}}
+@media(max-width:470px){.sector-grid{grid-template-columns:1fr}.sector-tile{display:grid;grid-template-columns:120px 1fr}.sector-tile img{height:100%;min-height:145px;aspect-ratio:auto}.v8-action-buttons{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.sector-tile{transition:none}}
+@media print{.sectors-v8,.v8-action-band{display:none!important}}
