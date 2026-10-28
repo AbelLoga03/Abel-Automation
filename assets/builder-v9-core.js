@@ -35,6 +35,7 @@
   {id:'contact',name:'Contacto',hint:'Datos de ejemplo'},
   {id:'form',name:'Formulario',hint:'+39 €',extra:'form'},
   {id:'whatsapp',name:'WhatsApp',hint:'+19 €',extra:'whatsapp'},
+  {id:'automation',name:'Automatización',hint:'desde 129 €',extra:'n8n'},
   {id:'seo',name:'SEO inicial',hint:'+79 €',extra:'seo'}
  ];
  const DEFAULT_ORDER=SECTION_META.map(x=>x.id);
