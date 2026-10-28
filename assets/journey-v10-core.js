@@ -90,7 +90,7 @@ function brief(input){
 function builderPreset(input,core){
  const r=recommend(input);if(!core)throw Error('Constructor V9 no disponible');
  const state=core.defaults(r.sector.builder);
- const extraToBlock={whatsapp:'whatsapp',gallery:'gallery',seo:'seo','qr-interactive':'qr',form:'form',booking:'booking',maps:'map',n8n:'services'};
+ const extraToBlock={whatsapp:'whatsapp',gallery:'gallery',seo:'seo','qr-interactive':'qr',form:'form',booking:'booking',maps:'map',n8n:'automation'};
  const selected=new Set(state.sections);
  for(const id of r.extras){const section=extraToBlock[id];if(section)selected.add(section);}
  return core.normalize({...state,brand:r.data.brand||state.brand,sections:[...selected]});
