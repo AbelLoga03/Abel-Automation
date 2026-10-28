@@ -17,7 +17,7 @@ Convertir el portfolio en una experiencia de venta consultiva: un negocio imagin
 3. **6 paletas + colores propios:** fondo, texto, acento y superficies; valores \`#RRGGBB\` validados. Comprobar manualmente el contraste de esquemas personalizados.
 4. **4 estilos y 4 tipografías:** Editorial, Impacto, Minimalista, Creativo; grotesca, serif, redondeada, monoespaciada.
 5. **3 distribuciones hero:** dividida, centrada y con fotografía completa.
-6. **14 bloques seleccionables y ordenables:** portada, historia, servicios, productos, galería, carta QR, reservas, testimonios, FAQ, mapa, contacto, formulario, WhatsApp y SEO inicial.
+6. **15 bloques seleccionables y ordenables:** portada, historia, servicios, productos, galería, carta QR, reservas, testimonios, FAQ, mapa, contacto, formulario, WhatsApp, automatización y SEO inicial.
 7. **Vista en directo** para escritorio, tablet y móvil. La maqueta es ilustrativa. Los testimonios son textos claramente ficticios, los formularios están deshabilitados, no se hacen reservas ni se conectan a números reales de WhatsApp.
 8. **Presupuesto con motor V8:** la base viene del sector; los extras se cobran solo si se selecciona el bloque correspondiente. Hay precios \`desde\` donde procede y mantenimiento opcional separado.
 9. **Dos tipos de PDF:**
