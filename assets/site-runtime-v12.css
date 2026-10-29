@@ -3,3 +3,10 @@
 @media(max-width:850px){.hero-copy{padding:43px}.hero h1{font-size:clamp(38px,6vw,64px)}.links{gap:11px}.section{padding:52px 0}}
 @media(max-width:620px){.wrap{width:calc(100% - 30px)}.nav{min-height:66px;flex-wrap:wrap}.menu-toggle{display:block}.links{display:none;flex-basis:100%;flex-direction:column;padding-bottom:18px}.links.is-open{display:flex}.links a{padding:8px 0}.hero,.layout-centered{display:flex;flex-direction:column}.hero-copy,.layout-centered .hero-copy{min-height:0;padding:44px 23px;align-items:flex-start;text-align:left}.hero h1{font-size:44px}.hero-photo,.layout-centered .hero-photo{min-height:220px}.layout-full{min-height:560px}.layout-full .hero-photo{position:absolute}.layout-full .hero-copy{min-height:550px}.cards,.gallery{grid-template-columns:1fr}.section{padding:42px 0}.footer .wrap{flex-direction:column;align-items:flex-start}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Personalidad de estilo también incluida en la web exportada */
+.style-editorial .hero h1{font-style:italic;font-weight:550}
+.style-bold .hero h1{text-transform:uppercase;font-weight:950}
+.style-minimal .hero h1{font-weight:500;letter-spacing:-.035em}
+.style-playful .hero h1{transform:rotate(-2deg)}
+.style-playful .card,.style-playful .action{border-radius:24px}
