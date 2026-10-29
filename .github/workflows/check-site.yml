@@ -1,4 +1,4 @@
-name: Validate Abel Automation V10
+name: Validate Abel Automation V11
 on:
   push:
     branches: [main, "feature/**"]
@@ -27,3 +27,5 @@ jobs:
         run: node scripts/check-v9.mjs
       - name: Validate V10 client journey, comparison and pricing across versions
         run: node scripts/check-v10.mjs
+      - name: Validate V11 launch readiness, CRM calendar, contact and SEO
+        run: node scripts/check-v11.mjs
