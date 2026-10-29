@@ -10,3 +10,8 @@
 .style-minimal .hero h1{font-weight:500;letter-spacing:-.035em}
 .style-playful .hero h1{transform:rotate(-2deg)}
 .style-playful .card,.style-playful .action{border-radius:24px}
+
+/* V13 · fotografía configurada individualmente para una sección */
+.section-feature-photo{overflow:hidden;border-radius:14px;margin:10px 0 26px;max-height:290px}
+.section-feature-photo img{display:block;width:100%;height:280px;object-fit:cover}
+@media(max-width:620px){.section-feature-photo img{height:190px}}
