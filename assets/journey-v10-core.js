@@ -4,8 +4,8 @@
 const SECTORS={
  restaurante:{label:'Restaurante o cafetería',builder:'restaurante',contact:'Restaurante / cafetería',base:'restaurante'},
  comercio:{label:'Comercio o tienda',builder:'comercio',contact:'Comercio / tienda',base:'catalogo'},
- belleza:{label:'Peluquería o estética',builder:'belleza',contact:'Otro',base:'reservas'},
- taller:{label:'Taller o reparación',builder:'taller',contact:'Servicios profesionales',base:'profesional'},
+ belleza:{label:'Peluquería o estética',builder:'belleza',contact:'Peluquería / estética',base:'reservas'},
+ taller:{label:'Taller o reparación',builder:'taller',contact:'Taller / reparaciones',base:'profesional'},
  hotel:{label:'Alojamiento o turismo',builder:'hotel',contact:'Alojamiento / turismo',base:'reservas'},
  profesional:{label:'Servicio profesional',builder:'profesional',contact:'Servicios profesionales',base:'profesional'},
  otro:{label:'Otro proyecto',builder:'otro',contact:'Otro',base:'basica'}
