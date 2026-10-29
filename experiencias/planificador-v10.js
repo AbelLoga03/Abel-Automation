@@ -119,6 +119,13 @@ function openBuilder(){
   location.href='../estudio/configurador-v9.html?source=v10';
  }catch{resultStatus('El constructor no está disponible en esta sesión.');}
 }
+function openBuilderV12(){
+ try{
+  const preset=Core.builderPreset(state,Builder);
+  sessionStorage.setItem('abel-v12-from-v9',JSON.stringify(preset));
+  location.href='../estudio/builder-v12.html';
+ }catch{resultStatus('No se pudo pasar la propuesta al editor V12.');}
+}
 function openContact(){
  try{
   const data={version:10,sector:Core.SECTORS[state.sector].contact,message:Core.brief(state)};
@@ -143,6 +150,7 @@ function init(){
  if(sector&&Object.prototype.hasOwnProperty.call(Core.SECTORS,sector))state=Core.defaults(sector);
  $('prev-step').addEventListener('click',previous);$('next-step').addEventListener('click',next);
  $('result-pdf').addEventListener('click',proposalPdf);$('result-builder').addEventListener('click',openBuilder);
+ $('result-builder-v12').addEventListener('click',openBuilderV12);
  $('result-contact').addEventListener('click',openContact);$('result-crm').addEventListener('click',openCRM);
  $('result-json').addEventListener('click',exportJson);
  $('result-edit').addEventListener('click',()=>{step=0;showStep();});
