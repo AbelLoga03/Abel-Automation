@@ -85,6 +85,11 @@ ok(app.includes("Engine.fromV9(parsed)")&&v9.includes("sessionStorage.setItem('a
 ok(home.includes('id="novedades-v12"')&&home.includes('estudio/builder-v12.html'),'Portada y centro de novedades prominently visibles');
 ok(news.includes('V12')&&news.includes('V11')&&news.includes('V10')&&news.includes('V9'),'Centro de novedades retrospectivo');
 ok(read('sitemap.xml').includes('/estudio/builder-v12.html')&&read('sitemap.xml').includes('/novedades.html'),'Páginas nuevas en sitemap');
+const planner=read('experiencias/planificador-v10.html'),plannerJS=read('experiencias/planificador-v10.js');
+ok(planner.includes('id="result-builder-v12"')&&plannerJS.includes("sessionStorage.setItem('abel-v12-from-v9'"),'Planificador V10 ofrece continuación exportable V12');
+for(const sector of ['restaurantes','peluquerias','talleres','comercios','alojamientos'])ok(read('sectores/'+sector+'.html').includes('../estudio/builder-v12.html?sector='),'Landing V8 permite llegar directamente a V12: '+sector);
+ok(home.includes('class="v12-nav-main"')&&home.includes('id="novedades-v12"'),'Acceso principal y novedades visibles desde home');
+
 for(const file of ['estudio/builder-v12.html','novedades.html']){
  for(const match of read(file).matchAll(/<(?:a|link|script|img)\b[^>]*?\b(?:href|src)=["']([^"']+)["']/gi)){
   const url=match[1];if(/^(https?:|mailto:|tel:|data:|#)/.test(url))continue;
