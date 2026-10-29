@@ -27,7 +27,7 @@
     name:'Peluquería o estética',tag:'BELLEZA · AGENDA',brand:'AURA CONCEPT',
     headline:'Tu estilo habla por ti.',sub:'Servicios visuales y solicitudes de cita sencillas.',
     base:'reservas',image:'assets/portfolio-barberia.webp',
-    service:'Tratamientos',second:'Reservar consulta',third:'El estudio',sector:'Otro'
+    service:'Tratamientos',second:'Reservar consulta',third:'El estudio',sector:'Peluquería / estética'
   },
   turismo:{
     name:'Hotel o alojamiento',tag:'TURISMO · EXPERIENCIA',brand:'SIERRA CALMA',
