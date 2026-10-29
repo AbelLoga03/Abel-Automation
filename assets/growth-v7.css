@@ -287,3 +287,14 @@ body{background:var(--bg);color:var(--text)}
 @media(max-width:950px){.v10-discovery-inner{grid-template-columns:1fr}.v10-discovery-art{max-width:620px}.v10-discovery-art>div{min-height:230px}}
 @media(max-width:540px){.v10-discovery{padding:48px 0}.v10-discovery-art>div{padding:14px;min-height:220px}.v10-question b{font-size:17px}.v10-question>span{font-size:9px}.v10-preview strong{font-size:25px}.v10-discovery-actions .btn{width:100%}}
 @media print{.v10-discovery{display:none!important}}
+
+/* V11 · contactos claros, sin píxeles de seguimiento ni almacenamiento personal */
+.v11-contact-tips{display:grid;gap:7px;margin-top:18px;border:1px solid #ffffff2b;background:#242b39;border-radius:11px;padding:16px 19px;line-height:1.6}
+.v11-contact-tips strong{color:#ffd3b4;font-size:12px}
+.v11-contact-tips span{color:#d1d4dd;font-size:12px}
+.v11-contact-count{font-size:11px;color:#536250;text-align:right;margin-top:6px}
+.v11-contact-alt{font-size:12px;color:#566a56;margin:12px 0}
+.v11-contact-alt a{font-weight:800;text-decoration:underline;color:#306b53}
+.contact-form #contact-status{min-height:18px}
+.contact-form button:focus-visible,.contact-form input:focus-visible,.contact-form textarea:focus-visible{outline:3px solid #24847c;outline-offset:3px}
+@media(max-width:720px){.v11-contact-tips{margin-top:14px}}
