@@ -1,6 +1,8 @@
-name: Validate AL Studio Digital
+name: Validate Abel Automation V13
 on:
   push:
+    branches: [main, "feature/**"]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 jobs:
@@ -13,4 +15,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node scripts/check-site.mjs
+      - name: Validate preserved legacy website
+        run: node scripts/check-site.mjs
+      - name: Validate V6 PRO project and calculator
+        run: node scripts/check-v6.mjs
+      - name: Validate Growth Studio, conversion, accessibility and form
+        run: node scripts/check-growth.mjs
+      - name: Validate V8 proposals, sector landings and encrypted CRM
+        run: node scripts/check-v8.mjs
+      - name: Validate V9 live builder, price logic, PDF, and CRM handoff
+        run: node scripts/check-v9.mjs
+      - name: Validate V10 client journey, comparison and pricing across versions
+        run: node scripts/check-v10.mjs
+      - name: Validate V11 launch readiness, CRM calendar, contact and SEO
+        run: node scripts/check-v11.mjs
+      - name: Validate V12 exportable web, real ZIP, editing, routes and safety
+        run: node scripts/check-v12.mjs
+      - name: Validate V13 project library, safe local autosave, editor UX and publish review
+        run: node scripts/check-v13.mjs

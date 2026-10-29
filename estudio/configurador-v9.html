@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10121a"><meta name="robots" content="index,follow">
+<title>Constructor visual de páginas web | Abel Automation V9</title>
+<meta name="description" content="Diseña una propuesta de página web: elige sector, textos, colores, estilos, secciones y descubre una vista previa inmediata. Descarga un PDF orientativo.">
+<link rel="canonical" href="https://abelloga03.github.io/Abel-Automation/estudio/configurador-v9.html">
+<link rel="icon" href="../assets/v6-favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="configurador-v9.css">
+<script src="../assets/proposal-v8.js" defer></script>
+<script src="../assets/builder-v9-core.js" defer></script>
+<script src="configurador-v9.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#constructor">Saltar al configurador</a>
+<header class="app-header"><div class="app-header-inner">
+ <a href="../index.html" class="brand" aria-label="Abel Automation · Inicio"><span class="brand-mark">a.</span><span>ABEL AUTOMATION<small>CREATIVE LAB / V9 PRO</small></span></a>
+ <nav class="header-nav" aria-label="Herramientas"><a href="../index.html#proyectos">25 demos</a><a href="../herramientas/propuestas-v8.html">Propuestas</a><a href="../herramientas/crm.html">CRM privado</a></nav>
+ <span class="header-label"><span class="pulse"></span> CONSTRUCTOR EN DIRECTO</span>
+</div></header>
+<main id="constructor">
+<section class="intro layout-width">
+ <div><p class="eyebrow">V9 · ABEL EXPERIENCE BUILDER</p><h1>Una web a tu gusto.<br><em>Una idea que cobra forma.</em></h1><p>Experimenta con la identidad de tu negocio: ajusta estilos, colores y secciones mientras ves el resultado. Después genera una propuesta PDF con los servicios que has elegido.</p></div>
+ <div class="intro-badges"><span>7 sectores</span><span>6 paletas</span><span>15 bloques</span><span>PDF real</span></div>
+</section>
+<div class="workspace layout-width">
+ <aside class="editor" aria-labelledby="editor-heading">
+  <div class="editor-heading"><div><p class="eyebrow">PANEL DE DISEÑO</p><h2 id="editor-heading">Tu concepto</h2></div><button type="button" class="mini-action" id="reset-config" title="Restaurar configuración del sector">Reiniciar ↺</button></div>
+  <div class="editor-tabs" role="tablist" aria-label="Categorías del constructor">
+   <button type="button" role="tab" id="tab-business" aria-controls="panel-business" aria-selected="true" tabindex="0" data-tab="business">01 · Negocio</button>
+   <button type="button" role="tab" id="tab-design" aria-controls="panel-design" aria-selected="false" tabindex="-1" data-tab="design">02 · Diseño</button>
+   <button type="button" role="tab" id="tab-blocks" aria-controls="panel-blocks" aria-selected="false" tabindex="-1" data-tab="blocks">03 · Bloques</button>
+  </div>
+  <section class="tab-panel" id="panel-business" role="tabpanel" aria-labelledby="tab-business">
+   <div class="field-group">
+    <label class="field-label" for="biz-sector">¿Qué tipo de negocio tienes?</label>
+    <select class="field" id="biz-sector"></select>
+    <p class="small-hint">Cambiar de sector carga una propuesta inicial; puedes personalizarla después.</p>
+   </div>
+   <div class="field-group"><label class="field-label" for="biz-brand">Nombre o marca</label><input class="field" id="biz-brand" maxlength="65" placeholder="Nombre comercial de ejemplo"><small class="input-counter" id="brand-count"></small></div>
+   <div class="field-group"><label class="field-label" for="biz-headline">Título destacado</label><textarea class="field" id="biz-headline" rows="2" maxlength="130" placeholder="Tu titular"></textarea></div>
+   <div class="field-group"><label class="field-label" for="biz-intro">Texto de presentación</label><textarea class="field" id="biz-intro" rows="3" maxlength="240" placeholder="Qué ofreces y por qué"></textarea></div>
+   <div class="field-group"><label class="field-label" for="biz-cta">Texto del botón principal</label><input class="field" id="biz-cta" maxlength="38" placeholder="Contacta"></div>
+   <div class="editor-note"><strong>Tu diseño no se publica.</strong> Todas las marcas, imágenes y contenidos iniciales son conceptos ilustrativos. Los formularios de la vista previa no envían nada.</div>
+  </section>
+  <section class="tab-panel" id="panel-design" role="tabpanel" aria-labelledby="tab-design" hidden>
+   <div class="field-group"><p class="field-label">Paleta de colores</p><div class="palette-grid" id="palette-options" role="group" aria-label="Paletas prediseñadas"></div></div>
+   <div class="field-group"><label class="checkrow"><input id="custom-toggle" type="checkbox"> Personalizar colores manualmente</label><div class="color-grid" id="color-controls" hidden>
+    <label>Fondo <input type="color" id="color-bg" value="#f8efe7"></label>
+    <label>Texto <input type="color" id="color-ink" value="#30252c"></label>
+    <label>Acento <input type="color" id="color-accent" value="#b5634e"></label>
+    <label>Tarjetas <input type="color" id="color-surface" value="#ffffff"></label>
+   </div><p class="small-hint">Revisa el contraste cuando elijas colores personalizados.</p></div>
+   <div class="field-group"><p class="field-label">Personalidad visual</p><div class="select-grid" id="style-options" role="group" aria-label="Estilo visual"></div></div>
+   <div class="field-group"><label class="field-label" for="font-select">Tipografía de titulares</label><select class="field" id="font-select"><option value="sans">Grotesca moderna</option><option value="serif">Editorial serif</option><option value="rounded">Redondeada</option><option value="mono">Monoespaciada</option></select></div>
+   <div class="field-group"><p class="field-label">Distribución de portada</p><div class="select-grid" id="layout-options" role="group" aria-label="Distribución del hero"></div></div>
+  </section>
+  <section class="tab-panel" id="panel-blocks" role="tabpanel" aria-labelledby="tab-blocks" hidden>
+   <p class="small-hint" style="margin-top:0">Activa o desactiva secciones. Usa las flechas para cambiar el orden. Algunas opciones incluyen un precio extra que se reflejará en el presupuesto.</p>
+   <div class="blocks-list" id="blocks-list" role="group" aria-label="Secciones editables"></div>
+   <div class="field-group" style="margin-top:21px"><label class="field-label" for="biz-maintenance">Mantenimiento opcional</label><select id="biz-maintenance" class="field">
+    <option value="none">Sin mantenimiento</option>
+    <option value="esencial">Esencial · 15 €/mes</option>
+    <option value="negocio">Negocio · 29 €/mes</option>
+    <option value="profesional">Profesional · 49 €/mes</option>
+    <option value="premium">Premium · desde 79 €/mes</option>
+   </select></div>
+  </section>
+  <div class="editor-footer">
+   <div class="estimate-label"><div><small>INVERSIÓN INICIAL ESTIMADA</small><strong id="builder-price" aria-live="polite">—</strong><span id="builder-price-detail"></span></div><span class="estimate-icon">↗</span></div>
+   <p id="builder-message" role="status" aria-live="polite" class="status-line"></p>
+   <div class="action-stack">
+    <button type="button" class="primary-action" id="open-builder-v12">★ NUEVO · Exportar una web real con V12 ↗</button>
+    <button type="button" class="primary-action" id="builder-pdf">Generar propuesta PDF <span>↗</span></button>
+    <button type="button" class="secondary-action" id="builder-print-design">Imprimir diseño / guardar como PDF <span>↗</span></button>
+    <button type="button" class="secondary-action" id="builder-edit-proposal">Editar PDF con datos del cliente <span>→</span></button>
+    <button type="button" class="secondary-action" id="builder-crm">Llevar idea a mi CRM privado <span>→</span></button>
+   </div>
+  </div>
+ </aside>
+ <section class="preview-column" aria-labelledby="preview-heading">
+  <div class="preview-toolbar"><div class="toolbar-left"><span class="preview-live-dot"></span><div><strong id="preview-heading">TU WEB EN DIRECTO</strong><small id="preview-summary">Vista conceptual de tu negocio</small></div></div>
+   <div class="device-picker" role="group" aria-label="Tamaño de vista previa"><button type="button" class="device" data-device="desktop" aria-pressed="true" title="Ordenador">▣ <span>Escritorio</span></button><button type="button" class="device" data-device="tablet" aria-pressed="false" title="Tablet">▤ <span>Tablet</span></button><button type="button" class="device" data-device="mobile" aria-pressed="false" title="Móvil">▯ <span>Móvil</span></button></div>
+  </div>
+  <div class="browser-shell" id="browser-shell">
+   <div class="browser-top"><div class="browser-dots"><i></i><i></i><i></i></div><div class="address-pill">https://tu-negocio.ejemplo · <span>previsualización</span></div><span class="browser-shield">✳</span></div>
+   <div class="preview-viewport" id="preview-viewport">
+    <div class="site-canvas" id="site-canvas" data-device="desktop" data-layout="split" data-style="editorial" data-font="sans" aria-label="Maqueta digital del negocio"></div>
+   </div>
+  </div>
+  <p class="preview-disclaimer"><span>◉</span> DEMOSTRACIÓN INTERACTIVA · No es una web publicada. Los precios y las funciones requieren confirmar alcance.</p>
+  <div class="export-bar">
+   <div><strong>Tu diseño también es tuyo.</strong><p>Descarga el concepto en JSON, recupéralo o crea un enlace compartible. El JSON solo contiene la configuración, no datos privados del CRM.</p></div>
+   <div class="export-actions">
+    <button type="button" id="save-config">Descargar JSON ↓</button>
+    <button type="button" id="load-config">Importar JSON ↑</button>
+    <input id="load-config-file" type="file" accept=".json,application/json" hidden>
+    <button type="button" id="share-config">Copiar enlace ↗</button>
+   </div>
+  </div>
+  <section class="next-steps" aria-labelledby="flow-heading"><p class="eyebrow">DEL DISEÑO AL PROYECTO</p><h2 id="flow-heading">¿Te gusta el resultado?</h2><div class="next-grid">
+   <div><span>01</span><strong>Configura</strong><p>Prueba visuales y funciones.</p></div>
+   <div><span>02</span><strong>Calcula</strong><p>Presupuesto según el catálogo.</p></div>
+   <div><span>03</span><strong>Descarga PDF</strong><p>Genera una propuesta de tu idea.</p></div>
+   <div><span>04</span><strong>Solicita</strong><p>Contacta para confirmar alcance.</p></div>
+  </div><a class="request-link" href="../index.html#contacto">Solicitar una propuesta personalizada ↗</a></section>
+ </section>
+</div>
+</main>
+<footer class="app-footer"><div class="layout-width"><span>© 2026 Abel Automation · Portfolio de servicios independientes</span><div><a href="../privacidad.html">Privacidad</a><a href="../index.html">Volver al portfolio</a></div></div></footer>
+</body></html>
