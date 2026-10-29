@@ -297,6 +297,7 @@ function init(){
  }
  restoreLink();renderAll();
  controlBindings();
+ $('open-builder-v12').addEventListener('click',()=>{try{sessionStorage.setItem('abel-v12-from-v9',JSON.stringify(Core.normalize(state)));location.href='builder-v12.html';}catch{status('No se pudo transferir la configuración a V12. Exporta un JSON para importarlo.');}});
  $('builder-pdf').addEventListener('click',createPdf);
  $('builder-print-design').addEventListener('click',()=>window.print());
  $('builder-edit-proposal').addEventListener('click',editProposal);
