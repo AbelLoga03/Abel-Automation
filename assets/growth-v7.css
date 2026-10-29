@@ -298,3 +298,34 @@ body{background:var(--bg);color:var(--text)}
 .contact-form #contact-status{min-height:18px}
 .contact-form button:focus-visible,.contact-form input:focus-visible,.contact-form textarea:focus-visible{outline:3px solid #24847c;outline-offset:3px}
 @media(max-width:720px){.v11-contact-tips{margin-top:14px}}
+
+/* V12: novedades de alto contraste, fácilmente localizables */
+.nav-links a.v12-nav-main{background:#ffb18e;color:#1c1827!important;border-radius:9px;padding:11px 14px;font-size:12px;box-shadow:0 0 24px #ffb18e48}
+.nav-links a.v12-nav-main:hover{background:#ffe0c2}
+.hero-actions a.v12-hero-cta{display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:59px}
+.v12-hero-cta>span:first-child{font-weight:950;color:#2b1827;background:#ffe8d3;border:1px solid #803e3a3d;border-radius:6px;padding:5px 8px;font-size:10px;letter-spacing:.04em}
+.v12-whats-new{padding:74px 0;background:#f7efe6;color:#29202b;border-top:5px solid #ffaf7f;border-bottom:5px solid #ffaf7f}
+.v12-whats-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:34px}.v12-whats-head .eyebrow{color:#986047!important}
+.v12-whats-head h2{font-size:clamp(37px,4.7vw,65px);line-height:1.09;letter-spacing:-.074em;margin:8px 0 14px}
+.v12-whats-head h2 em{font-family:Georgia,serif;color:#a6513b;font-weight:400}
+.v12-whats-head p:not(.eyebrow){max-width:680px;color:#594f53;font-size:15px}
+.v12-whats-all{font-size:12px;font-weight:850;color:#873e34;text-decoration:underline;max-width:220px;text-align:right}
+.v12-feature-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:auto auto;gap:13px}
+.v12-feature-primary{grid-row:span 2;background:#192334;color:#fff9ed;padding:29px;border-radius:18px;min-height:400px;position:relative;overflow:hidden;box-shadow:0 18px 45px #2821332c}
+.v12-new-label{display:inline-block;background:#ffbb90;color:#34212a;border-radius:999px;padding:7px 12px;font-size:10px;font-weight:950}
+.v12-feature-primary h3{font-size:clamp(24px,3vw,36px);line-height:1.15;letter-spacing:-.06em;margin:23px 0 13px;max-width:530px}
+.v12-feature-primary p{color:#c0c8d6;font-size:13px;line-height:1.7;max-width:530px}
+.v12-feature-primary>a{display:inline-flex;margin-top:18px;background:#ffb18e;color:#241a2a;padding:13px 20px;font-weight:900;border-radius:9px;font-size:12px}
+.v12-feature-preview{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:15px;background:#303b4e;border:1px solid #ffffff28;border-radius:12px;margin:23px 0 5px;max-width:530px}
+.v12-feature-preview span{font-size:9px;color:#b8d9d9;padding:9px}
+.v12-feature-preview strong{font-size:14px;font-weight:900;background:#efdec9;color:#252431;border-radius:5px;padding:8px 10px}
+.v12-feature-preview em{font-size:12px;color:#2e202b;background:#ffb18e;padding:11px;border-radius:6px;font-weight:950;font-style:normal}
+.v12-feature-secondary{border:1px solid #e6d2c6;background:#fffaf4;border-radius:15px;padding:24px;min-height:173px}
+.v12-feature-secondary>span{font-size:9px;letter-spacing:.1em;font-weight:950;color:#a25843}
+.v12-feature-secondary h3{font-size:20px;letter-spacing:-.06em;margin:12px 0 7px}
+.v12-feature-secondary p{color:#6b6063;font-size:12px;line-height:1.5}
+.v12-feature-secondary a{color:#8b4035;font-weight:900;font-size:12px}
+.v12-note{font-size:11px!important;margin-top:22px;color:#625a5c}
+@media(max-width:1120px){.v12-feature-grid{grid-template-columns:1.2fr 1fr}.v12-feature-primary{grid-row:span 3}.v12-whats-head h2{font-size:46px}}
+@media(max-width:780px){.v12-feature-grid{grid-template-columns:1fr 1fr}.v12-feature-primary{grid-column:1/-1;grid-row:auto;min-height:0}.v12-whats-head{display:block}.v12-whats-all{display:inline-block;text-align:left;max-width:none}.v12-whats-new{padding:46px 0}.v12-feature-secondary{min-height:0}}
+@media(max-width:570px){.v12-feature-grid{grid-template-columns:1fr}.v12-feature-primary{grid-column:auto}.v12-whats-head h2{font-size:41px}.v12-feature-primary{padding:22px}.v12-feature-preview{gap:4px}.v12-feature-preview span{display:none}}
