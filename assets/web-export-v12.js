@@ -53,7 +53,7 @@ function htmlText(raw,preview=false,css='',js=''){
  ({sans:'system-ui,sans-serif',serif:'Georgia,serif',rounded:'"Trebuchet MS",system-ui,sans-serif',mono:'ui-monospace,monospace'}[p.font])+';}';
  const bridge="document.body.classList.add('editor-preview');document.addEventListener('blur',e=>{const t=e.target;if(!(t instanceof HTMLElement))return;const field=t.dataset.field,heading=t.dataset.heading,card=t.dataset.card;if(!field&&!heading&&!card)return;const kind=field?'field':heading?'heading':'card';parent.postMessage({type:'ABEL_V12_EDIT',kind,key:field||heading||card,value:(t.textContent||'').replace(/[\\r\\n\\t]+/g,' ').trim().slice(0,240)},'*');},true);document.addEventListener('click',e=>{if(e.target.closest('a'))e.preventDefault();});";
  return '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+escapeHtml(p.brand)+'</title><meta name="description" content="'+escapeHtml(p.intro)+'"><meta name="contact-email" content="'+escapeHtml(p.email)+'"><meta name="theme-color" content="'+p.colors.bg+'">'+
- (preview?'<style>'+prefix+css+'</style>':'<link rel="stylesheet" href="styles.css">')+'</head><body><a class="skip" href="#inicio">Saltar al contenido</a>'+html+
+ (preview?'<style>'+prefix+css+'</style>':'<link rel="stylesheet" href="styles.css">')+'</head><body class="style-'+p.style+'"><a class="skip" href="#inicio">Saltar al contenido</a>'+html+
  (preview?'<script>'+js+'</'+'script><script>'+bridge+'</'+'script>':'<script src="app.js" defer></'+'script>')+'</body></html>';
 }
 function filesForProject(project,css,js){
