@@ -65,7 +65,7 @@ const launchHtml=read('herramientas/lanzamiento-v11.html');
 ok(launchHtml.includes('noindex,nofollow')&&launchHtml.includes('id="ready-progress"'),'Checklist interna no indexable con progreso');
 ok(!launchHtml.includes('formsubmit.co/')&&!launchHtml.includes('name="email"'),'Checklist no recoge ni envía datos de clientes');
 const local=read('servicios/web-local-v11.html'),map=read('sitemap.xml');
-ok(local.includes('Ubrique, Ronda y Cortes')&&local.includes('no se anuncian oficinas físicas'),'SEO local sin direcciones inventadas');
+ok(local.includes('Ubrique, Ronda y Cortes')&&local.toLowerCase().includes('no se anuncian oficinas físicas'),'SEO local sin direcciones inventadas');
 ok(local.includes('rel="canonical"')&&local.includes('property="og:image"')&&local.includes('name="description"'),'SEO social de página local');
 ok(local.includes('ficticios')&&local.includes('no representan trabajos contratados'),'Sin clientes falsos');
 ok(home.includes('servicios/web-local-v11.html')&&map.includes('/servicios/web-local-v11.html'),'Nueva página local enlazada e indexada');
