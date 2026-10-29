@@ -12,10 +12,11 @@ function defaults(sector='restaurante'){const base=B.defaults(sector),s=B.SECTOR
 function normalize(raw){
  const x=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{},b=B.normalize(x),s=B.SECTORS[b.sector];
  const titles={};for(const id of Object.keys(TITLES))titles[id]=text(x.titles?.[id],85)||TITLES[id];
- const tri=(v,fallback)=>Array.from({length:3},(_,i)=>text(Array.isArray(v)?v[i]:fallback[i],75)||fallback[i]);
+ const tri=(v,fallback)=>{const values=Array.isArray(v)&&v.length? v.slice(0,6):fallback;return values.map((x,i)=>text(x,75)||fallback[i%fallback.length]);};
+ const sectionImages={};for(const id of ['about','services','products','gallery']){const src=x.sectionImages?.[id];if(IMAGES.includes(src))sectionImages[id]=src;}
  return {...b,version:12,email:isEmail(x.email)?x.email:'',phone:isPhone(x.phone)?x.phone:'',
  location:text(x.location,150),image:IMAGES.includes(x.image)?x.image:s.hero,customPhoto:isPhoto(x.customPhoto)?x.customPhoto:'',
- titles,services:tri(x.services,s.services),products:tri(x.products,s.products)};
+ titles,sectionImages,services:tri(x.services,s.services),products:tri(x.products,s.products)};
 }
 function fromV9(config){if(config?.version!==9)throw Error('Proyecto V9 inválido');return normalize(config);}
 function imageName(x){const p=normalize(x);if(!p.customPhoto)return p.image;const type=p.customPhoto.slice(11,p.customPhoto.indexOf(';'));return 'hero-personalizada.'+(type==='jpeg'?'jpg':type);}
@@ -26,6 +27,7 @@ function cards(list,id,preview){
 }
 function section(id,p,preview){
  const heading='<p class="kicker">'+escapeHtml(id.toUpperCase())+'</p><h2'+edit(preview,'heading',id)+'>'+escapeHtml(p.titles[id]||TITLES[id])+'</h2>';
+ const feature=p.sectionImages[id]?'<div class="section-feature-photo"><img src="'+path(p.sectionImages[id],preview)+'" alt="Imagen ilustrativa del bloque '+escapeHtml(id)+'" loading="lazy"></div>':'';
  let body='';
  if(id==='about')body='<p class="lead">'+escapeHtml(p.intro)+'</p><p>Tu historia, tu equipo y tus valores pueden aparecer aquí.</p>';
  else if(id==='services')body=cards(p.services,id,preview);
@@ -40,7 +42,7 @@ function section(id,p,preview){
  else if(id==='whatsapp')body=p.phone?'<a class="action" href="https://wa.me/'+p.phone.slice(1)+'" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a>':'<p>Configura un teléfono autorizado en formato internacional.</p>';
  else if(id==='automation')body='<p>Ideas de automatización. Esta página no ejecuta conexiones ni tareas externas.</p>';
  else return '';
- return '<section class="section" id="'+id+'"><div class="wrap">'+heading+body+'</div></section>';
+ return '<section class="section" id="'+id+'"><div class="wrap">'+heading+feature+body+'</div></section>';
 }
 function htmlText(raw,preview=false,css='',js=''){
  const p=normalize(raw),s=B.SECTORS[p.sector],shown=p.order.filter(id=>p.sections.includes(id)&&id!=='hero'&&id!=='seo');
