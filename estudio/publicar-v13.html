@@ -1,0 +1,40 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#111723">
+<title>Revisar web antes de publicar · Abel Automation V13</title>
+<link rel="icon" href="../assets/v6-favicon.svg" type="image/svg+xml">
+<script src="../assets/builder-v9-core.js" defer></script><script src="../assets/web-export-v12.js" defer></script><script src="../assets/publish-v13.js" defer></script>
+<style>
+:root{--bg:#111723;--panel:#1d2636;--muted:#b8c6d1;--ink:#fbf4e9;--accent:#ffb18b;--mint:#8fe5db;--line:#ffffff29}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.65 system-ui,sans-serif}button,input{font:inherit}button{cursor:pointer}a{color:var(--mint)}:focus-visible{outline:3px solid var(--mint);outline-offset:3px}.wrap{width:min(980px,calc(100% - 32px));margin:auto}header{border-bottom:1px solid var(--line);padding:19px 0}header a{font-weight:900;text-decoration:none;color:var(--accent)}main{padding:65px 0 75px}.eyebrow{color:var(--mint);font-size:11px;font-weight:950;letter-spacing:.15em}h1{font-size:clamp(40px,5.5vw,68px);letter-spacing:-.08em;line-height:1.08;margin:10px 0 17px}h1 em{font-family:Georgia,serif;color:var(--accent);font-weight:400}.intro{color:var(--muted);font-size:15px;max-width:800px}.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:25px;margin:25px 0}.box h2{font-size:25px;letter-spacing:-.06em;margin:0 0 8px}.box p{color:var(--muted)}.choose{display:inline-block;border:1px solid var(--accent);padding:13px 20px;border-radius:9px;background:var(--accent);color:#2a202c;font-weight:900;cursor:pointer}.button{display:inline-block;border:1px solid var(--accent);background:transparent;color:var(--accent);padding:11px 18px;border-radius:8px;font-weight:850}.button:disabled{opacity:.4}.checks{display:grid;gap:9px;margin:20px 0}.item{padding:15px;background:#273141;border:1px solid var(--line);border-radius:9px;display:flex;gap:13px;align-items:start}.item .status{font-size:16px;font-weight:950;color:var(--accent);min-width:26px}.item.ok .status{color:var(--mint)}.item strong{display:block}.item p{font-size:11px;color:var(--muted);margin:5px 0 0}.summary{border-left:3px solid var(--accent);background:#312d3a;padding:16px 18px;border-radius:6px}.steps{padding-left:22px}.steps li{padding:6px 0;color:var(--muted)}.steps strong{color:var(--ink)}.actions{display:flex;gap:10px;flex-wrap:wrap}.info{font-size:11px;color:var(--muted)}footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-size:11px}
+@media(max-width:650px){main{padding:42px 0}.box{padding:18px}.actions{display:grid}}
+</style>
+</head><body><header><div class="wrap"><a href="studio-v13.html">← Abel Automation Studio V13</a></div></header>
+<main class="wrap"><p class="eyebrow">ASISTENTE DE PUBLICACIÓN · V13</p><h1>Una web preparada.<br><em>Sin sorpresas.</em></h1><p class="intro">Sube el JSON de un proyecto V12 y revisa los puntos importantes antes de publicarlo en tu propio alojamiento. Esta herramienta funciona en tu navegador: no transmite ni publica archivos.</p>
+<section class="box" aria-labelledby="upload-heading"><h2 id="upload-heading">1 · Revisa tu proyecto</h2><p>Importa el archivo <code>configuracion-v12.json</code> incluido en el ZIP de la web, o un proyecto guardado desde el editor.</p><label class="choose" for="project-file">Seleccionar JSON de la web ↑</label><input id="project-file" type="file" accept=".json,application/json" hidden><p class="info">Revisa los datos de contacto antes de compartir archivos. Este análisis no guarda ni envía tu JSON.</p><p id="file-status" role="status" aria-live="polite"></p></section>
+<section class="box" id="results" aria-labelledby="review-heading" hidden><h2 id="review-heading">2 · Informe de preparación</h2><p class="summary" id="summary" role="status"></p><div id="checks" class="checks"></div><div class="actions"><button class="button" type="button" id="report">Descargar informe .txt</button><a class="button" href="builder-v12.html">Volver al editor</a></div></section>
+<section class="box" aria-labelledby="publish-heading"><h2 id="publish-heading">3 · Publicación responsable</h2><p>Cuando hayas revisado manualmente la web y quieras publicarla, puedes usar GitHub Pages para un sitio estático propio. La publicación requiere una cuenta y una decisión expresa; este asistente no realiza cambios en GitHub.</p>
+<ol class="steps"><li><strong>Exporta la web ZIP</strong> desde el constructor y extrae su contenido.</li><li><strong>Prueba la carpeta</strong> en un navegador y verifica todos los enlaces, fotografías y formularios.</li><li><strong>Crea un repositorio propio</strong> en GitHub y sube los archivos exportados a la raíz de la rama destinada a publicar.</li><li><strong>Configura Pages</strong> en el repositorio, seleccionando la rama y carpeta pertinentes, y revisa el resultado público.</li><li><strong>Comprueba el dominio, HTTPS y privacidad.</strong> Si utilizas formularios reales, pagos o reservas, necesitarás integraciones adicionales y revisión legal.</li></ol>
+<p class="info">Para la propia web de Abel Automation, el código se publica mediante el repositorio principal y sus comprobaciones; los proyectos de los visitantes no se publican automáticamente.</p>
+<a class="button" href="https://docs.github.com/es/pages/getting-started-with-github-pages/creating-a-github-pages-site" rel="noopener noreferrer" target="_blank">Documentación oficial de GitHub Pages ↗</a></section></main>
+<footer><div class="wrap">Abel Automation · Publicación consciente y comprobación manual · No se garantiza disponibilidad de servicios externos.</div></footer>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const E=globalThis.AbelWebExportV12,A=globalThis.AbelPublishV13,$=id=>document.getElementById(id);let selected=null;
+ $('project-file').addEventListener('change',async e=>{
+  const file=e.target.files?.[0];e.target.value='';if(!file)return;
+  if(file.size>4800000){$('file-status').textContent='El JSON es demasiado grande.';return;}
+  try{selected=E.importProject(await file.text());const r=A.audit(selected);$('results').hidden=false;$('checks').replaceChildren();
+   $('summary').textContent=r.criticalPending?'Hay '+r.criticalPending+' comprobaciones críticas sin validar. No publiques sin revisarlas.':'Los controles técnicos han pasado, pero revisa derechos y privacidad manualmente antes de publicar.';
+   for(const entry of r.issues){
+    const row=document.createElement('div');row.className='item'+(entry.ok?' ok':'');
+    const mark=document.createElement('span');mark.className='status';mark.textContent=entry.ok?'✓':'!';
+    const content=document.createElement('div'),title=document.createElement('strong'),hint=document.createElement('p');
+    title.textContent=entry.title+(entry.critical?' · CRÍTICO':'');hint.textContent=entry.detail;content.append(title,hint);row.append(mark,content);$('checks').append(row);
+   }$('file-status').textContent='Proyecto cargado. Este análisis se ha realizado en el navegador.';$('results').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch{selected=null;$('results').hidden=true;$('file-status').textContent='No se pudo analizar un JSON V9/V12 válido.';}
+ });
+ $('report').addEventListener('click',()=>{
+  if(!selected)return;const blob=new Blob([A.report(selected)],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='Informe-prepublicacion-V13.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+ });
+});
+</script></body></html>
