@@ -116,7 +116,9 @@ function bindFields(){
 }
 function refresh(){renderPreview();quote();syncControls();}
 function onInlineEdit(event){
- const iframe=$('live-preview');if(event.source!==iframe.contentWindow||!event.data||event.data.type!=='ABEL_V12_EDIT')return;
+ const iframe=$('live-preview');if(event.source!==iframe.contentWindow||!event.data)return;
+ if(event.data.type==='ABEL_V12_PHOTO_PICK'){setTab('design');$('image').focus();status('Elige una fotografía o sube una imagen propia.');return;}
+ if(event.data.type!=='ABEL_V12_EDIT')return;
  const {kind,key,value}=event.data;
  if(typeof value!=='string'||value.length>240)return;
  if(kind==='field'&&['brand','headline','intro','cta'].includes(key)){
