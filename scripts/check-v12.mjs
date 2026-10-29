@@ -78,6 +78,7 @@ assert.throws(()=>E.buildZip({'assets/x.svg':'<svg onload=alert(1)>'}));ok(true,
 ok(ui.includes('id="live-preview"')&&ui.includes('sandbox="allow-scripts"'),'Vista previa aislada mediante sandbox');
 ok(ui.includes('id="export"')&&ui.includes('Generar y descargar web ZIP'),'Acceso de exportación evidente');
 ok(ui.includes('id="photo-file"')&&app.includes('readAsDataURL')&&app.includes('file.size>2_000_000'),'Edición de fotografía propia con tamaño limitado');
+ok(ExPhotoClickable(),'Pulsar foto abre directamente el panel Diseño');
 ok(app.includes("event.source!==iframe.contentWindow")||app.includes("event.source!==iframe.contentWindow".replace('event','event')),'Solo acepta ediciones del iframe propio');
 ok(app.includes('Engine.buildZip(files)')&&app.includes('saveFile(zip,'),'Interfaz descarga ZIP real');
 ok(app.includes("Proposal.pdfDocument(document)")&&app.includes("sessionStorage.setItem('abel-v9-crm-draft'"),'PDF y CRM están conectados');
@@ -96,6 +97,7 @@ for(const file of ['estudio/builder-v12.html','novedades.html']){
   ok(exists(path.resolve(path.dirname(file),url.split(/[?#]/)[0])),'Enlace local válido '+file+' → '+url);
  }
 }
+function ExPhotoClickable(){return read('assets/web-export-v12.js').includes('ABEL_V12_PHOTO_PICK')&&app.includes("event.data.type==='ABEL_V12_PHOTO_PICK'");}
 const classic=read('scripts/check-v6.mjs');
 ok(classic.includes('data.DEMOS.length===25'),'No se elimina la verificación de 25 demos');
 console.log('V12 Web Builder PRO: '+checks+' validaciones completas (incluyendo unzip real).');
