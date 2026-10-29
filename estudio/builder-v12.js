@@ -1,21 +1,42 @@
 /* Abel Automation V12 · editor real de sitios sin servicios externos */
 (()=>{
 'use strict';
-const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8;
+const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13;
 if(!Core||!Engine||!Proposal)return;
 const $=id=>document.getElementById(id);
 let state=Engine.defaults(),runtimeCss='',runtimeJs='',tab='brand',renderVersion=0,busy=false;
+let past=[],future=[],lastEditKey='',lastEditTime=0,saveTimer=null;
 const status=message=>{$('status').textContent=message;};
 const el=(tag,text='',className='')=>{const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;};
 function saveFile(content,name,mime){
  const blob=new Blob([content],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;
  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),7000);
 }
-function update(values,refresh=true){
- state=Engine.normalize({...state,...values});
- renderPreview();quote();
- if(refresh)syncControls();
+function historyUI(){ $('undo').disabled=!past.length;$('redo').disabled=!future.length; }
+function saveSoon(){
+ clearTimeout(saveTimer);
+ $('autosave-status').textContent='Guardando…';
+ saveTimer=setTimeout(()=>{$('autosave-status').textContent=Store&&Store.saveDraft(state)?'Guardado local ✓':'No se pudo guardar';},650);
 }
+function remember(next,key=''){
+ const prev=JSON.stringify(state);if(JSON.stringify(next)===prev)return false;
+ const now=Date.now();if(!key||key!==lastEditKey||now-lastEditTime>600){past.push(prev);if(past.length>35)past.shift();}
+ lastEditKey=key;lastEditTime=now;future=[];historyUI();return true;
+}
+function update(values,refresh=true,key=''){
+ const next=Engine.normalize({...state,...values});if(!remember(next,key))return;
+ state=next;renderPreview();quote();if(refresh)syncControls();saveSoon();
+}
+function replaceProject(next,track=true){
+ const normalized=Engine.normalize(next);
+ if(track)remember(normalized);
+ state=normalized;renderPreview();quote();syncControls();saveSoon();historyUI();
+}
+function stepHistory(stack,to){
+ if(!stack.length)return;const item=stack.pop();to.push(JSON.stringify(state));if(to.length>35)to.shift();
+ state=Engine.importProject(item);lastEditKey='';renderPreview();quote();syncControls();historyUI();saveSoon();
+}
+
 function setTab(which,focus=false){
  tab=which;
  for(const id of ['brand','design','sections']){
@@ -47,6 +68,10 @@ function renderBlocks(){
  const box=$('blocks');box.replaceChildren();
  state.order.forEach((id,i)=>{
   const info=Core.SECTION_META.find(x=>x.id===id),row=el('div','','block'),label=el('label');
+  row.draggable=i>0;row.dataset.block=id;row.title=i>0?'Arrastra para reordenar la sección':'';
+  row.addEventListener('dragstart',e=>{if(i===0){e.preventDefault();return;}e.dataTransfer.setData('text/plain',id);e.dataTransfer.effectAllowed='move';});
+  row.addEventListener('dragover',e=>{if(i>0)e.preventDefault();});
+  row.addEventListener('drop',e=>{e.preventDefault();const dragged=e.dataTransfer.getData('text/plain');const a=state.order.indexOf(dragged),b=state.order.indexOf(id);if(a<=0||b<=0||a===b)return;const next=[...state.order];next.splice(a,1);next.splice(b,0,dragged);update({order:next});status('Sección reordenada.');});
   const checked=el('input');checked.type='checkbox';checked.value=id;checked.checked=state.sections.includes(id);checked.disabled=id==='hero';checked.setAttribute('aria-label','Mostrar '+info.name);
   const description=el('span');description.append(el('strong',info.name),el('small',info.hint||''));
   label.append(checked,description);row.append(label);
@@ -61,7 +86,26 @@ function renderBlocks(){
   for(const [text,dir]of [['↑',-1],['↓',1]]){
    const button=el('button',text);button.type='button';button.disabled=i===0||(dir<0?i<=1:i===state.order.length-1);
    button.setAttribute('aria-label',(dir===-1?'Subir ':'Bajar ')+info.name);button.addEventListener('click',()=>move(dir));row.append(button);
-  }box.append(row);
+  }
+  if(['services','products'].includes(id)){
+   const add=el('button','+ Copiar tarjeta'),remove=el('button','− Quitar');add.type='button';remove.type='button';
+   add.className='v13-card-tool';remove.className='v13-card-tool';
+   add.disabled=state[id].length>=6;remove.disabled=state[id].length<=1;
+   add.setAttribute('aria-label','Duplicar tarjeta de '+info.name);remove.setAttribute('aria-label','Quitar última tarjeta de '+info.name);
+   add.addEventListener('click',()=>{const items=[...state[id]];items.push(items[items.length-1]);update({[id]:items});status('Tarjeta duplicada. Edita su texto en la vista previa.');});
+   remove.addEventListener('click',()=>{update({[id]:state[id].slice(0,-1)});status('Se ha quitado la última tarjeta.');});
+   const tools=el('div','','v13-card-tools');tools.append(add,remove);row.append(tools);
+  }
+  if(['about','services','products','gallery'].includes(id)){
+   const wrap=el('label','','v13-photo-block');wrap.append(el('span','Imagen del bloque: '));
+   const select=el('select');select.setAttribute('aria-label','Fotografía de '+info.name);
+   select.add(new Option('Sin imagen adicional',''));
+   for(const name of Engine.IMAGES)select.add(new Option(name.replace('portfolio-','').replace('.webp',''),name));
+   select.value=state.sectionImages?.[id]||'';
+   select.addEventListener('change',()=>update({sectionImages:{...state.sectionImages,[id]:select.value}}));
+   wrap.append(select);row.append(wrap);
+  }
+  box.append(row);
  });
 }
 function quote(){
@@ -78,14 +122,14 @@ function renderPreview(){
 function bindFields(){
  $('sector').addEventListener('change',e=>{
   const newSector=e.target.value,prev=state;
-  state=Engine.normalize({...Engine.defaults(newSector),theme:prev.theme,style:prev.style,font:prev.font,layout:prev.layout,
+  replaceProject({...Engine.defaults(newSector),theme:prev.theme,style:prev.style,font:prev.font,layout:prev.layout,
    custom:prev.custom,colors:prev.colors,sections:prev.sections,order:prev.order,maintenance:prev.maintenance,email:prev.email,phone:prev.phone,location:prev.location});
-  renderPreview();quote();syncControls();status('Plantilla de sector actualizada. Tus colores, bloques y datos de contacto se han conservado.');
+  status('Plantilla de sector actualizada. Tus colores, bloques y datos de contacto se han conservado.');
  });
  for(const field of ['brand','headline','intro','cta','email','phone','location','font','layout','style','image','maintenance']){
   $(field).addEventListener(field==='brand'||field==='headline'||field==='intro'||field==='cta'?'input':'change',e=>{
    const val=e.target.value;
-   update({[field]:val,...(field==='image'?{customPhoto:''}:{})},false);
+   update({[field]:val,...(field==='image'?{customPhoto:''}:{})},false,['brand','headline','intro','cta'].includes(field)?field:'');
    if((field==='email'&&val&&!Engine.isEmail(val))||(field==='phone'&&val&&!Engine.isPhone(val)))status('Comprueba el formato. Para WhatsApp usa + seguido del código de país y número.');
   });
  }
@@ -103,7 +147,10 @@ function bindFields(){
   }catch{status('No fue posible incorporar la imagen.');}
  });
  $('remove-photo').addEventListener('click',()=>{update({customPhoto:''});status('Fotografía restaurada desde la plantilla.');});
- $('reset').addEventListener('click',()=>{if(!confirm('¿Restaurar la plantilla? Se perderán los cambios no exportados.'))return;state=Engine.defaults(state.sector);refresh();status('Plantilla restaurada.');});
+ $('reset').addEventListener('click',()=>{if(!confirm('¿Restaurar la plantilla? Se perderán los cambios no exportados.'))return;replaceProject(Engine.defaults(state.sector));status('Plantilla restaurada (puedes deshacer).');});
+ $('undo').addEventListener('click',()=>stepHistory(past,future));
+ $('redo').addEventListener('click',()=>stepHistory(future,past));
+ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.altKey){if(e.key.toLowerCase()==='z'&&!e.shiftKey){e.preventDefault();stepHistory(past,future);}else if(e.key.toLowerCase()==='y'||(e.key.toLowerCase()==='z'&&e.shiftKey)){e.preventDefault();stepHistory(future,past);}}});
  for(const b of document.querySelectorAll('[data-tab]')){
   b.addEventListener('click',()=>setTab(b.dataset.tab));
   b.addEventListener('keydown',e=>{
@@ -125,7 +172,7 @@ function onInlineEdit(event){
   update({[key]:value});status('Texto actualizado dentro del proyecto.');
  }else if(kind==='heading'&&Object.prototype.hasOwnProperty.call(Engine.TITLES,key)){
   update({titles:{...state.titles,[key]:value}});status('Título de sección actualizado.');
- }else if(kind==='card'&&/^(services|products):[012]$/.test(key)){
+ }else if(kind==='card'&&/^(services|products):[0-5]$/.test(key)){
   const [group,index]=key.split(':'),items=[...state[group]];items[Number(index)]=value;update({[group]:items});status('Tarjeta actualizada.');
  }
 }
@@ -169,25 +216,29 @@ function saveJson(){saveFile(Engine.projectJson(state),'Abel-Automation-Proyecto
 function importJson(file){
  if(!file)return;
  if(file.size>4_800_000){status('Archivo demasiado grande.');return;}
- file.text().then(text=>{state=Engine.importProject(text);refresh();status('Proyecto importado. Revisa contenidos antes de exportar.');})
+ file.text().then(text=>{replaceProject(Engine.importProject(text));status('Proyecto importado. Revisa contenidos antes de exportar.');})
  .catch(()=>status('No se pudo abrir un JSON V12 o V9 válido.'));
 }
 async function init(){
  initOptions();bindFields();window.addEventListener('message',onInlineEdit);
+ $('save-project').addEventListener('click',()=>{try{if(!Store)throw Error('Gestor de proyectos no disponible');Store.create(state,state.brand);status('Guardado en Mis proyectos de este navegador. Correo, teléfono, dirección y fotos subidas no se conservan en la biblioteca.');}catch(e){status('No se pudo guardar: '+e.message);}});
  $('export').addEventListener('click',exportZip);
  $('pdf').addEventListener('click',downloadPdf);$('crm').addEventListener('click',crmDraft);
  $('save-json').addEventListener('click',saveJson);
  $('import-json').addEventListener('click',()=>$('project-file').click());
  $('project-file').addEventListener('change',e=>{importJson(e.target.files?.[0]);e.target.value='';});
  try{
+  const fromStudio=sessionStorage.getItem('abel-v13-open-project');
   const raw=sessionStorage.getItem('abel-v12-from-v9');
-  if(raw){const parsed=JSON.parse(raw);state=Engine.fromV9(parsed);sessionStorage.removeItem('abel-v12-from-v9');}
+  if(fromStudio){state=Engine.importProject(fromStudio);sessionStorage.removeItem('abel-v13-open-project');}
+  else if(raw){const parsed=JSON.parse(raw);state=Engine.fromV9(parsed);sessionStorage.removeItem('abel-v12-from-v9');}
+  else if(!new URLSearchParams(location.search).has('new')&&!new URLSearchParams(location.search).has('sector')&&Store?.draft()){state=Store.draft();status('Se ha recuperado el diseño autoguardado de este navegador.');}
   else if(new URLSearchParams(location.search).has('sector')){
    const sector=new URLSearchParams(location.search).get('sector');
    if(Object.prototype.hasOwnProperty.call(Core.SECTORS,sector))state=Engine.defaults(sector);
   }
  }catch{status('No se pudo recuperar la configuración anterior. Se usará la plantilla inicial.');}
- refresh();
+ refresh();historyUI();
  try{
   const [css,js]=await Promise.all(['../assets/site-runtime-v12.css','../assets/site-runtime-v12.js'].map(async url=>{
    const r=await fetch(url);if(!r.ok)throw Error('No se pudo cargar '+url);return r.text();
