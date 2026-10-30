@@ -1,11 +1,11 @@
 /* Abel Automation V12 · editor real de sitios sin servicios externos */
 (()=>{
 'use strict';
-const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13;
+const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13,Templates=globalThis.AbelTemplatesV14,Multipage=globalThis.AbelMultipageV14;
 if(!Core||!Engine||!Proposal)return;
 const $=id=>document.getElementById(id);
 let state=Engine.defaults(),runtimeCss='',runtimeJs='',tab='brand',renderVersion=0,busy=false;
-let past=[],future=[],lastEditKey='',lastEditTime=0,saveTimer=null;
+let past=[],future=[],lastEditKey='',lastEditTime=0,saveTimer=null,selectedText=null;state.v14=Multipage.normalize({});
 const status=message=>{$('status').textContent=message;};
 const el=(tag,text='',className='')=>{const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;};
 function saveFile(content,name,mime){
@@ -24,17 +24,17 @@ function remember(next,key=''){
  lastEditKey=key;lastEditTime=now;future=[];historyUI();return true;
 }
 function update(values,refresh=true,key=''){
- const next=Engine.normalize({...state,...values});if(!remember(next,key))return;
+ const next=Engine.normalize({...state,...values});next.v14=Multipage.normalize(values.v14||state.v14);if(!remember(next,key))return;
  state=next;renderPreview();quote();if(refresh)syncControls();saveSoon();
 }
 function replaceProject(next,track=true){
- const normalized=Engine.normalize(next);
+ const normalized=Engine.normalize(next);normalized.v14=Multipage.normalize(next.v14||{});
  if(track)remember(normalized);
  state=normalized;renderPreview();quote();syncControls();saveSoon();historyUI();
 }
 function stepHistory(stack,to){
  if(!stack.length)return;const item=stack.pop();to.push(JSON.stringify(state));if(to.length>35)to.shift();
- state=Engine.importProject(item);lastEditKey='';renderPreview();quote();syncControls();historyUI();saveSoon();
+ const raw=JSON.parse(item);state=Engine.importProject(item);state.v14=Multipage.normalize(raw.v14||{});lastEditKey='';renderPreview();quote();syncControls();historyUI();saveSoon();
 }
 
 function setTab(which,focus=false){
@@ -48,6 +48,7 @@ function setTab(which,focus=false){
 function initOptions(){
  for(const [key,value] of Object.entries(Core.SECTORS))$('sector').add(new Option(value.name,key));
  for(const [key,value] of Object.entries(Core.THEMES))$('theme').add(new Option(value.name,key));
+ for(const template of Templates.PRESETS)$('v14-template').add(new Option(template.name,template.id));
  for(const image of Engine.IMAGES){
   const label=image.replace('portfolio-','').replace('.webp','').replace(/-/g,' ');
   $('image').add(new Option(label.charAt(0).toUpperCase()+label.slice(1),image));
@@ -62,7 +63,34 @@ function syncControls(){
   $('color-'+key).value=state.colors[key];
  }
  for(const button of document.querySelectorAll('[data-device]'))button.setAttribute('aria-pressed',String(button.dataset.device===state.device));
- renderBlocks();
+ renderBlocks();renderPageControls();renderTemplateGallery();
+}
+function renderTemplateGallery(){
+ const box=$('v14-template-gallery');box.replaceChildren();
+ for(const preset of Templates.PRESETS.filter(p=>p.sector===state.sector)){
+  const btn=el('button','','v14-preset-card');btn.type='button';btn.setAttribute('aria-label','Aplicar '+preset.name);
+  const canvas=el('span','','v14-preset-preview'),theme=Core.THEMES[preset.theme];
+  canvas.style.background=theme.bg;canvas.style.color=theme.ink;
+  const top=el('span','','v14-preset-bar');top.style.background=theme.surface;
+  const heading=el('strong',preset.direction==='impacto'?'GRAN IMPACTO':preset.direction==='editorial'?'Estilo editorial':'Minimal');
+  const accent=el('span','','v14-preset-accent');accent.style.background=theme.accent;
+  canvas.append(top,heading,accent);btn.append(canvas,el('small',preset.name.split(' · ')[1]||preset.name));
+  if(state.style===preset.style&&state.layout===preset.layout&&state.theme===preset.theme)btn.classList.add('active');
+  btn.addEventListener('click',()=>{replaceProject({...Templates.apply(preset.id,state),v14:state.v14});$('v14-template').value=preset.id;status('Estilo visual '+preset.name+' aplicado.');});
+  box.append(btn);
+ }
+}
+function renderPageControls(){
+ const cfg=Multipage.normalize(state.v14);$('v14-multipage').checked=cfg.multipage;
+ $('v14-pages-list').hidden=!cfg.multipage;const list=$('v14-pages-list');list.replaceChildren();
+ const preview=$('v14-page-preview'),prior=preview.value;preview.replaceChildren();
+ for(const page of Multipage.PAGE_DEFS){
+  const enabled=cfg.pages.includes(page.id);const label=el('label','','v14-page-choice');const check=el('input');check.type='checkbox';check.checked=enabled;check.disabled=page.id==='home';
+  check.addEventListener('change',()=>{const set=new Set(cfg.pages);check.checked?set.add(page.id):set.delete(page.id);update({v14:{multipage:true,pages:[...set]}});});
+  label.append(check,document.createTextNode(page.name));list.append(label);
+  if(!cfg.multipage||enabled)preview.add(new Option(page.name,page.id));
+ }
+ preview.value=[...preview.options].some(x=>x.value===prior)?prior:'home';
 }
 function renderBlocks(){
  const box=$('blocks');box.replaceChildren();
@@ -116,14 +144,20 @@ function quote(){
 }
 function renderPreview(){
  if(!runtimeCss||!runtimeJs)return;
- $('live-preview').srcdoc=Engine.htmlText(state,true,runtimeCss,runtimeJs);
+ const config=Multipage.normalize(state.v14),selected=$('v14-page-preview')?.value||'home';
+ $('live-preview').srcdoc=config.multipage?Multipage.makePage(state,config,config.pages.includes(selected)?selected:'home',true,runtimeCss,runtimeJs):Engine.htmlText(state,true,runtimeCss,runtimeJs);
  $('live-preview').dataset.device=state.device;
 }
 function bindFields(){
+ $('v14-template').addEventListener('change',e=>{if(!e.target.value)return;
+  replaceProject({...Templates.apply(e.target.value,state),v14:state.v14});status('Plantilla premium aplicada; puedes modificarla libremente.');});
+ $('v14-multipage').addEventListener('change',e=>{update({v14:{...state.v14,multipage:e.target.checked}});status(e.target.checked?'Modo multipágina activado; selecciona las páginas.':'Modo de una sola página activado.');});
+ $('v14-page-preview').addEventListener('change',renderPreview);
+ $('v14-apply-selection').addEventListener('click',()=>{if(!selectedText)return;onInlineEdit({source:$('live-preview').contentWindow,data:{type:'ABEL_V12_EDIT',...selectedText,value:$('v14-selected-input').value}});});
  $('sector').addEventListener('change',e=>{
   const newSector=e.target.value,prev=state;
   replaceProject({...Engine.defaults(newSector),theme:prev.theme,style:prev.style,font:prev.font,layout:prev.layout,
-   custom:prev.custom,colors:prev.colors,sections:prev.sections,order:prev.order,maintenance:prev.maintenance,email:prev.email,phone:prev.phone,location:prev.location});
+   custom:prev.custom,colors:prev.colors,sections:prev.sections,order:prev.order,maintenance:prev.maintenance,email:prev.email,phone:prev.phone,location:prev.location,v14:prev.v14});
   status('Plantilla de sector actualizada. Tus colores, bloques y datos de contacto se han conservado.');
  });
  for(const field of ['brand','headline','intro','cta','email','phone','location','font','layout','style','image','maintenance']){
@@ -164,6 +198,11 @@ function bindFields(){
 function refresh(){renderPreview();quote();syncControls();}
 function onInlineEdit(event){
  const iframe=$('live-preview');if(event.source!==iframe.contentWindow||!event.data)return;
+ if(event.data.type==='ABEL_V14_SELECT'){
+  const {kind,key,value}=event.data;if(typeof value!=='string'||value.length>240)return;
+  selectedText={kind,key};$('v14-selected-label').textContent='Editando '+kind+' · '+key;
+  $('v14-selected-input').value=value;return;
+ }
  if(event.data.type==='ABEL_V12_PHOTO_PICK'){setTab('design');$('image').focus();status('Elige una fotografía o sube una imagen propia.');return;}
  if(event.data.type!=='ABEL_V12_EDIT')return;
  const {kind,key,value}=event.data;
@@ -180,7 +219,7 @@ async function exportZip(){
  if(busy)return;busy=true;$('export').disabled=true;status('Preparando los archivos del proyecto.');
  try{
   if(!runtimeCss||!runtimeJs)throw Error('No se han cargado las plantillas');
-  const files=Engine.filesForProject(state,runtimeCss,runtimeJs);
+  const files=Multipage.generate(state,state.v14,runtimeCss,runtimeJs);
   const assets=Engine.IMAGES;
   for(const name of assets){
    const response=await fetch('../assets/'+name,{cache:'default'});
@@ -190,7 +229,7 @@ async function exportZip(){
   }
   if(state.customPhoto)files['assets/'+Engine.imageName(state)]=Engine.imageBytes(state.customPhoto);
   const zip=Engine.buildZip(files);
-  saveFile(zip,'Abel-Automation-Web-V12.zip','application/zip');
+  saveFile(zip,state.v14?.multipage?'Abel-Automation-Sitio-Multipagina-V14.zip':'Abel-Automation-Web-V14.zip','application/zip');
   status('Web real exportada en ZIP con '+Object.keys(files).length+' archivos. No se ha publicado nada.');
  }catch(e){status('No se pudo exportar: '+(e?.message||'error desconocido')+'. Ejecuta el proyecto desde un servidor local.');}
  finally{busy=false;$('export').disabled=false;}
@@ -212,11 +251,12 @@ function crmDraft(){
   location.href='../herramientas/crm.html#studio-v9';
  }catch{status('No se pudo preparar el CRM en esta sesión.');}
 }
-function saveJson(){saveFile(Engine.projectJson(state),'Abel-Automation-Proyecto-V12.json','application/json');status('Archivo de configuración guardado en el dispositivo.');}
+function saveJson(){saveFile(JSON.stringify({...Engine.normalize(state),v14:Multipage.normalize(state.v14)},null,2),'Abel-Automation-Proyecto-V14.json','application/json');status('Proyecto completo y estructura de páginas guardados en este dispositivo.');}
 function importJson(file){
  if(!file)return;
  if(file.size>4_800_000){status('Archivo demasiado grande.');return;}
- file.text().then(text=>{replaceProject(Engine.importProject(text));status('Proyecto importado. Revisa contenidos antes de exportar.');})
+ file.text().then(text=>{const raw=JSON.parse(text),base=raw.version===14?raw.project:raw;
+  replaceProject({...Engine.importProject(JSON.stringify(base)),v14:Multipage.normalize(raw.v14||raw.pages&&{multipage:true,pages:raw.pages}||{})});status('Proyecto importado. Revisa contenidos antes de exportar.');})
  .catch(()=>status('No se pudo abrir un JSON V12 o V9 válido.'));
 }
 async function init(){
@@ -230,15 +270,15 @@ async function init(){
  try{
   const fromStudio=sessionStorage.getItem('abel-v13-open-project');
   const raw=sessionStorage.getItem('abel-v12-from-v9');
-  if(fromStudio){state=Engine.importProject(fromStudio);sessionStorage.removeItem('abel-v13-open-project');}
+  if(fromStudio){const data=JSON.parse(fromStudio);state=Engine.importProject(fromStudio);state.v14=Multipage.normalize(data.v14||{});sessionStorage.removeItem('abel-v13-open-project');}
   else if(raw){const parsed=JSON.parse(raw);state=Engine.fromV9(parsed);sessionStorage.removeItem('abel-v12-from-v9');}
-  else if(!new URLSearchParams(location.search).has('new')&&!new URLSearchParams(location.search).has('sector')&&Store?.draft()){state=Store.draft();status('Se ha recuperado el diseño autoguardado de este navegador.');}
+  else if(!new URLSearchParams(location.search).has('new')&&!new URLSearchParams(location.search).has('sector')&&Store?.draft()){state=Store.draft();state.v14=Multipage.normalize(state.v14||{});status('Se ha recuperado el diseño autoguardado de este navegador.');}
   else if(new URLSearchParams(location.search).has('sector')){
    const sector=new URLSearchParams(location.search).get('sector');
    if(Object.prototype.hasOwnProperty.call(Core.SECTORS,sector))state=Engine.defaults(sector);
   }
  }catch{status('No se pudo recuperar la configuración anterior. Se usará la plantilla inicial.');}
- refresh();historyUI();
+ state.v14=Multipage.normalize(state.v14||{});refresh();historyUI();
  try{
   const [css,js]=await Promise.all(['../assets/site-runtime-v12.css','../assets/site-runtime-v12.js'].map(async url=>{
    const r=await fetch(url);if(!r.ok)throw Error('No se pudo cargar '+url);return r.text();

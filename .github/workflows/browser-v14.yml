@@ -1,0 +1,46 @@
+name: V14 Browser QA and Published V13 Audit
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-v13-audit:
+    name: Audit V13 pages actually published
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check public GitHub Pages responses and expected version markers
+        run: node scripts/audit-live-v13.mjs
+
+  chromium-v14:
+    name: Playwright Chromium desktop and mobile viewport
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Test
+        run: npm install --no-save --ignore-scripts @playwright/test@1.56.1
+      - name: Install Chromium and required system libraries
+        run: npx playwright install --with-deps chromium
+      - name: End-to-end browser tests with local Python HTTP server
+        run: npx playwright test --config=playwright.config.mjs
+      - name: Save report, desktop/mobile captures and traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v14-browser-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

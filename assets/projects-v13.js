@@ -8,7 +8,11 @@ function safeProject(raw){
  if(!E)throw Error('Motor V12 no disponible');
  const p=E.normalize(raw);
  // Almacenamiento NO cifrado: nunca guardar correos, teléfonos, direcciones ni fotografías personales.
- return {...p,email:'',phone:'',location:'',customPhoto:''};
+ const available=['home','about','services','gallery','contact'];
+ const rawPages=Array.isArray(raw?.v14?.pages)?raw.v14.pages:available;
+ const pages=available.filter(id=>rawPages.includes(id));if(!pages.includes('home'))pages.unshift('home');
+ const v14={multipage:raw?.v14?.multipage===true,pages};
+ return {...p,email:'',phone:'',location:'',customPhoto:'',v14};
 }
 const cleanName=x=>String(x||'').replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,65)||'Proyecto sin nombre';
 function safeRecord(x){
