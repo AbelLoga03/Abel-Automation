@@ -23,6 +23,8 @@ test('Editor V16: reutilizar bloque, editar copia y exportar ZIP verificado',asy
  await page.locator('#v16-title').fill('Copia independiente en Servicios');
  await page.locator('#v16-apply').click();
  await expect(page.frameLocator('#live-preview').locator('.v16-component h2')).toContainText('Copia independiente en Servicios');
+ await page.locator('#v14-template').selectOption('restaurante-impacto');
+ await expect(page.frameLocator('#live-preview').locator('.v16-component h2')).toContainText('Copia independiente en Servicios');
  await page.locator('#v14-page-preview').selectOption('home');
  await expect(page.frameLocator('#live-preview').locator('.v16-component h2')).toContainText('Bloque exclusivo de Inicio');
  await info.attach('v16-editor-desktop',{body:await page.screenshot({fullPage:true}),contentType:'image/png'});
