@@ -9,9 +9,10 @@ dialog?.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
 const receiver=document.querySelector('meta[name="contact-email"]')?.content||'';
 const form=document.getElementById('site-contact-form');
 form?.addEventListener('submit',e=>{
+ if(form.dataset.provider==='formsubmit')return; // Native POST after explicit consent; provider must be activated separately.
  e.preventDefault();if(!form.reportValidity()||!receiver)return;
  const data=new FormData(form);
- const body='Nombre: '+data.get('name')+'\nCorreo: '+data.get('reply')+'\nMensaje: '+data.get('message');
+ const body='Nombre: '+data.get('name')+'\nCorreo: '+(data.get('email')||data.get('reply'))+'\nMensaje: '+data.get('message');
  const status=document.getElementById('form-status');if(status)status.textContent='Se abrirá tu correo. Comprueba la información y confirma el envío manualmente.';
  location.href='mailto:'+encodeURIComponent(receiver)+'?subject='+encodeURIComponent('Consulta desde la web')+'&body='+encodeURIComponent(body);
 });
