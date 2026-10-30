@@ -12,6 +12,8 @@
 <script src="../assets/proposal-v8.js" defer></script>
 <script src="../assets/web-export-v12.js" defer></script>
 <script src="../assets/page-studio-v15.js" defer></script>
+<script src="../assets/blocks-v16.js" defer></script>
+<script src="../assets/review-v16.js" defer></script>
 <script src="../assets/projects-v13.js" defer></script>
 <script src="../assets/templates-v14.js" defer></script>
 <script src="../assets/multipage-v14.js" defer></script>
@@ -19,7 +21,7 @@
 <script src="builder-v12.js" defer></script>
 </head><body>
 <a href="#builder" class="skip">Saltar al constructor</a>
-<header class="global-header"><div class="shell topnav"><a href="../index.html" class="logo"><b>a.</b><span>ABEL AUTOMATION <small>CREATIVE STUDIO</small></span></a><nav aria-label="Navegación de herramientas"><a href="studio-v13.html">★ Mi Studio V13</a><a href="../index.html">Portfolio</a><a href="../experiencias/planificador-v10.html">Planificador</a><a href="../herramientas/crm.html">CRM privado</a></nav><div class="header-tag"><span class="dot"></span> V15 · BUSINESS PRO</div></div></header>
+<header class="global-header"><div class="shell topnav"><a href="../index.html" class="logo"><b>a.</b><span>ABEL AUTOMATION <small>CREATIVE STUDIO</small></span></a><nav aria-label="Navegación de herramientas"><a href="studio-v13.html">★ Mi Studio V13</a><a href="../index.html">Portfolio</a><a href="../experiencias/planificador-v10.html">Planificador</a><a href="../herramientas/crm.html">CRM privado</a></nav><div class="header-tag"><span class="dot"></span> V16 · BUSINESS ULTIMATE</div></div></header>
 <main id="builder">
 <section class="hero shell"><div><p class="eyebrow">V12 · WEB BUILDER PRO</p><h1>Diseña cada página. <em>Entrega una web real.</em></h1><p>Elige tu negocio, cambia los contenidos en directo y descarga una web independiente con archivos HTML, CSS, JavaScript e imágenes. Sin cuentas ni publicación automática.</p><div class="hero-tags"><span>✓ Páginas independientes</span><span>✓ Editor visual</span><span>✓ Gestor de imágenes</span><span>✓ ZIP de entrega</span></div></div><div class="hero-badge"><span>01</span><strong>DISEÑA</strong><span>→</span><strong>02 PREVISUALIZA</strong><span>→</span><strong>03 EXPORTA</strong></div></section>
 <div class="work shell">
@@ -73,11 +75,34 @@
  <details class="v15-page-sections"><summary>Elegir bloques exclusivos de esta página</summary><p>Personaliza qué secciones aparecen en esta página sin modificar las demás.</p><div id="v15-section-list"></div><button id="v15-reset-sections" type="button">Volver a bloques predeterminados</button></details>
  <div class="v15-photo-manager"><label for="v15-photo-select">Imagen de portada de esta página</label><select id="v15-photo-select"><option value="template">Foto de plantilla</option><option value="custom">Foto principal existente</option></select><label class="v15-upload" for="v15-photo-upload">+ Añadir foto propia, recortar y optimizar <small>Hasta 4 fotos · cada una máx. 1,45 MB exportada</small></label><input id="v15-photo-upload" type="file" accept="image/png,image/jpeg,image/webp"><div id="v15-photo-library" class="v15-photo-library" aria-label="Galería personal de este proyecto"></div></div>
  </section>
+<section id="v16-panel" class="v16-panel" aria-labelledby="v16-heading">
+<div class="v16-panel-head"><div><p class="eyebrow">V16 · EDITOR DE COMPONENTES</p><h3 id="v16-heading">Bloques de esta página</h3></div><span id="v16-count">0 / 8</span></div>
+<p class="v16-hint">Añade secciones reutilizables, haz clic sobre ellas en la vista previa, edítalas aquí o cópialas a otra página. Cada copia es independiente.</p>
+<div class="v16-add-row"><label for="v16-type">Nuevo bloque <select id="v16-type"><option value="feature">Destacado</option><option value="cta">Llamada a la acción</option><option value="steps">Cómo trabajamos</option><option value="highlight">Aviso informativo</option></select></label><button id="v16-add" type="button">+ Añadir bloque</button></div>
+<div id="v16-block-list" class="v16-block-list" aria-label="Componentes y orden de la página"></div>
+<div id="v16-inspector" class="v16-inspector" hidden>
+<strong id="v16-current">Editar componente</strong>
+<div class="v16-fields">
+<label>Título <input id="v16-title" maxlength="85"></label>
+<label>Descripción <textarea id="v16-description" rows="3" maxlength="280"></textarea></label>
+<label>Texto del botón <input id="v16-button" maxlength="34"></label>
+<label>Destino seguro <select id="v16-href"><option value="">Sin enlace</option><option value="index.html">Inicio</option><option value="nosotros.html">Nosotros</option><option value="servicios.html">Servicios</option><option value="galeria.html">Galería</option><option value="contacto.html">Contacto</option></select></label>
+<label>Diseño <select id="v16-align"><option value="left">Izquierda</option><option value="center">Centrado</option></select></label>
+<label>Fondo <select id="v16-tone"><option value="accent">Acento</option><option value="soft">Suave</option></select></label>
+</div>
+<div class="v16-actions">
+<button id="v16-apply" type="button">Aplicar cambios</button>
+<button id="v16-save-reusable" type="button">Guardar como reutilizable</button>
+<button id="v16-duplicate" type="button">Duplicar aquí</button>
+<button id="v16-delete" type="button">Eliminar</button></div></div>
+<details class="v16-library"><summary>Biblioteca reutilizable <span id="v16-library-count">0 / 10</span></summary><div id="v16-library-list" class="v16-library-list"></div></details>
+</section>
 <div class="v14-editor-tools"><label for="v14-page-preview">Página visible <select id="v14-page-preview" class="field"><option value="home">Inicio</option></select></label><div class="v14-selection" id="v14-selection"><span id="v14-selected-label">Selecciona un texto en la vista para editarlo aquí</span><input id="v14-selected-input" type="text" maxlength="240" placeholder="Texto del elemento seleccionado" aria-label="Texto seleccionado"><button id="v14-apply-selection" type="button">Aplicar cambio</button></div></div>
 <div class="preview-frame-wrap"><div class="browser-top"><div><span></span><span></span><span></span></div><p>tu-negocio.local · Vista del proyecto</p><small>PREVIEW</small></div><div class="frame-scroll"><iframe id="live-preview" title="Vista previa editable del sitio creado" sandbox="allow-scripts" loading="eager"></iframe></div></div>
 <div class="preview-hint">✎ <strong>Edición directa:</strong> pulsa sobre el nombre comercial, el titular, la descripción, los títulos de sección o las tarjetas. Los cambios quedarán reflejados en el proyecto exportado.</div>
-<section class="export-box" aria-labelledby="export-heading"><div class="export-glow" aria-hidden="true">↗</div><div class="export-head"><div><p class="eyebrow">03 · TU PROYECTO TERMINADO PARA EDITAR</p><h2 id="export-heading">Descarga una web real.</h2><p>Obtendrás <strong>HTML, CSS, JavaScript y fotografías</strong> y, si activas el modo multipágina, archivos independientes para Inicio, Nosotros, Servicios, Galería y Contacto. Puedes abrirla o continuar su desarrollo fuera del portfolio.</p></div><span class="file-icon" aria-hidden="true">ZIP</span></div><button type="button" id="export" class="export-button">Generar sitio profesional ZIP · V15 <span>↓</span></button><p class="export-small">Menú, secciones, galería y formulario de correo opcional. Reservas, QR, mapas y automatizaciones no se activan sin integraciones reales.</p><p class="status" id="status" aria-live="polite" role="status"></p></section>
+<section class="export-box" aria-labelledby="export-heading"><div class="export-glow" aria-hidden="true">↗</div><div class="export-head"><div><p class="eyebrow">03 · TU PROYECTO TERMINADO PARA EDITAR</p><h2 id="export-heading">Descarga una web real.</h2><p>Obtendrás <strong>HTML, CSS, JavaScript y fotografías</strong> y, si activas el modo multipágina, archivos independientes para Inicio, Nosotros, Servicios, Galería y Contacto. Puedes abrirla o continuar su desarrollo fuera del portfolio.</p></div><span class="file-icon" aria-hidden="true">ZIP</span></div><button type="button" id="export" class="export-button">Generar sitio profesional ZIP · V16 <span>↓</span></button><p class="export-small">Menú, secciones, galería y formulario de correo opcional. Reservas, QR, mapas y automatizaciones no se activan sin integraciones reales.</p><p class="status" id="status" aria-live="polite" role="status"></p></section>
 <div class="v15-delivery-link"><span>✓ Entrega profesional</span><strong>¿Terminaste la web?</strong><a href="entrega-v15.html">Abrir checklist de entrega y publicación guiada ↗</a></div>
+<section class="v16-review-panel"><div><p class="eyebrow">V16 · REVISIÓN Y ENTREGA</p><h3>Comentarios de revisión sin cuentas</h3><p>El ZIP multipágina incluye REVISION-V16.html. El revisor descarga sus comentarios JSON y te los devuelve por un canal acordado; esta herramienta no envía nada online ni certifica una firma.</p></div><label class="v16-import" for="v16-feedback-file">Importar comentarios de revisión ↑</label><input type="file" id="v16-feedback-file" accept=".json,application/json" hidden><div id="v16-review-results" role="status" aria-live="polite"></div></section>
 <div class="project-actions"><div><h3>Tu proyecto, bajo tu control.</h3><p>Guarda un JSON con tus opciones, vuelve a importarlo o comienza con una plantilla V9. Los datos no se mandan al servidor.</p></div><div class="project-buttons"><button type="button" id="save-project" class="v13-save-project">★ Guardar en mis proyectos</button><a class="v13-project-link" href="studio-v13.html#projects">Ver mis proyectos ↗</a><button type="button" id="save-json">Guardar proyecto JSON ↓</button><button type="button" id="import-json">Importar proyecto ↑</button><input type="file" id="project-file" accept="application/json,.json" hidden></div></div>
 </section></div>
 <section class="help shell"><p class="eyebrow">CÓMO FUNCIONA</p><h2>Todo claro en tres pasos.</h2><div class="help-grid"><article><span>01</span><strong>Elige una plantilla</strong><p>Selecciona tu sector y ajusta identidad, fotografías y colores.</p></article><article><span>02</span><strong>Personaliza en directo</strong><p>Escribe sobre la vista previa y activa los bloques que quieras.</p></article><article><span>03</span><strong>Descarga tu web</strong><p>Genera archivos independientes y una propuesta PDF orientativa.</p></article></div><p class="help-foot">Herramienta para diseños estáticos. No publica archivos en GitHub Pages ni instala un backend. Para recibir solicitudes reales, habilitar pagos o gestionar reservas se necesitan servicios y configuraciones adicionales.</p></section>
