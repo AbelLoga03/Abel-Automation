@@ -74,3 +74,10 @@
 .v15-photo-card button{padding:7px;border:1px solid #ffffff44;background:#2b4051;color:#f9eee8;border-radius:6px;font-size:10px;font-weight:850}
 @media(max-width:800px){#v15-section-list{grid-template-columns:repeat(2,1fr)}.v15-photo-library{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:570px){.v15-fields{grid-template-columns:1fr}.v15-page-title{display:block}.v15-page-title>span{display:inline-block}.v15-page-editor{padding:14px}.v15-photo-library{grid-template-columns:1fr 1fr}}
+
+/* V15 · acceso inconfundible a la entrega profesional */
+.v15-delivery-link{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:#243d3c;border:1px solid #8de3d999;border-radius:13px;padding:17px 19px;margin:18px 0}
+.v15-delivery-link span{font-size:10px;color:#a8ebdf;font-weight:900;letter-spacing:.08em}
+.v15-delivery-link strong{font-size:14px;color:#fff3ec}
+.v15-delivery-link a{font-size:11px;background:#ffb18e;color:#282332;font-weight:900;border-radius:8px;padding:10px 13px}
+.v15-delivery-link a:hover{background:#ffe1c2}
