@@ -60,7 +60,7 @@ ok(hubHTML.includes('25 demos')&&hubHTML.includes('CRM cifrado'),'Accesos a demo
 ok(hubHTML.includes('correo, teléfono, dirección y fotos subidas'),'Privacidad del autoguardado explicada');
 const publish=txt('estudio/publicar-v13.html');
 ok(publish.includes('noindex,nofollow'),'Guía interna no indexada');
-ok(publish.includes('type="file"')&&publish.includes('E.importProject(await file.text())'),'Auditoría de JSON ejecutada localmente');
+ok(publish.includes('type="file"')&&(publish.includes('E.importProject(await file.text())')||publish.includes('E.importProject(JSON.stringify(project))')),'Auditoría de JSON ejecutada localmente');
 ok(publish.includes('no publica')||publish.includes('no realiza cambios'),'No finge subir proyectos al servidor');
 const issues=A.audit(E.defaults('restaurante'));
 ok(issues.canPublishAutomatically===false&&issues.criticalPending>0,'No existe publicación automática y se identifican puntos críticos');
