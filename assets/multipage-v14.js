@@ -3,6 +3,7 @@
 'use strict';
 const Studio=globalThis.AbelPageStudioV15||null;
 const Blocks=globalThis.AbelBlocksV16||null;
+const Review=globalThis.AbelReviewV16||null;
 const PAGE_DEFS=[
  {id:'home',file:'index.html',name:'Inicio',sections:['faq','testimonials','booking','qr','automation']},
  {id:'about',file:'nosotros.html',name:'Nosotros',sections:['about']},
@@ -80,7 +81,7 @@ function generate(project,config,css,js){
  }
  for(const id of cfg.pages)files[lookup[id].file]=makePage(p,config,id);
  files['estructura-v14.json']=JSON.stringify({version:14,layout:'multipage',pages:cfg.pages,project:p},null,2);
- if(config?.v16&&Blocks){files['COMPONENTES-V16.json']=JSON.stringify(Blocks.normalize(config.v16),null,2);files['ENTREGA-V16.txt']='ENTREGA V16: comprueba componentes, navegación, datos de clientes, permisos y enlaces antes de publicar. Este ZIP no se publica automáticamente.';}
+ if(config?.v16&&Blocks){files['COMPONENTES-V16.json']=JSON.stringify(Blocks.normalize(config.v16),null,2);files['ENTREGA-V16.txt']='ENTREGA V16: comprueba componentes, navegación, datos de clientes, permisos y enlaces antes de publicar. Este ZIP no se publica automáticamente.';if(Review)files['REVISION-V16.html']=Review.makeReviewFile(p,cfg.pages);}
  if(cfg.multipage&&config?.v15&&Studio){
   const photos=Studio.mediaFiles(config.v15);Object.assign(files,photos);
   files['PAGINAS-V15.json']=JSON.stringify(Studio.normalize(config.v15),null,2);
