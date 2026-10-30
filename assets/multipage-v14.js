@@ -1,7 +1,7 @@
 /* V14 multipágina: genera páginas HTML independientes con navegación relativa y assets compartidos. */
 (function(root,factory){const api=factory(root.AbelWebExportV12);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.AbelMultipageV14=api;})(typeof globalThis!=='undefined'?globalThis:this,E=>{
 'use strict';
-const Studio=root.AbelPageStudioV15||null;
+const Studio=globalThis.AbelPageStudioV15||null;
 const PAGE_DEFS=[
  {id:'home',file:'index.html',name:'Inicio',sections:['faq','testimonials','booking','qr','automation']},
  {id:'about',file:'nosotros.html',name:'Nosotros',sections:['about']},
