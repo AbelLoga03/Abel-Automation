@@ -1,6 +1,7 @@
 /* V14 multipágina: genera páginas HTML independientes con navegación relativa y assets compartidos. */
 (function(root,factory){const api=factory(root.AbelWebExportV12);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.AbelMultipageV14=api;})(typeof globalThis!=='undefined'?globalThis:this,E=>{
 'use strict';
+const Studio=root.AbelPageStudioV15||null;
 const PAGE_DEFS=[
  {id:'home',file:'index.html',name:'Inicio',sections:['faq','testimonials','booking','qr','automation']},
  {id:'about',file:'nosotros.html',name:'Nosotros',sections:['about']},
@@ -35,7 +36,23 @@ function makePage(project,config,pageId,preview=false,css="",js=""){
   intro:pageId==='contact'?'Puedes comunicarte mediante los canales configurados para este proyecto.':
   'Descubre '+page.name.toLowerCase()+' de '+base.brand+'.'
  };
+ const v15=config?.v15&&Studio?Studio.normalize(config.v15):null;
+ if(v15){
+  const entry=v15.pages[pageId];
+  // Each page stores independent text, sections, layout and card content.
+  const next=Studio.effective(scoped,v15,pageId);
+  Object.assign(scoped,next);
+  if(entry.sections.length)scoped.sections=['hero',...entry.sections];
+ }
  let html=E.htmlText(scoped,preview,css,js);
+ if(v15){
+  const image=Studio.photoLink(v15,pageId,preview);
+  if(image){
+   // Only validated built-in identifiers or image data URI from normalized media.
+   const safe=image.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+   html=html.replace(/(<div class="hero-photo"><img src=")[^"]+/,(_,open)=>open+safe);
+  }
+ }
  const marker=/<nav id="links" class="links" aria-label="Navegación">[\s\S]*?<\/nav>/;
  if(!marker.test(html))throw Error('No se encontró navegación del motor V12');
  html=html.replace(marker,'<nav id="links" class="links" aria-label="Navegación principal">'+links(cfg,pageId)+'</nav>');
@@ -56,8 +73,13 @@ function makePage(project,config,pageId,preview=false,css="",js=""){
 function generate(project,config,css,js){
  const cfg=normalize(config),p=E.normalize(project),files=E.filesForProject(p,css,js);
  if(!cfg.multipage)return files;
- for(const id of cfg.pages)files[lookup[id].file]=makePage(p,cfg,id);
+ for(const id of cfg.pages)files[lookup[id].file]=makePage(p,config,id);
  files['estructura-v14.json']=JSON.stringify({version:14,layout:'multipage',pages:cfg.pages,project:p},null,2);
+ if(cfg.multipage&&config?.v15&&Studio){
+  const photos=Studio.mediaFiles(config.v15);Object.assign(files,photos);
+  files['PAGINAS-V15.json']=JSON.stringify(Studio.normalize(config.v15),null,2);
+  files['ENTREGA-V15.txt']=['ABEL AUTOMATION · ENTREGA BUSINESS PRO V15','Web multipágina editable con contenidos independientes por página.','Comprueba todos los enlaces y las fotografías antes de publicar.','Los formularios externos solo funcionan tras validar el correo receptor y revisar privacidad; no se certifica recepción desde esta aplicación.','El JSON del proyecto puede contener fotografías y datos de contacto: no lo publiques si no procede.','Todos los archivos HTML usan rutas relativas y no se ha efectuado ningún despliegue.'].join('\n');
+ }
  files['ENTREGA-V14.txt']=[
   'ABEL AUTOMATION · WEB MULTIPÁGINA V14','',
   'Abre index.html. Páginas creadas: '+cfg.pages.map(id=>lookup[id].file).join(', '),
