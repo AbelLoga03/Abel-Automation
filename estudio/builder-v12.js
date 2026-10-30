@@ -407,6 +407,21 @@ async function exportZip(){
   const audit=Preflight.inspect(files);
   if(!audit.passed)throw Error('Revisión automática: '+audit.errors.slice(0,3).join('; '));
   files['CALIDAD-V16.txt']=Preflight.report(audit);
+  const estimate=Core.quote(state,Proposal),parts=Blocks.report(state.v16);
+  const pages=Multipage.normalize(state.v14);
+  files['FICHA-V16.txt']=[
+   'ABEL AUTOMATION · FICHA COMERCIAL ORIENTATIVA V16','',
+   'Proyecto: '+state.brand,
+   'Sector: '+Core.SECTORS[state.sector].name,
+   'Modalidad: '+(pages.multipage?'Multipágina':'Página única'),
+   'Páginas elegidas: '+(pages.multipage?pages.pages.length:1),
+   'Componentes adicionales: '+parts.total,
+   'Presupuesto inicial orientativo: '+Proposal.euro(estimate.total),
+   'Mantenimiento: '+(estimate.maintenance?.price?Proposal.euro(estimate.maintenance.price)+'/mes':'No seleccionado'),
+   'Estado: BORRADOR · pendiente de revisión y aceptación del alcance.',
+   'No incluye datos privados de contacto ni confirma contratación, alojamiento o pagos.',
+   'Revisa también CALIDAD-V16.txt y las condiciones de publicación antes de entregar.'
+  ].join('\n');
   const zip=Engine.buildZip(files);
   saveFile(zip,state.v14?.multipage?'Abel-Automation-Multipagina-V16.zip':'Abel-Automation-Web-V16.zip','application/zip');
   status('ZIP comprobado: '+audit.metrics.pages+' páginas, '+audit.metrics.links+' enlaces y '+Object.keys(files).length+' archivos. Avisos: '+audit.warnings.length+'. No se ha publicado nada.');
@@ -417,15 +432,15 @@ function downloadPdf(){
  try{
   const ids=Core.priceIds(state);
   const document={...ids,client:'Por definir',project:'Web para '+state.brand,scope:Core.brief(state)+
-   '\nV12: web estática exportable. Contacto: '+(state.email?'correo configurado':'sin correo')+'. Reservas, QR, mapas y automatizaciones sujetos a desarrollo adicional.'};
-  saveFile(Proposal.pdfDocument(document),'Propuesta-Abel-Automation-V12.pdf','application/pdf');
+   '\nV16: '+(state.v14?.multipage?'web multipágina':'web estática')+' con '+Blocks.report(state.v16).total+' bloques adicionales. Contacto: '+(state.email?'correo configurado':'sin correo')+'. Reservas, QR, mapas y automatizaciones sujetos a desarrollo adicional.'};
+  saveFile(Proposal.pdfDocument(document),'Propuesta-Abel-Automation-V16.pdf','application/pdf');
   status('Propuesta PDF descargada con los precios orientativos actuales.');
  }catch{status('No se pudo crear el presupuesto PDF.');}
 }
 function crmDraft(){
  try{
   const q=Core.quote(state,Proposal),draft={version:9,name:state.brand,sector:Core.SECTORS[state.sector].name,estimate:q.total,
-   notes:(Core.brief(state)+'\nCódigo exportable: Web Builder V12.').slice(0,3500)};
+   notes:(Core.brief(state)+'\nStudio V16: '+Blocks.report(state.v16).total+' bloques editables. Estado: proyecto no publicado.').slice(0,3500)};
   sessionStorage.setItem('abel-v9-crm-draft',JSON.stringify(draft));
   location.href='../herramientas/crm.html#studio-v9';
  }catch{status('No se pudo preparar el CRM en esta sesión.');}
