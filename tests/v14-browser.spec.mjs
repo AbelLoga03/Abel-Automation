@@ -33,6 +33,9 @@ test('V14: preset premium, edición contextual y exportación multipágina ZIP',
  await page.goto('/estudio/builder-v12.html?new=1');
  await expect(page.locator('#status')).toContainText('Listo:');
  await expect(page.locator('#v14-template option')).toHaveCount(22);
+ await expect(page.locator('#v14-template-gallery button')).toHaveCount(3);
+ await page.locator('#v14-template-gallery button').first().click();
+ await expect(page.locator('#v14-template')).toHaveValue('restaurante-editorial');
  await page.locator('#v14-template').selectOption('taller-impacto');
  await expect(page.locator('#sector')).toHaveValue('taller');
  await expect(page.locator('#layout')).toHaveValue('full');
