@@ -12,7 +12,7 @@ function safeProject(raw){
  const rawPages=Array.isArray(raw?.v14?.pages)?raw.v14.pages:available;
  const pages=available.filter(id=>rawPages.includes(id));if(!pages.includes('home'))pages.unshift('home');
  const v14={multipage:raw?.v14?.multipage===true,pages};
- const V15=root.AbelPageStudioV15;
+ const V15=globalThis.AbelPageStudioV15;
  const v15=V15?V15.normalize(raw?.v15||{}):undefined;
  if(v15)v15.media=[]; // This local library is not encrypted. Images stay in explicit export only.
  return {...p,email:'',phone:'',location:'',customPhoto:'',v14,...(v15?{v15}:{})};
