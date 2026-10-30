@@ -2,6 +2,7 @@
 (function(root,factory){const api=factory(root.AbelWebExportV12);if(typeof module!=='undefined'&&module.exports)module.exports=api;root.AbelMultipageV14=api;})(typeof globalThis!=='undefined'?globalThis:this,E=>{
 'use strict';
 const Studio=globalThis.AbelPageStudioV15||null;
+const Blocks=globalThis.AbelBlocksV16||null;
 const PAGE_DEFS=[
  {id:'home',file:'index.html',name:'Inicio',sections:['faq','testimonials','booking','qr','automation']},
  {id:'about',file:'nosotros.html',name:'Nosotros',sections:['about']},
@@ -65,6 +66,7 @@ function makePage(project,config,pageId,preview=false,css="",js=""){
  html=html.replace('href="#inicio" class="brand"','href="index.html" class="brand"');
  // Cambiar CTA de subpáginas a un enlace válido al contacto.
  if(pageId!=='home')html=html.replace(/(<a class="action" href=")[^"]+(")/,(_,a,b)=>a+(cfg.pages.includes('contact')?'contacto.html#contact':'index.html')+b);
+ if(config?.v16&&Blocks)html=Blocks.renderInto(html,config.v16,pageId,preview);
  const description=base.intro;
  // Meta description por página, sin crear datos externos ni dominios ficticios.
  html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>'+E.normalize({...base,brand:page.name+' | '+base.brand}).brand.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</title>');
@@ -72,9 +74,13 @@ function makePage(project,config,pageId,preview=false,css="",js=""){
 }
 function generate(project,config,css,js){
  const cfg=normalize(config),p=E.normalize(project),files=E.filesForProject(p,css,js);
- if(!cfg.multipage)return files;
+ if(!cfg.multipage){
+  if(config?.v16&&Blocks){files['index.html']=Blocks.renderInto(files['index.html'],config.v16,'home');files['COMPONENTES-V16.json']=JSON.stringify(Blocks.normalize(config.v16),null,2);}
+  return files;
+ }
  for(const id of cfg.pages)files[lookup[id].file]=makePage(p,config,id);
  files['estructura-v14.json']=JSON.stringify({version:14,layout:'multipage',pages:cfg.pages,project:p},null,2);
+ if(config?.v16&&Blocks){files['COMPONENTES-V16.json']=JSON.stringify(Blocks.normalize(config.v16),null,2);files['ENTREGA-V16.txt']='ENTREGA V16: comprueba componentes, navegación, datos de clientes, permisos y enlaces antes de publicar. Este ZIP no se publica automáticamente.';}
  if(cfg.multipage&&config?.v15&&Studio){
   const photos=Studio.mediaFiles(config.v15);Object.assign(files,photos);
   files['PAGINAS-V15.json']=JSON.stringify(Studio.normalize(config.v15),null,2);
