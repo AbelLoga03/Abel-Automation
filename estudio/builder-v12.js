@@ -231,7 +231,15 @@ function bindFields(){
  $('v14-multipage').addEventListener('change',e=>{update({v14:{...state.v14,multipage:e.target.checked}});status(e.target.checked?'Modo multipágina activado; selecciona las páginas.':'Modo de una sola página activado.');});
  $('v14-page-preview').addEventListener('change',()=>{syncPageEditor();renderPreview();});
  bindPageEditor();
- $('v15-form-mode').addEventListener('change',e=>update({formMode:e.target.value}));
+ $('v15-form-mode').addEventListener('change',e=>{
+  const next=e.target.value,model=Pages.normalize(state.v15);
+  if(next==='formsubmit'){
+   const current=model.pages.contact.sections.length?model.pages.contact.sections:state.sections.filter(id=>id!=='hero'&&id!=='seo');
+   model.pages.contact.sections=[...new Set([...current,'contact','form'])];
+  }
+  update({formMode:next,v15:model});
+  status(next==='formsubmit'?'Formulario añadido a Contacto. Antes de recibir solicitudes, verifica el buzón y los textos de privacidad.':'Modo de preparación de correo activado.');
+ });
  $('v14-apply-selection').addEventListener('click',()=>{if(!selectedText)return;onInlineEdit({source:$('live-preview').contentWindow,data:{type:'ABEL_V12_EDIT',...selectedText,value:$('v14-selected-input').value}});});
  $('sector').addEventListener('change',e=>{
   const newSector=e.target.value,prev=state;
