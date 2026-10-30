@@ -1,7 +1,7 @@
 import {defineConfig,devices} from '@playwright/test';
 export default defineConfig({
  testDir:'./tests',
- testMatch:'v14-browser.spec.mjs',
+ testMatch:['v14-browser.spec.mjs','v15-browser.spec.mjs'],
  timeout:45000,
  expect:{timeout:12000},
  fullyParallel:false,

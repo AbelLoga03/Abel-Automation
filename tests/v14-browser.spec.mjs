@@ -7,7 +7,7 @@ test('V13 pública integrada: portada, Studio y demos accesibles',async ({page},
  await page.goto('/');
  await expect(page.locator('a[href="estudio/studio-v13.html"]').first()).toBeVisible();
  await page.goto('/estudio/studio-v13.html');
- await expect(page.getByRole('heading',{name:/Construye tu próxima web/i})).toBeVisible();
+ await expect(page.getByRole('heading',{name:/Construye tu próxima web|Diseña cada página de tu web/i})).toBeVisible();
  await expect(page.locator('#project-list')).toBeVisible();
  await expect(page.locator('#v14-search')).toBeVisible();
  await info.attach('studio-desktop',{body:await page.screenshot({fullPage:true}),contentType:'image/png'});

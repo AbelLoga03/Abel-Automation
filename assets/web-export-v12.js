@@ -16,7 +16,7 @@ function normalize(raw){
  const sectionImages={};for(const id of ['about','services','products','gallery']){const src=x.sectionImages?.[id];if(IMAGES.includes(src))sectionImages[id]=src;}
  return {...b,version:12,email:isEmail(x.email)?x.email:'',phone:isPhone(x.phone)?x.phone:'',
  location:text(x.location,150),image:IMAGES.includes(x.image)?x.image:s.hero,customPhoto:isPhoto(x.customPhoto)?x.customPhoto:'',
- titles,sectionImages,services:tri(x.services,s.services),products:tri(x.products,s.products)};
+ titles,sectionImages,services:tri(x.services,s.services),products:tri(x.products,s.products),formMode:x.formMode==='formsubmit'?'formsubmit':'mailto'};
 }
 function fromV9(config){if(config?.version!==9)throw Error('Proyecto V9 inválido');return normalize(config);}
 function imageName(x){const p=normalize(x);if(!p.customPhoto)return p.image;const type=p.customPhoto.slice(11,p.customPhoto.indexOf(';'));return 'hero-personalizada.'+(type==='jpeg'?'jpg':type);}
@@ -38,7 +38,19 @@ function section(id,p,preview){
  else if(id==='faq')body='<details><summary>¿Cómo puedo contactar?</summary><p>Utiliza los canales indicados en esta web.</p></details><details><summary>¿Cómo solicito un presupuesto?</summary><p>Escríbenos indicando qué necesitas.</p></details>';
  else if(id==='map')body=p.location?'<p class="lead">'+escapeHtml(p.location)+'</p><p class="note">Dirección de texto, sin integración de mapas externos.</p>':'<p>Añade una dirección pública autorizada.</p>';
  else if(id==='contact')body=(p.email?'<a class="action" href="mailto:'+encodeURIComponent(p.email)+'">Enviar correo ↗</a>':'<p>Correo no configurado.</p>')+(p.phone?'<p>Teléfono: '+escapeHtml(p.phone)+'</p>':'');
- else if(id==='form')body='<p>Este formulario prepara un mensaje para tu aplicación de correo; no transmite nada a un servidor.</p><form id="site-contact-form"><label>Nombre<input name="name" maxlength="90" autocomplete="name" required></label><label>Correo<input name="reply" type="email" maxlength="150" autocomplete="email" required></label><label>Mensaje<textarea name="message" rows="4" maxlength="1500" minlength="10" required></textarea></label><button class="action" type="submit" '+(!p.email?'disabled':'')+'>Preparar correo ↗</button><p id="form-status" role="status">'+(p.email?'Revisa y confirma el envío desde tu correo.':'Configura primero un correo válido.')+'</p></form>';
+ else if(id==='form'){
+  const external=p.formMode==='formsubmit'&&isEmail(p.email);
+  const action=external?' action="https://formsubmit.co/'+encodeURIComponent(p.email)+'" method="POST" data-provider="formsubmit"':'';
+  body='<p>'+(external?'El envío utiliza FormSubmit, un proveedor externo. No envíes datos sensibles. Su recepción necesita activar y verificar el correo destinatario.':'Este formulario prepara un correo desde tu aplicación; no lo envía automáticamente.')+'</p>'+
+   '<form id="site-contact-form"'+action+'><label>Nombre<input name="name" maxlength="90" autocomplete="name" required></label>'+
+   '<label>Correo<input name="email" type="email" maxlength="150" autocomplete="email" required></label>'+
+   '<label>Mensaje<textarea name="message" rows="4" maxlength="1500" minlength="10" required></textarea></label>'+
+   (external?'<label class="consent"><input type="checkbox" name="consentimiento" value="aceptado" required> Acepto que mi solicitud se envíe al proveedor externo indicado para que el negocio pueda responderme.</label>'+
+    '<input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" class="form-honeypot">'+
+    '<input type="hidden" name="_captcha" value="true"><input type="hidden" name="_subject" value="Nueva consulta desde la web">':'')+
+   '<button class="action" type="submit" '+(!p.email?'disabled':'')+'>'+(external?'Enviar consulta ↗':'Preparar correo ↗')+'</button>'+
+   '<p id="form-status" role="status">'+(external?'El envío solo se confirma al recibir el mensaje en la bandeja autorizada.':p.email?'Revisa y confirma el envío desde tu correo.':'Configura primero un correo válido.')+'</p></form>';
+ }
  else if(id==='whatsapp')body=p.phone?'<a class="action" href="https://wa.me/'+p.phone.slice(1)+'" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a>':'<p>Configura un teléfono autorizado en formato internacional.</p>';
  else if(id==='automation')body='<p>Ideas de automatización. Esta página no ejecuta conexiones ni tareas externas.</p>';
  else return '';
@@ -78,7 +90,7 @@ function buildZip(files){
  const entries=Object.entries(files);if(!entries.length||entries.length>40)throw Error('Cantidad de archivos inválida');
  let total=0;const seen=new Set();
  const prepared=entries.map(([name,content])=>{
-  if(!/^(?:assets\/[A-Za-z0-9_-]+\.(?:webp|jpg|png)|(?:index\.html|nosotros\.html|servicios\.html|galeria\.html|contacto\.html|styles\.css|app\.js|README\.txt|ENTREGA-V14\.txt|configuracion-v12\.json|estructura-v14\.json))$/.test(name)||seen.has(name))throw Error('Nombre ZIP inseguro');seen.add(name);
+  if(!/^(?:assets\/[A-Za-z0-9_-]+\.(?:webp|jpg|png)|(?:index\.html|nosotros\.html|servicios\.html|galeria\.html|contacto\.html|styles\.css|app\.js|README\.txt|ENTREGA-V14\.txt|ENTREGA-V15\.txt|configuracion-v12\.json|estructura-v14\.json|PAGINAS-V15\.json))$/.test(name)||seen.has(name))throw Error('Nombre ZIP inseguro');seen.add(name);
   const bytes=typeof content==='string'?encoder.encode(content):content;if(!(bytes instanceof Uint8Array)||bytes.length>5500000)throw Error('Archivo ZIP inválido');
   total+=bytes.length;if(total>18000000)throw Error('Exportación demasiado grande');return {bytes,name:encoder.encode(name),crc:crc32(bytes)};
  });

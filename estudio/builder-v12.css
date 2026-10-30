@@ -45,3 +45,39 @@
 .v14-preset-bar{width:100%;height:11px;border-radius:3px;opacity:.82}
 .v14-preset-accent{height:8px;width:53%;border-radius:3px}
 @media(max-width:470px){.v14-preset-gallery{gap:4px}.v14-preset-preview{padding:5px}.v14-preset-preview strong{font-size:8px}}
+
+/* V15 Business PRO · controles visibles para cada página, imágenes y formularios */
+.v15-page-editor{background:linear-gradient(130deg,#26384a,#27283b);border:1px solid #89e9dc99;border-radius:15px;padding:19px 20px;margin:0 0 13px}
+.v15-page-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:15px}
+.v15-page-title h3{font-size:22px;line-height:1.25;letter-spacing:-.045em;margin:5px 0}
+.v15-page-title .eyebrow{margin:0}
+.v15-page-title>span{background:#8de3d9;color:#172633;font-weight:900;font-size:11px;padding:7px 11px;border-radius:8px}
+.v15-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.v15-fields label{display:grid;gap:6px;color:#e5d2c7;font-size:11px;font-weight:850}
+.v15-fields input,.v15-fields select,.v15-fields textarea,.v15-photo-manager select{min-width:0;width:100%;padding:10px;border-radius:8px;background:#141d2d;color:#fffaf5;border:1px solid #a7b2c7}
+.v15-fields textarea{resize:vertical}
+.v15-page-sections{margin:18px 0;border:1px solid #ffffff42;background:#192636;border-radius:9px;padding:12px}
+.v15-page-sections summary{font-weight:850;font-size:12px;color:#a4ebdf;cursor:pointer}
+.v15-page-sections p{font-size:11px;color:#b4c8d4}
+#v15-section-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.v15-section-entry{font-size:11px;display:flex;gap:6px;align-items:center}.v15-section-entry input{accent-color:#ffb18e}
+#v15-reset-sections{margin-top:13px;color:#221c2a;font-size:11px;font-weight:900;background:#ffb18e;border:0;border-radius:8px;padding:9px 13px}
+.v15-photo-manager{margin-top:20px;display:grid;gap:10px;border-top:1px solid #ffffff38;padding-top:17px}
+.v15-photo-manager>label:first-child{font-size:12px;font-weight:900;color:#ffcfaa}
+.v15-upload{display:block;width:max-content;max-width:100%;padding:11px 16px;border:1px dashed #ffbd95;color:#ffcfb4;border-radius:9px;font-size:12px;font-weight:850;cursor:pointer}
+.v15-upload small{display:block;color:#becbd5;font-weight:500;font-size:10px}
+#v15-photo-upload{font-size:11px}
+.v15-photo-library{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.v15-photo-card{display:grid;gap:6px;padding:7px;background:#192437;border:1px solid #ffffff33;border-radius:9px}
+.v15-photo-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px}
+.v15-photo-card small{font-size:9px;overflow-wrap:anywhere}
+.v15-photo-card button{padding:7px;border:1px solid #ffffff44;background:#2b4051;color:#f9eee8;border-radius:6px;font-size:10px;font-weight:850}
+@media(max-width:800px){#v15-section-list{grid-template-columns:repeat(2,1fr)}.v15-photo-library{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:570px){.v15-fields{grid-template-columns:1fr}.v15-page-title{display:block}.v15-page-title>span{display:inline-block}.v15-page-editor{padding:14px}.v15-photo-library{grid-template-columns:1fr 1fr}}
+
+/* V15 · acceso inconfundible a la entrega profesional */
+.v15-delivery-link{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:#243d3c;border:1px solid #8de3d999;border-radius:13px;padding:17px 19px;margin:18px 0}
+.v15-delivery-link span{font-size:10px;color:#a8ebdf;font-weight:900;letter-spacing:.08em}
+.v15-delivery-link strong{font-size:14px;color:#fff3ec}
+.v15-delivery-link a{font-size:11px;background:#ffb18e;color:#282332;font-weight:900;border-radius:8px;padding:10px 13px}
+.v15-delivery-link a:hover{background:#ffe1c2}
