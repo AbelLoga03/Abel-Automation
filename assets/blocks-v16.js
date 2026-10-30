@@ -3,9 +3,9 @@
 'use strict';
 const PAGES=['home','about','services','gallery','contact'];
 const TYPES={
- feature:{name:'Destacado',title:'Lo que nos diferencia',description:'Cuenta qué valor aporta este negocio.',button:'Ver servicios',href:'servicios.html'},
- cta:{name:'Llamada a la acción',title:'¿Hablamos de tu proyecto?',description:'Contacta para conocer las opciones disponibles.',button:'Contactar',href:'contacto.html'},
- steps:{name:'Cómo trabajamos',title:'Nuestro proceso',description:'1. Escuchamos · 2. Proponemos · 3. Entregamos',button:'Saber más',href:'nosotros.html'},
+ feature:{name:'Destacado',title:'Lo que nos diferencia',description:'Cuenta qué valor aporta este negocio.',button:'Conocer más',href:'#inicio'},
+ cta:{name:'Llamada a la acción',title:'¿Hablamos de tu proyecto?',description:'Contacta para conocer las opciones disponibles.',button:'Contactar',href:'#inicio'},
+ steps:{name:'Cómo trabajamos',title:'Nuestro proceso',description:'1. Escuchamos · 2. Proponemos · 3. Entregamos',button:'Saber más',href:'#inicio'},
  highlight:{name:'Aviso destacado',title:'Información importante',description:'Añade aquí información real y revisada del negocio.',button:'',href:''}
 };
 const MAX=8,LIBMAX=10;
