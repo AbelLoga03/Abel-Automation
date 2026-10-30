@@ -22,6 +22,13 @@ test('V15: páginas con titulares independientes, formulario externo opcional y 
  await page.locator('#v15-form-mode').selectOption('formsubmit');
  await page.locator('#tab-sections').click();
  await page.locator('#v14-page-preview').selectOption('contact');
+ console.log('V15 form diagnostics',JSON.stringify({
+  mode:await page.locator('#v15-form-mode').inputValue(),
+  email:await page.locator('#email').inputValue(),
+  page:await page.locator('#v14-page-preview').inputValue(),
+  sections:await page.locator('#v15-section-list').locator('input').evaluateAll(list=>list.map((x,i)=>({i,checked:x.checked})).filter(x=>x.checked)),
+  preview:(await page.frameLocator('#live-preview').locator('body').innerText()).slice(-1400)
+ }));
  await expect(page.frameLocator('#live-preview').locator('form[data-provider="formsubmit"]')).toHaveCount(1);
  await expect(page.frameLocator('#live-preview').locator('input[name="consentimiento"]')).toHaveCount(1);
  await info.attach('v15-editor-desktop',{body:await page.screenshot({fullPage:true}),contentType:'image/png'});
