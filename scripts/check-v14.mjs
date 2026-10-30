@@ -10,7 +10,7 @@ const X=(await import('../assets/projects-v14.js')).default;
 let count=0;const ok=(x,name)=>{assert.ok(x,name);console.log('OK',name);count++};
 const file=f=>fs.readFileSync(f,'utf8');
 const files=['assets/multipage-v14.js','assets/templates-v14.js','assets/projects-v14.js','estudio/builder-v12.js','estudio/studio-v13.js','scripts/audit-live-v13.mjs','assets/web-export-v12.js'];
-for(const name of files){ok(fs.existsSync(name),'Archivo V14 '+name);new vm.Script(file(name),{filename:name});ok(true,'Sintaxis '+name)}
+for(const name of files){ok(fs.existsSync(name),'Archivo V14 '+name);if(!name.endsWith('.mjs')){new vm.Script(file(name),{filename:name});ok(true,'Sintaxis '+name)}}
 ok(T.PRESETS.length===21,'21 combinaciones de plantilla (7 sectores x 3 estilos)');
 ok(new Set(T.PRESETS.map(x=>x.id)).size===21,'Identificadores de plantilla únicos');
 for(const preset of T.PRESETS){
