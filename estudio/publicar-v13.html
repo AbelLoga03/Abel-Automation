@@ -9,7 +9,7 @@
 </style>
 </head><body><header><div class="wrap"><a href="studio-v13.html">← Abel Automation Studio V13</a></div></header>
 <main class="wrap"><p class="eyebrow">ASISTENTE DE PUBLICACIÓN · V13</p><h1>Una web preparada.<br><em>Sin sorpresas.</em></h1><p class="intro">Sube el JSON de un proyecto V12 y revisa los puntos importantes antes de publicarlo en tu propio alojamiento. Esta herramienta funciona en tu navegador: no transmite ni publica archivos.</p>
-<section class="box" aria-labelledby="upload-heading"><h2 id="upload-heading">1 · Revisa tu proyecto</h2><p>Importa el archivo <code>configuracion-v12.json</code> incluido en el ZIP de la web, o un proyecto guardado desde el editor.</p><label class="choose" for="project-file">Seleccionar JSON de la web ↑</label><input id="project-file" type="file" accept=".json,application/json" hidden><p class="info">Revisa los datos de contacto antes de compartir archivos. Este análisis no guarda ni envía tu JSON.</p><p id="file-status" role="status" aria-live="polite"></p></section>
+<section class="box" aria-labelledby="upload-heading"><h2 id="upload-heading">1 · Revisa tu proyecto</h2><p>Importa <code>configuracion-v12.json</code>, <code>estructura-v14.json</code> incluido en un ZIP multipágina o un proyecto guardado desde el editor.</p><label class="choose" for="project-file">Seleccionar JSON de la web ↑</label><input id="project-file" type="file" accept=".json,application/json" hidden><p class="info">Revisa los datos de contacto antes de compartir archivos. Este análisis no guarda ni envía tu JSON.</p><p id="file-status" role="status" aria-live="polite"></p></section>
 <section class="box" id="results" aria-labelledby="review-heading" hidden><h2 id="review-heading">2 · Informe de preparación</h2><p class="summary" id="summary" role="status"></p><div id="checks" class="checks"></div><div class="actions"><button class="button" type="button" id="report">Descargar informe .txt</button><a class="button" href="builder-v12.html">Volver al editor</a></div></section>
 <section class="box" aria-labelledby="publish-heading"><h2 id="publish-heading">3 · Publicación responsable</h2><p>Cuando hayas revisado manualmente la web y quieras publicarla, puedes usar GitHub Pages para un sitio estático propio. La publicación requiere una cuenta y una decisión expresa; este asistente no realiza cambios en GitHub.</p>
 <ol class="steps"><li><strong>Exporta la web ZIP</strong> desde el constructor y extrae su contenido.</li><li><strong>Prueba la carpeta</strong> en un navegador y verifica todos los enlaces, fotografías y formularios.</li><li><strong>Crea un repositorio propio</strong> en GitHub y sube los archivos exportados a la raíz de la rama destinada a publicar.</li><li><strong>Configura Pages</strong> en el repositorio, seleccionando la rama y carpeta pertinentes, y revisa el resultado público.</li><li><strong>Comprueba el dominio, HTTPS y privacidad.</strong> Si utilizas formularios reales, pagos o reservas, necesitarás integraciones adicionales y revisión legal.</li></ol>
@@ -22,14 +22,14 @@ document.addEventListener('DOMContentLoaded',()=>{
  $('project-file').addEventListener('change',async e=>{
   const file=e.target.files?.[0];e.target.value='';if(!file)return;
   if(file.size>4800000){$('file-status').textContent='El JSON es demasiado grande.';return;}
-  try{selected=E.importProject(await file.text());const r=A.audit(selected);$('results').hidden=false;$('checks').replaceChildren();
+  try{const raw=JSON.parse(await file.text()),project=raw.version===14&&raw.project?raw.project:raw;selected=E.importProject(JSON.stringify(project));const pages=raw.version===14&&Array.isArray(raw.pages)?raw.pages:raw.v14?.pages||[];const r=A.audit(selected);$('results').hidden=false;$('checks').replaceChildren();
    $('summary').textContent=r.criticalPending?'Hay '+r.criticalPending+' comprobaciones críticas sin validar. No publiques sin revisarlas.':'Los controles técnicos han pasado, pero revisa derechos y privacidad manualmente antes de publicar.';
    for(const entry of r.issues){
     const row=document.createElement('div');row.className='item'+(entry.ok?' ok':'');
     const mark=document.createElement('span');mark.className='status';mark.textContent=entry.ok?'✓':'!';
     const content=document.createElement('div'),title=document.createElement('strong'),hint=document.createElement('p');
     title.textContent=entry.title+(entry.critical?' · CRÍTICO':'');hint.textContent=entry.detail;content.append(title,hint);row.append(mark,content);$('checks').append(row);
-   }$('file-status').textContent='Proyecto cargado. Este análisis se ha realizado en el navegador.';$('results').scrollIntoView({behavior:'smooth',block:'start'});
+   }$('file-status').textContent='Proyecto cargado'+(pages.length?' · estructura V14 con '+pages.length+' páginas.':'')+'. Análisis local; verifica manualmente enlaces entre páginas y archivos del ZIP.';$('results').scrollIntoView({behavior:'smooth',block:'start'});
   }catch{selected=null;$('results').hidden=true;$('file-status').textContent='No se pudo analizar un JSON V9/V12 válido.';}
  });
  $('report').addEventListener('click',()=>{
