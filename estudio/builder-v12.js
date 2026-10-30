@@ -1,11 +1,11 @@
 /* Abel Automation V12 · editor real de sitios sin servicios externos */
 (()=>{
 'use strict';
-const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13,Templates=globalThis.AbelTemplatesV14,Multipage=globalThis.AbelMultipageV14;
+const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13,Templates=globalThis.AbelTemplatesV14,Multipage=globalThis.AbelMultipageV14,Pages=globalThis.AbelPageStudioV15;
 if(!Core||!Engine||!Proposal)return;
 const $=id=>document.getElementById(id);
 let state=Engine.defaults(),runtimeCss='',runtimeJs='',tab='brand',renderVersion=0,busy=false;
-let past=[],future=[],lastEditKey='',lastEditTime=0,saveTimer=null,selectedText=null;state.v14=Multipage.normalize({});
+let past=[],future=[],lastEditKey='',lastEditTime=0,saveTimer=null,selectedText=null;state.v14=Multipage.normalize({});state.v15=Pages.normalize({});
 const status=message=>{$('status').textContent=message;};
 const el=(tag,text='',className='')=>{const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;};
 function saveFile(content,name,mime){
@@ -24,17 +24,17 @@ function remember(next,key=''){
  lastEditKey=key;lastEditTime=now;future=[];historyUI();return true;
 }
 function update(values,refresh=true,key=''){
- const next=Engine.normalize({...state,...values});next.v14=Multipage.normalize(values.v14||state.v14);if(!remember(next,key))return;
+ const next=Engine.normalize({...state,...values});next.v14=Multipage.normalize(values.v14||state.v14);next.v15=Pages.normalize(values.v15||state.v15);if(!remember(next,key))return;
  state=next;renderPreview();quote();if(refresh)syncControls();saveSoon();
 }
 function replaceProject(next,track=true){
- const normalized=Engine.normalize(next);normalized.v14=Multipage.normalize(next.v14||{});
+ const normalized=Engine.normalize(next);normalized.v14=Multipage.normalize(next.v14||{});normalized.v15=Pages.normalize(next.v15||{});
  if(track)remember(normalized);
  state=normalized;renderPreview();quote();syncControls();saveSoon();historyUI();
 }
 function stepHistory(stack,to){
  if(!stack.length)return;const item=stack.pop();to.push(JSON.stringify(state));if(to.length>35)to.shift();
- const raw=JSON.parse(item);state=Engine.importProject(item);state.v14=Multipage.normalize(raw.v14||{});lastEditKey='';renderPreview();quote();syncControls();historyUI();saveSoon();
+ const raw=JSON.parse(item);state=Engine.importProject(item);state.v14=Multipage.normalize(raw.v14||{});state.v15=Pages.normalize(raw.v15||{});lastEditKey='';renderPreview();quote();syncControls();historyUI();saveSoon();
 }
 
 function setTab(which,focus=false){
@@ -55,7 +55,7 @@ function initOptions(){
  }
 }
 function syncControls(){
- for(const key of ['sector','brand','headline','intro','cta','email','phone','location','theme','font','layout','style','image','maintenance'])$(key).value=state[key];
+ for(const key of ['sector','brand','headline','intro','cta','email','phone','location','theme','font','layout','style','image','maintenance'])$(key).value=state[key];$('v15-form-mode').value=state.formMode||'mailto';
  $('custom').checked=state.custom;$('color-options').hidden=!state.custom;
  const palette=$('palette-preview');palette.replaceChildren();
  for(const key of ['bg','ink','accent','surface']){
@@ -63,7 +63,7 @@ function syncControls(){
   $('color-'+key).value=state.colors[key];
  }
  for(const button of document.querySelectorAll('[data-device]'))button.setAttribute('aria-pressed',String(button.dataset.device===state.device));
- renderBlocks();renderPageControls();renderTemplateGallery();
+ renderBlocks();renderPageControls();renderTemplateGallery();syncPageEditor();
 }
 function renderTemplateGallery(){
  const box=$('v14-template-gallery');box.replaceChildren();
@@ -142,22 +142,99 @@ function quote(){
   $('price-monthly').textContent=amount.maintenance.price?(amount.maintenance.from?'desde ':'')+Proposal.euro(amount.maintenance.price)+'/mes':'Sin mantenimiento';
  }catch{$('price').textContent='Consultar';$('price-monthly').textContent='';}
 }
+
+/* V15 independent-page inspector and image library */
+function currentPage(){return $('v14-page-preview')?.value||'home';}
+function syncPageEditor(){
+ const page=currentPage(),data=Pages.normalize(state.v15),entry=data.pages[page];
+ $('v15-page-indicator').textContent=Multipage.PAGE_DEFS.find(p=>p.id===page)?.name||'Inicio';
+ for(const field of ['headline','intro','cta','layout'])$('v15-'+field).value=entry[field]||'';
+ const select=$('v15-photo-select');select.replaceChildren();
+ select.add(new Option('Fotografía de la plantilla','template'));
+ select.add(new Option('Fotografía principal anterior','custom'));
+ for(const photo of data.media)select.add(new Option(photo.name+' ('+photo.type.toUpperCase()+')',photo.id));
+ select.value=entry.image;
+ const box=$('v15-photo-library');box.replaceChildren();
+ for(const photo of data.media){
+  const card=el('div','','v15-photo-card');
+  const image=el('img');image.src=photo.data;image.alt='Vista previa de '+photo.name;image.loading='lazy';
+  const desc=el('small',photo.name),choose=el('button','Usar aquí'),remove=el('button','Eliminar');
+  choose.type='button';remove.type='button';
+  choose.addEventListener('click',()=>updatePage({image:photo.id}));
+  remove.addEventListener('click',()=>{if(!confirm('¿Eliminar esta fotografía del proyecto y de las páginas que la utilicen?'))return;update({v15:Pages.without(state.v15,photo.id)});});
+  card.append(image,desc,choose,remove);box.append(card);
+ }
+ const sectionBox=$('v15-section-list');sectionBox.replaceChildren();
+ for(const id of Core.SECTION_META.map(x=>x.id).filter(id=>id!=='hero'&&id!=='seo')){
+  const label=el('label','','v15-section-entry'),check=el('input');check.type='checkbox';
+  const list=entry.sections.length?entry.sections:state.sections.filter(x=>x!=='hero'&&x!=='seo');
+  check.checked=list.includes(id);
+  check.addEventListener('change',()=>{
+   const set=new Set(entry.sections.length?entry.sections:list);
+   check.checked?set.add(id):set.delete(id);
+   updatePage({sections:[...set]});
+  });
+  label.append(check,document.createTextNode(Core.SECTION_META.find(x=>x.id===id).name));sectionBox.append(label);
+ }
+}
+function updatePage(patch,key=''){
+ const id=currentPage(),data=Pages.normalize(state.v15);
+ data.pages[id]={...data.pages[id],...patch};
+ update({v15:data},true,'v15-'+id+'-'+key);
+}
+async function optimizedImage(file){
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8_000_000)throw Error('Usa JPG, PNG o WebP de hasta 8 MB de origen.');
+ const url=URL.createObjectURL(file);
+ try{
+  const bitmap=await createImageBitmap(file);
+  const width=Math.min(bitmap.width,1200),height=Math.min(bitmap.height,Math.round(width*9/16));
+  if(width<20||height<20)throw Error('La fotografía es demasiado pequeña');
+  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+  const ctx=canvas.getContext('2d');if(!ctx)throw Error('No hay soporte de imágenes');
+  const scale=Math.max(width/bitmap.width,height/bitmap.height),dw=bitmap.width*scale,dh=bitmap.height*scale;
+  ctx.drawImage(bitmap,(width-dw)/2,(height-dh)/2,dw,dh);bitmap.close?.();
+  let result='';
+  for(const q of [.85,.7,.55,.4]){
+   result=canvas.toDataURL('image/webp',q);
+   if(Pages.summary({media:[{id:'photo-1',data:result,name:'Imagen'}]}).bytes<=Pages.PHOTO_BYTES)break;
+  }
+  if(!/^data:image\/webp;base64,/.test(result))throw Error('El navegador no permite exportar WebP');
+  if(Pages.summary({media:[{id:'photo-1',data:result,name:'Imagen'}]}).bytes>Pages.PHOTO_BYTES)throw Error('La imagen supera el límite de 1,45 MB optimizada');
+  return result;
+ }finally{URL.revokeObjectURL(url);}
+}
+function bindPageEditor(){
+ for(const field of ['headline','intro','cta','layout']){
+  $('v15-'+field).addEventListener(field==='layout'?'change':'input',e=>updatePage({[field]:e.target.value},field));
+ }
+ $('v15-photo-select').addEventListener('change',e=>updatePage({image:e.target.value}));
+ $('v15-reset-sections').addEventListener('click',()=>updatePage({sections:[]}));
+ $('v15-photo-upload').addEventListener('change',async e=>{
+  const file=e.target.files?.[0];e.target.value='';if(!file)return;
+  try{const data=await optimizedImage(file),library=Pages.attach(state.v15,{name:file.name,data});
+   update({v15:library});status('Imagen optimizada, recortada a 16:9 y añadida en este navegador. El ZIP contendrá su archivo real.');
+  }catch(error){status('No se pudo añadir la foto: '+error.message);}
+ });
+}
+
 function renderPreview(){
  if(!runtimeCss||!runtimeJs)return;
  const config=Multipage.normalize(state.v14),selected=$('v14-page-preview')?.value||'home';
- $('live-preview').srcdoc=config.multipage?Multipage.makePage(state,config,config.pages.includes(selected)?selected:'home',true,runtimeCss,runtimeJs):Engine.htmlText(state,true,runtimeCss,runtimeJs);
+ $('live-preview').srcdoc=config.multipage?Multipage.makePage(state,{...config,v15:state.v15},config.pages.includes(selected)?selected:'home',true,runtimeCss,runtimeJs):Engine.htmlText(state,true,runtimeCss,runtimeJs);
  $('live-preview').dataset.device=state.device;
 }
 function bindFields(){
  $('v14-template').addEventListener('change',e=>{if(!e.target.value)return;
   replaceProject({...Templates.apply(e.target.value,state),v14:state.v14});status('Plantilla premium aplicada; puedes modificarla libremente.');});
  $('v14-multipage').addEventListener('change',e=>{update({v14:{...state.v14,multipage:e.target.checked}});status(e.target.checked?'Modo multipágina activado; selecciona las páginas.':'Modo de una sola página activado.');});
- $('v14-page-preview').addEventListener('change',renderPreview);
+ $('v14-page-preview').addEventListener('change',()=>{syncPageEditor();renderPreview();});
+ bindPageEditor();
+ $('v15-form-mode').addEventListener('change',e=>update({formMode:e.target.value}));
  $('v14-apply-selection').addEventListener('click',()=>{if(!selectedText)return;onInlineEdit({source:$('live-preview').contentWindow,data:{type:'ABEL_V12_EDIT',...selectedText,value:$('v14-selected-input').value}});});
  $('sector').addEventListener('change',e=>{
   const newSector=e.target.value,prev=state;
   replaceProject({...Engine.defaults(newSector),theme:prev.theme,style:prev.style,font:prev.font,layout:prev.layout,
-   custom:prev.custom,colors:prev.colors,sections:prev.sections,order:prev.order,maintenance:prev.maintenance,email:prev.email,phone:prev.phone,location:prev.location,v14:prev.v14});
+   custom:prev.custom,colors:prev.colors,sections:prev.sections,order:prev.order,maintenance:prev.maintenance,email:prev.email,phone:prev.phone,location:prev.location,v14:prev.v14,v15:prev.v15,formMode:prev.formMode});
   status('Plantilla de sector actualizada. Tus colores, bloques y datos de contacto se han conservado.');
  });
  for(const field of ['brand','headline','intro','cta','email','phone','location','font','layout','style','image','maintenance']){
@@ -219,7 +296,7 @@ async function exportZip(){
  if(busy)return;busy=true;$('export').disabled=true;status('Preparando los archivos del proyecto.');
  try{
   if(!runtimeCss||!runtimeJs)throw Error('No se han cargado las plantillas');
-  const files=Multipage.generate(state,state.v14,runtimeCss,runtimeJs);
+  const files=Multipage.generate(state,{...state.v14,v15:state.v15},runtimeCss,runtimeJs);
   const assets=Engine.IMAGES;
   for(const name of assets){
    const response=await fetch('../assets/'+name,{cache:'default'});
@@ -229,7 +306,7 @@ async function exportZip(){
   }
   if(state.customPhoto)files['assets/'+Engine.imageName(state)]=Engine.imageBytes(state.customPhoto);
   const zip=Engine.buildZip(files);
-  saveFile(zip,state.v14?.multipage?'Abel-Automation-Sitio-Multipagina-V14.zip':'Abel-Automation-Web-V14.zip','application/zip');
+  saveFile(zip,state.v14?.multipage?'Abel-Automation-Multipagina-V15.zip':'Abel-Automation-Web-V15.zip','application/zip');
   status('Web real exportada en ZIP con '+Object.keys(files).length+' archivos. No se ha publicado nada.');
  }catch(e){status('No se pudo exportar: '+(e?.message||'error desconocido')+'. Ejecuta el proyecto desde un servidor local.');}
  finally{busy=false;$('export').disabled=false;}
@@ -251,12 +328,12 @@ function crmDraft(){
   location.href='../herramientas/crm.html#studio-v9';
  }catch{status('No se pudo preparar el CRM en esta sesión.');}
 }
-function saveJson(){saveFile(JSON.stringify({...Engine.normalize(state),v14:Multipage.normalize(state.v14)},null,2),'Abel-Automation-Proyecto-V14.json','application/json');status('Proyecto completo y estructura de páginas guardados en este dispositivo.');}
+function saveJson(){saveFile(JSON.stringify({...Engine.normalize(state),v14:Multipage.normalize(state.v14),v15:Pages.normalize(state.v15)},null,2),'Abel-Automation-Proyecto-V15.json','application/json');status('Proyecto completo y estructura de páginas guardados en este dispositivo.');}
 function importJson(file){
  if(!file)return;
  if(file.size>4_800_000){status('Archivo demasiado grande.');return;}
  file.text().then(text=>{const raw=JSON.parse(text),base=raw.version===14?raw.project:raw;
-  replaceProject({...Engine.importProject(JSON.stringify(base)),v14:Multipage.normalize(raw.v14||raw.pages&&{multipage:true,pages:raw.pages}||{})});status('Proyecto importado. Revisa contenidos antes de exportar.');})
+  replaceProject({...Engine.importProject(JSON.stringify(base)),v14:Multipage.normalize(raw.v14||raw.pages&&{multipage:true,pages:raw.pages}||{}),v15:Pages.normalize(raw.v15||{})});status('Proyecto importado. Revisa contenidos antes de exportar.');})
  .catch(()=>status('No se pudo abrir un JSON V12 o V9 válido.'));
 }
 async function init(){
@@ -270,15 +347,15 @@ async function init(){
  try{
   const fromStudio=sessionStorage.getItem('abel-v13-open-project');
   const raw=sessionStorage.getItem('abel-v12-from-v9');
-  if(fromStudio){const data=JSON.parse(fromStudio);state=Engine.importProject(fromStudio);state.v14=Multipage.normalize(data.v14||{});sessionStorage.removeItem('abel-v13-open-project');}
+  if(fromStudio){const data=JSON.parse(fromStudio);state=Engine.importProject(fromStudio);state.v14=Multipage.normalize(data.v14||{});state.v15=Pages.normalize(data.v15||{});sessionStorage.removeItem('abel-v13-open-project');}
   else if(raw){const parsed=JSON.parse(raw);state=Engine.fromV9(parsed);sessionStorage.removeItem('abel-v12-from-v9');}
-  else if(!new URLSearchParams(location.search).has('new')&&!new URLSearchParams(location.search).has('sector')&&Store?.draft()){state=Store.draft();state.v14=Multipage.normalize(state.v14||{});status('Se ha recuperado el diseño autoguardado de este navegador.');}
+  else if(!new URLSearchParams(location.search).has('new')&&!new URLSearchParams(location.search).has('sector')&&Store?.draft()){state=Store.draft();state.v14=Multipage.normalize(state.v14||{});state.v15=Pages.normalize(state.v15||{});status('Se ha recuperado el diseño autoguardado de este navegador.');}
   else if(new URLSearchParams(location.search).has('sector')){
    const sector=new URLSearchParams(location.search).get('sector');
    if(Object.prototype.hasOwnProperty.call(Core.SECTORS,sector))state=Engine.defaults(sector);
   }
  }catch{status('No se pudo recuperar la configuración anterior. Se usará la plantilla inicial.');}
- state.v14=Multipage.normalize(state.v14||{});refresh();historyUI();
+ state.v14=Multipage.normalize(state.v14||{});state.v15=Pages.normalize(state.v15||{});refresh();historyUI();
  try{
   const [css,js]=await Promise.all(['../assets/site-runtime-v12.css','../assets/site-runtime-v12.js'].map(async url=>{
    const r=await fetch(url);if(!r.ok)throw Error('No se pudo cargar '+url);return r.text();
