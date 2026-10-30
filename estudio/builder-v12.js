@@ -63,7 +63,22 @@ function syncControls(){
   $('color-'+key).value=state.colors[key];
  }
  for(const button of document.querySelectorAll('[data-device]'))button.setAttribute('aria-pressed',String(button.dataset.device===state.device));
- renderBlocks();renderPageControls();
+ renderBlocks();renderPageControls();renderTemplateGallery();
+}
+function renderTemplateGallery(){
+ const box=$('v14-template-gallery');box.replaceChildren();
+ for(const preset of Templates.PRESETS.filter(p=>p.sector===state.sector)){
+  const btn=el('button','','v14-preset-card');btn.type='button';btn.setAttribute('aria-label','Aplicar '+preset.name);
+  const canvas=el('span','','v14-preset-preview'),theme=Core.THEMES[preset.theme];
+  canvas.style.background=theme.bg;canvas.style.color=theme.ink;
+  const top=el('span','','v14-preset-bar');top.style.background=theme.surface;
+  const heading=el('strong',preset.direction==='impacto'?'GRAN IMPACTO':preset.direction==='editorial'?'Estilo editorial':'Minimal');
+  const accent=el('span','','v14-preset-accent');accent.style.background=theme.accent;
+  canvas.append(top,heading,accent);btn.append(canvas,el('small',preset.name.split(' · ')[1]||preset.name));
+  if(state.style===preset.style&&state.layout===preset.layout&&state.theme===preset.theme)btn.classList.add('active');
+  btn.addEventListener('click',()=>{replaceProject({...Templates.apply(preset.id,state),v14:state.v14});$('v14-template').value=preset.id;status('Estilo visual '+preset.name+' aplicado.');});
+  box.append(btn);
+ }
 }
 function renderPageControls(){
  const cfg=Multipage.normalize(state.v14);$('v14-multipage').checked=cfg.multipage;
