@@ -76,7 +76,7 @@ function renderTemplateGallery(){
   const accent=el('span','','v14-preset-accent');accent.style.background=theme.accent;
   canvas.append(top,heading,accent);btn.append(canvas,el('small',preset.name.split(' · ')[1]||preset.name));
   if(state.style===preset.style&&state.layout===preset.layout&&state.theme===preset.theme)btn.classList.add('active');
-  btn.addEventListener('click',()=>{replaceProject({...Templates.apply(preset.id,state),v14:state.v14});$('v14-template').value=preset.id;status('Estilo visual '+preset.name+' aplicado.');});
+  btn.addEventListener('click',()=>{replaceProject({...Templates.apply(preset.id,state),v14:state.v14,v15:state.v15,v16:state.v16,formMode:state.formMode});$('v14-template').value=preset.id;status('Estilo visual '+preset.name+' aplicado.');});
   box.append(btn);
  }
 }
@@ -304,7 +304,7 @@ function renderPreview(){
 }
 function bindFields(){
  $('v14-template').addEventListener('change',e=>{if(!e.target.value)return;
-  replaceProject({...Templates.apply(e.target.value,state),v14:state.v14});status('Plantilla premium aplicada; puedes modificarla libremente.');});
+  replaceProject({...Templates.apply(e.target.value,state),v14:state.v14,v15:state.v15,v16:state.v16,formMode:state.formMode});status('Plantilla premium aplicada; puedes modificarla libremente.');});
  $('v14-multipage').addEventListener('change',e=>{update({v14:{...state.v14,multipage:e.target.checked}});status(e.target.checked?'Modo multipágina activado; selecciona las páginas.':'Modo de una sola página activado.');});
  $('v14-page-preview').addEventListener('change',()=>{syncPageEditor();renderPreview();syncBlocksV16();selectedBlockId=null;});
  bindPageEditor();bindBlocksV16();
