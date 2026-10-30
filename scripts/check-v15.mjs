@@ -10,7 +10,7 @@ const Store=(await import('../assets/projects-v13.js')).default;
 let n=0;function ok(c,label){assert.ok(c,label);console.log('OK',label);n++;}
 const read=p=>fs.readFileSync(p,'utf8');
 for(const p of ['assets/page-studio-v15.js','assets/multipage-v14.js','assets/web-export-v12.js','estudio/builder-v12.js','estudio/builder-v12.html','assets/site-runtime-v12.js']){
- ok(fs.existsSync(p),'Existe '+p);new vm.Script(read(p),{filename:p});ok(true,'JS clásico válido / archivo V15: '+p);
+ ok(fs.existsSync(p),'Existe '+p);if(p.endsWith('.js')){new vm.Script(read(p),{filename:p});ok(true,'Sintaxis de JavaScript '+p);}
 }
 const cfg={multipage:true,pages:['home','about','services','gallery','contact']};
 const photo='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==';
