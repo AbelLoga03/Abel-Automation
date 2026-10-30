@@ -22,7 +22,7 @@ function links(config,active){
   const page=lookup[id];return '<a '+(id===active?'aria-current="page" ':'')+'href="'+page.file+'">'+page.name+'</a>';
  }).join('');
 }
-function makePage(project,config,pageId){
+function makePage(project,config,pageId,preview=false,css="",js=""){
  const cfg=normalize(config);
  if(!cfg.pages.includes(pageId))throw Error('Página no seleccionada');
  const base=E.normalize(project),page=lookup[pageId];
@@ -35,7 +35,7 @@ function makePage(project,config,pageId){
   intro:pageId==='contact'?'Puedes comunicarte mediante los canales configurados para este proyecto.':
   'Descubre '+page.name.toLowerCase()+' de '+base.brand+'.'
  };
- let html=E.htmlText(scoped);
+ let html=E.htmlText(scoped,preview,css,js);
  const marker=/<nav id="links" class="links" aria-label="Navegación">[\s\S]*?<\/nav>/;
  if(!marker.test(html))throw Error('No se encontró navegación del motor V12');
  html=html.replace(marker,'<nav id="links" class="links" aria-label="Navegación principal">'+links(cfg,pageId)+'</nav>');
