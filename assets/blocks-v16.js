@@ -75,7 +75,13 @@ function htmlFor(list,preview=false){
 }
 function renderInto(html,state,page,preview=false){
  if(typeof html!=='string'||!html.includes('</main>'))throw Error('Documento HTML incompleto');
- const data=normalize(state);return html.replace('</main>',htmlFor(data.pages[page]||[],preview)+'</main>');
+ const data=normalize(state);
+ let result=html.replace('</main>',htmlFor(data.pages[page]||[],preview)+'</main>');
+ if(preview){
+  const js="document.addEventListener('click',function(e){var node=e.target.closest('[data-v16-block]');if(!node)return;e.preventDefault();parent.postMessage({type:'ABEL_V16_SELECT',id:node.getAttribute('data-v16-block')},'*');});document.addEventListener('keydown',function(e){var node=e.target.closest('[data-v16-block]');if(!node||!(e.key==='Enter'||e.key===' '))return;e.preventDefault();parent.postMessage({type:'ABEL_V16_SELECT',id:node.getAttribute('data-v16-block')},'*');});";
+  result=result.replace('</body>','<script>'+js+'</'+'script></body>');
+ }
+ return result;
 }
 function report(state){
  const data=normalize(state);
