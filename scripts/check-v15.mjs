@@ -74,7 +74,7 @@ const ui=read('estudio/builder-v12.html'),js=read('estudio/builder-v12.js');
 for(const id of ['v15-page-editor','v15-form-mode','v15-headline','v15-intro','v15-cta','v15-layout','v15-photo-select','v15-photo-upload','v15-section-list']){
  ok(ui.includes('id="'+id+'"'),'Control visible: '+id);
 }
-ok(js.includes('function updatePage(')&&js.includes('Pages.attach(')&&js.includes('Multipage.generate(state,{...state.v14,v15:state.v15}'),'Editor conecta motor V15');
+ok(js.includes('function updatePage(')&&js.includes('Pages.attach(')&&(js.includes('Multipage.generate(state,{...state.v14,v15:state.v15}')||js.includes('Multipage.generate(state,{...state.v14,v15:state.v15,v16:state.v16}')),'Editor conecta motor V15');
 ok(js.includes('if(independent)updatePage({titles:')&&js.includes('if(independent)updatePage({[group]:items})'),'Edición directa independiente de títulos y tarjetas');
 ok(read('scripts/check-v6.mjs').includes('data.DEMOS.length===25'),'Se mantiene la comprobación de 25 demos');
 console.log('V15 Studio Business PRO: '+n+' verificaciones correctas; recepción real FormSubmit no comprobada.');
