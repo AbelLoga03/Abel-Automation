@@ -248,7 +248,7 @@ function bindFields(){
   status('Plantilla de sector actualizada. Tus colores, bloques y datos de contacto se han conservado.');
  });
  for(const field of ['brand','headline','intro','cta','email','phone','location','font','layout','style','image','maintenance']){
-  $(field).addEventListener(field==='brand'||field==='headline'||field==='intro'||field==='cta'?'input':'change',e=>{
+  $(field).addEventListener(['brand','headline','intro','cta','email','phone','location'].includes(field)?'input':'change',e=>{
    const val=e.target.value;
    update({[field]:val,...(field==='image'?{customPhoto:''}:{})},false,['brand','headline','intro','cta'].includes(field)?field:'');
    if((field==='email'&&val&&!Engine.isEmail(val))||(field==='phone'&&val&&!Engine.isPhone(val)))status('Comprueba el formato. Para WhatsApp usa + seguido del código de país y número.');
