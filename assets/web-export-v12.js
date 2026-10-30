@@ -78,7 +78,7 @@ function buildZip(files){
  const entries=Object.entries(files);if(!entries.length||entries.length>40)throw Error('Cantidad de archivos inválida');
  let total=0;const seen=new Set();
  const prepared=entries.map(([name,content])=>{
-  if(!/^(?:assets\/[A-Za-z0-9_-]+\.(?:webp|jpg|png)|(?:index\.html|styles\.css|app\.js|README\.txt|configuracion-v12\.json))$/.test(name)||seen.has(name))throw Error('Nombre ZIP inseguro');seen.add(name);
+  if(!/^(?:assets\/[A-Za-z0-9_-]+\.(?:webp|jpg|png)|(?:index\.html|nosotros\.html|servicios\.html|galeria\.html|contacto\.html|styles\.css|app\.js|README\.txt|ENTREGA-V14\.txt|configuracion-v12\.json|estructura-v14\.json))$/.test(name)||seen.has(name))throw Error('Nombre ZIP inseguro');seen.add(name);
   const bytes=typeof content==='string'?encoder.encode(content):content;if(!(bytes instanceof Uint8Array)||bytes.length>5500000)throw Error('Archivo ZIP inválido');
   total+=bytes.length;if(total>18000000)throw Error('Exportación demasiado grande');return {bytes,name:encoder.encode(name),crc:crc32(bytes)};
  });
