@@ -31,8 +31,10 @@ test('Editor V16: reutilizar bloque, editar copia y exportar ZIP verificado',asy
  const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#export').click()]);
  const target=await dl.path();expect(target).toBeTruthy();
  const names=execFileSync('unzip',['-Z','-1',target],{encoding:'utf8'});
- for(const name of ['index.html','servicios.html','COMPONENTES-V16.json','ENTREGA-V16.txt','REVISION-V16.html','CALIDAD-V16.txt'])expect(names).toContain(name);
+ for(const name of ['index.html','servicios.html','COMPONENTES-V16.json','ENTREGA-V16.txt','REVISION-V16.html','CALIDAD-V16.txt','FICHA-V16.txt'])expect(names).toContain(name);
  const home=execFileSync('unzip',['-p',target,'index.html'],{encoding:'utf8'});
+ const fiche=execFileSync('unzip',['-p',target,'FICHA-V16.txt'],{encoding:'utf8'});
+ expect(fiche).toContain('Presupuesto inicial orientativo');
  const services=execFileSync('unzip',['-p',target,'servicios.html'],{encoding:'utf8'});
  expect(home).toContain('Bloque exclusivo de Inicio');expect(home).not.toContain('Copia independiente en Servicios');
  expect(services).toContain('Copia independiente en Servicios');expect(services).not.toContain('Bloque exclusivo de Inicio');
