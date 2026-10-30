@@ -20,3 +20,15 @@
 .form-honeypot{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 #site-contact-form .consent{font-size:12px;font-weight:600;display:flex;flex-direction:row;align-items:flex-start;gap:11px;line-height:1.5}
 #site-contact-form .consent input{width:18px;min-width:18px;height:18px;margin:2px 0}
+
+/* V16: reusable, independently editable content blocks in the exported site */
+.v16-component .wrap{max-width:980px}.v16-component .lead{max-width:700px;white-space:pre-line}
+.v16-component .v16-block-action{margin-top:15px}
+.v16-component.align-center .wrap{text-align:center;display:flex;flex-direction:column;align-items:center}
+.v16-component.tone-soft{background:var(--surface)}
+.v16-component.tone-accent{border-top:3px solid var(--accent)}
+.v16-cta{padding:80px 0}.v16-cta h2{font-size:clamp(36px,5vw,58px)}
+.v16-highlight .wrap{border-left:4px solid var(--accent);padding-left:26px}
+.editor-preview [data-v16-block]{cursor:pointer;outline:2px dashed transparent;outline-offset:-8px}
+.editor-preview [data-v16-block]:hover,.editor-preview [data-v16-block]:focus{outline-color:var(--accent)}
+@media(max-width:600px){.v16-cta{padding:48px 0}.v16-highlight .wrap{padding-left:15px}}
