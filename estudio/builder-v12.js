@@ -147,6 +147,7 @@ function quote(){
 function currentPage(){return $('v14-page-preview')?.value||'home';}
 function syncPageEditor(){
  if(!$('v15-page-indicator'))return;
+ $('v15-page-editor').hidden=!state.v14?.multipage;
  const page=currentPage(),data=Pages.normalize(state.v15),entry=data.pages[page];
  $('v15-page-indicator').textContent=Multipage.PAGE_DEFS.find(p=>p.id===page)?.name||'Inicio';
  for(const field of ['headline','intro','cta','layout'])$('v15-'+field).value=entry[field]||'';
