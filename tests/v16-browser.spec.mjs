@@ -1,0 +1,63 @@
+/* V16 E2E: Chrome real tests component editing and a downloaded site's files. */
+import {test,expect} from '@playwright/test';
+import {execFileSync} from 'node:child_process';
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
+test('Editor V16: reutilizar bloque, editar copia y exportar ZIP verificado',async({page},info)=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('/estudio/builder-v12.html?new=1');
+ await expect(page.locator('#status')).toContainText('Listo:');
+ await page.locator('#v16-add').click();
+ await expect(page.locator('#v16-block-list .v16-block-entry')).toHaveCount(1);
+ await expect(page.locator('#v16-inspector')).toBeVisible();
+ await page.locator('#v16-title').fill('Bloque exclusivo de Inicio');
+ await page.locator('#v16-description').fill('Contenido original para la página principal');
+ await page.locator('#v16-apply').click();
+ await expect(page.frameLocator('#live-preview').locator('.v16-component h2')).toContainText('Bloque exclusivo de Inicio');
+ await page.locator('#v16-save-reusable').click();
+ await expect(page.locator('#v16-library-list .v16-library-item')).toHaveCount(1);
+ await page.locator('#tab-sections').click();
+ await page.locator('#v14-multipage').check();
+ await page.locator('#v14-page-preview').selectOption('services');
+ await page.locator('#v16-library-list .v16-library-item button').first().click();
+ await expect(page.locator('#v16-block-list .v16-block-entry')).toHaveCount(1);
+ await page.locator('#v16-title').fill('Copia independiente en Servicios');
+ await page.locator('#v16-apply').click();
+ await expect(page.frameLocator('#live-preview').locator('.v16-component h2')).toContainText('Copia independiente en Servicios');
+ await page.locator('#v14-page-preview').selectOption('home');
+ await expect(page.frameLocator('#live-preview').locator('.v16-component h2')).toContainText('Bloque exclusivo de Inicio');
+ await info.attach('v16-editor-desktop',{body:await page.screenshot({fullPage:true}),contentType:'image/png'});
+ await page.setViewportSize({width:390,height:844});
+ await info.attach('v16-editor-mobile',{body:await page.screenshot({fullPage:true}),contentType:'image/png'});
+ const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#export').click()]);
+ const target=await dl.path();expect(target).toBeTruthy();
+ const names=execFileSync('unzip',['-Z','-1',target],{encoding:'utf8'});
+ for(const name of ['index.html','servicios.html','COMPONENTES-V16.json','ENTREGA-V16.txt','REVISION-V16.html','CALIDAD-V16.txt'])expect(names).toContain(name);
+ const home=execFileSync('unzip',['-p',target,'index.html'],{encoding:'utf8'});
+ const services=execFileSync('unzip',['-p',target,'servicios.html'],{encoding:'utf8'});
+ expect(home).toContain('Bloque exclusivo de Inicio');expect(home).not.toContain('Copia independiente en Servicios');
+ expect(services).toContain('Copia independiente en Servicios');expect(services).not.toContain('Bloque exclusivo de Inicio');
+ expect(errors).toEqual([]);
+});
+test('Cada web exportada mantiene navegación y revisión offline funcional',async({page})=>{
+ await page.goto('/estudio/builder-v12.html?new=1');
+ await expect(page.locator('#status')).toContainText('Listo:');
+ await page.locator('#tab-sections').click();await page.locator('#v14-multipage').check();
+ const [download]=await Promise.all([page.waitForEvent('download'),page.locator('#export').click()]);
+ const archive=await download.path(),folder=fs.mkdtempSync(path.join(os.tmpdir(),'abel-v16-browser-'));
+ try{
+  execFileSync('unzip',['-q',archive,'-d',folder]);
+  await page.goto('file://'+path.join(folder,'index.html'));
+  await expect(page.locator('nav a[href="contacto.html"]')).toBeVisible();
+  await page.locator('nav a[href="contacto.html"]').click();
+  await expect(page).toHaveURL(/contacto\.html$/);
+  await expect(page.locator('main')).toBeVisible();
+  await page.goto('file://'+path.join(folder,'REVISION-V16.html'));
+  await expect(page.getByRole('heading',{name:'Revisa este proyecto'})).toBeVisible();
+  await page.locator('#note').fill('Corregir este ejemplo');
+  await page.locator('#add').click();
+  const [comments]=await Promise.all([page.waitForEvent('download'),page.locator('#download').click()]);
+  expect(comments.suggestedFilename()).toBe('COMENTARIOS-V16.json');
+  const text=fs.readFileSync(await comments.path(),'utf8');
+  expect(JSON.parse(text).entries[0].note).toBe('Corregir este ejemplo');
+ }finally{fs.rmSync(folder,{recursive:true,force:true});}
+});
