@@ -146,6 +146,7 @@ function quote(){
 /* V15 independent-page inspector and image library */
 function currentPage(){return $('v14-page-preview')?.value||'home';}
 function syncPageEditor(){
+ if(!$('v15-page-indicator'))return;
  const page=currentPage(),data=Pages.normalize(state.v15),entry=data.pages[page];
  $('v15-page-indicator').textContent=Multipage.PAGE_DEFS.find(p=>p.id===page)?.name||'Inicio';
  for(const field of ['headline','intro','cta','layout'])$('v15-'+field).value=entry[field]||'';
@@ -284,12 +285,21 @@ function onInlineEdit(event){
  if(event.data.type!=='ABEL_V12_EDIT')return;
  const {kind,key,value}=event.data;
  if(typeof value!=='string'||value.length>240)return;
+ const independent=state.v14?.multipage===true;
+ const data=Pages.normalize(state.v15),entry=data.pages[currentPage()];
  if(kind==='field'&&['brand','headline','intro','cta'].includes(key)){
-  update({[key]:value});status('Texto actualizado dentro del proyecto.');
+  if(independent&&key!=='brand')updatePage({[key]:value},key);
+  else update({[key]:value});
+  status('Texto actualizado en '+(independent?'esta página.':'el proyecto.'));
  }else if(kind==='heading'&&Object.prototype.hasOwnProperty.call(Engine.TITLES,key)){
-  update({titles:{...state.titles,[key]:value}});status('Título de sección actualizado.');
+  if(independent)updatePage({titles:{...entry.titles,[key]:value}});
+  else update({titles:{...state.titles,[key]:value}});
+  status('Título de sección actualizado.');
  }else if(kind==='card'&&/^(services|products):[0-5]$/.test(key)){
-  const [group,index]=key.split(':'),items=[...state[group]];items[Number(index)]=value;update({[group]:items});status('Tarjeta actualizada.');
+  const [group,index]=key.split(':'),items=[...(independent&&entry[group].length?entry[group]:state[group])];
+  items[Number(index)]=value;
+  if(independent)updatePage({[group]:items});else update({[group]:items});
+  status('Tarjeta actualizada en '+(independent?'esta página.':'el proyecto.'));
  }
 }
 async function exportZip(){
