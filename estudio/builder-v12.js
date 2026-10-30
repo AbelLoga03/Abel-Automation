@@ -1,7 +1,7 @@
 /* Abel Automation V12 · editor real de sitios sin servicios externos */
 (()=>{
 'use strict';
-const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13,Templates=globalThis.AbelTemplatesV14,Multipage=globalThis.AbelMultipageV14,Pages=globalThis.AbelPageStudioV15,Blocks=globalThis.AbelBlocksV16,Review=globalThis.AbelReviewV16;
+const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13,Templates=globalThis.AbelTemplatesV14,Multipage=globalThis.AbelMultipageV14,Pages=globalThis.AbelPageStudioV15,Blocks=globalThis.AbelBlocksV16,Review=globalThis.AbelReviewV16,Preflight=globalThis.AbelPreflightV16;
 if(!Core||!Engine||!Proposal)return;
 const $=id=>document.getElementById(id);
 let state=Engine.defaults(),runtimeCss='',runtimeJs='',tab='brand',renderVersion=0,busy=false;
@@ -404,9 +404,12 @@ async function exportZip(){
    files['assets/'+name]=bin;
   }
   if(state.customPhoto)files['assets/'+Engine.imageName(state)]=Engine.imageBytes(state.customPhoto);
+  const audit=Preflight.inspect(files);
+  if(!audit.passed)throw Error('Revisión automática: '+audit.errors.slice(0,3).join('; '));
+  files['CALIDAD-V16.txt']=Preflight.report(audit);
   const zip=Engine.buildZip(files);
   saveFile(zip,state.v14?.multipage?'Abel-Automation-Multipagina-V16.zip':'Abel-Automation-Web-V16.zip','application/zip');
-  status('Web real exportada en ZIP con '+Object.keys(files).length+' archivos. No se ha publicado nada.');
+  status('ZIP comprobado: '+audit.metrics.pages+' páginas, '+audit.metrics.links+' enlaces y '+Object.keys(files).length+' archivos. Avisos: '+audit.warnings.length+'. No se ha publicado nada.');
  }catch(e){status('No se pudo exportar: '+(e?.message||'error desconocido')+'. Ejecuta el proyecto desde un servidor local.');}
  finally{busy=false;$('export').disabled=false;}
 }
