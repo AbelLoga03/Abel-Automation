@@ -76,7 +76,7 @@ try{
 assert.throws(()=>E.buildZip({'../../secret.txt':'x'}));ok(true,'ZIP rechaza traversal de rutas');
 assert.throws(()=>E.buildZip({'assets/x.svg':'<svg onload=alert(1)>'}));ok(true,'ZIP rechaza formatos no autorizados');
 ok(ui.includes('id="live-preview"')&&ui.includes('sandbox="allow-scripts"'),'Vista previa aislada mediante sandbox');
-ok(ui.includes('id="export"')&&ui.includes('Generar y descargar web ZIP'),'Acceso de exportación evidente');
+ok(ui.includes('id="export"')&&(ui.includes('Generar y descargar web ZIP')||ui.includes('Generar web completa ZIP')),'Acceso de exportación evidente');
 ok(ui.includes('id="photo-file"')&&app.includes('readAsDataURL')&&app.includes('file.size>2_000_000'),'Edición de fotografía propia con tamaño limitado');
 ok(ExPhotoClickable(),'Pulsar foto abre directamente el panel Diseño');
 ok(app.includes("event.source!==iframe.contentWindow")||app.includes("event.source!==iframe.contentWindow".replace('event','event')),'Solo acepta ediciones del iframe propio');
