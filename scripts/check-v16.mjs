@@ -1,0 +1,72 @@
+/* V16 — reusable components, safe review, every-export preflight and actual ZIP */
+import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import vm from 'node:vm';
+import {execFileSync} from 'node:child_process';
+const B=(await import('../assets/builder-v9-core.js')).default;
+const E=(await import('../assets/web-export-v12.js')).default;
+const V15=(await import('../assets/page-studio-v15.js')).default;
+const Blocks=(await import('../assets/blocks-v16.js')).default;
+const Review=(await import('../assets/review-v16.js')).default;
+const Audit=(await import('../assets/preflight-v16.js')).default;
+const M=(await import('../assets/multipage-v14.js')).default;
+const Store=(await import('../assets/projects-v13.js')).default;
+let count=0;function ok(test,why){assert.ok(test,why);count++;console.log('OK',why);}
+const read=p=>fs.readFileSync(p,'utf8');
+for(const file of ['assets/blocks-v16.js','assets/review-v16.js','assets/preflight-v16.js','estudio/builder-v12.js','assets/multipage-v14.js']){
+ ok(fs.existsSync(file),'Archivo existente '+file);new vm.Script(read(file),{filename:file});ok(true,'Sintaxis JavaScript '+file);
+}
+let blocks=Blocks.normalize({});ok(Object.keys(blocks.pages).length===5,'Bloques por cinco páginas');
+blocks=Blocks.add(blocks,'home',Blocks.create('cta'));
+ok(blocks.pages.home.length===1,'Añadir bloque Inicio');
+const id=blocks.pages.home[0].id;
+blocks=Blocks.patch(blocks,'home',id,{title:'Compra <script>alert(1)</script>',description:'Servicios autónomos',href:'javascript:alert(1)',button:'Consultar'});
+ok(blocks.pages.home[0].href==='','El modelo rechaza URL javascript');
+blocks=Blocks.saveReusable(blocks,'home',id);ok(blocks.library.length===1,'Guardar en biblioteca');
+blocks=Blocks.add(blocks,'services',blocks.library[0]);const replica=blocks.pages.services[0];
+ok(replica.id!==id&&replica.title===blocks.pages.home[0].title,'Instancia copiada con ID independiente');
+blocks=Blocks.patch(blocks,'services',replica.id,{title:'Servicios V16'});
+ok(blocks.pages.home[0].title!==blocks.pages.services[0].title,'Editar copia no altera origen');
+blocks=Blocks.add(blocks,'services',Blocks.create('steps'));
+const oldOrder=blocks.pages.services.map(x=>x.id);blocks=Blocks.move(blocks,'services',oldOrder[1],-1);
+ok(blocks.pages.services[0].id===oldOrder[1],'Reordenar componentes');
+const markup=Blocks.htmlFor(blocks.pages.home);
+ok(markup.includes('&lt;script&gt;alert(1)&lt;/script&gt;')&&!markup.includes('<script>alert(1)</script>'),'Textos escapados en HTML exportado');
+assert.throws(()=>Blocks.add(blocks,'evil',Blocks.create('cta')));ok(true,'Página desconocida rechazada');
+assert.throws(()=>Blocks.patch(blocks,'home','block-missing1',{title:'x'}));ok(true,'Edición de bloque inexistente rechazada');
+const project=E.normalize({...E.defaults('restaurante'),brand:'Negocio de ejemplo',email:'prueba@ejemplo.es',sections:['hero','about','services','gallery','contact','form']});
+const structure={multipage:true,pages:['home','about','services','gallery','contact'],v15:V15.normalize({}),v16:blocks};
+const css=read('assets/site-runtime-v12.css'),js=read('assets/site-runtime-v12.js');
+let files=M.generate(project,structure,css,js);
+ok(files['index.html'].includes('Compra &lt;script&gt;alert(1)&lt;/script&gt;'),'Bloque de Inicio en HTML');
+ok(!files['nosotros.html'].includes('Servicios V16')&&files['servicios.html'].includes('Servicios V16'),'Componentes por página aislados');
+ok(files['COMPONENTES-V16.json'].includes('"version": 16'),'Manifiesto V16');
+ok(files['REVISION-V16.html'].includes('COMENTARIOS-V16.json'),'Hoja de comentarios offline entregable');
+ok(!files['REVISION-V16.html'].includes('fetch(')&&!files['REVISION-V16.html'].includes('form action='),'La hoja no envía comentarios online');
+const safeReview=Review.makeReviewFile({brand:'<img src=x onerror=alert(1)>'},['home','contact']);
+ok(!safeReview.includes('<img src=x onerror=alert(1)>'),'Marca maliciosa escapada en revisión');
+const feedback=Review.normalizeReview({entries:[{page:'services',decision:'changes',note:'Revisar textos'},{page:'bad',note:'No debe pasar'}]});
+ok(feedback.entries.length===1&&feedback.entries[0].note==='Revisar textos','Comentarios JSON validados y filtrados');
+const preview=M.makePage(project,structure,'services',true,css,js);
+ok(preview.includes('ABEL_V16_SELECT'),'Selección de componentes en el iframe');
+for(const img of E.IMAGES)files['assets/'+img]=new Uint8Array(fs.readFileSync('assets/'+img));
+const good=Audit.inspect(files);ok(good.passed,'Preflight aprueba HTML completo con assets');ok(good.metrics.pages===5,'Inspección de cinco HTML reales');
+ok(Audit.report(good).includes('CORRECTO'),'Informe de revisión generado');
+const broken={...files};delete broken['assets/'+E.IMAGES[0]];
+const bad=Audit.inspect(broken);ok(!bad.passed&&bad.errors.some(x=>x.includes(E.IMAGES[0])),'Preflight detecta assets faltantes');
+const unsafe=Audit.inspect({...files,'contacto.html':files['contacto.html'].replace('href="index.html"','href="javascript:alert(1)"')});
+ok(!unsafe.passed,'Preflight detecta destinos javascript');
+const redacted=Store.safeProject({...project,v16:blocks,v14:{multipage:true},v15:V15.normalize({}),location:'Dirección personal'});
+ok(redacted.v16.pages.home.length===1&&!redacted.email&&!redacted.location,'Guardado local conserva bloques pero elimina datos de contacto');
+files['CALIDAD-V16.txt']=Audit.report(good);
+const zip=E.buildZip(files),dir=fs.mkdtempSync(path.join(os.tmpdir(),'abel-v16-'));
+try{
+ const p=path.join(dir,'site.zip');fs.writeFileSync(p,zip);
+ ok(execFileSync('unzip',['-t',p],{encoding:'utf8'}).includes('No errors detected'),'ZIP V16 real pasa descompresión');
+ const names=execFileSync('unzip',['-Z','-1',p],{encoding:'utf8'});
+ for(const file of ['COMPONENTES-V16.json','REVISION-V16.html','CALIDAD-V16.txt','contacto.html','app.js','styles.css'])ok(names.includes(file),'ZIP contiene '+file);
+}finally{fs.rmSync(dir,{recursive:true,force:true});}
+const ui=read('estudio/builder-v12.html'),app=read('estudio/builder-v12.js');
+for(const id of ['v16-panel','v16-add','v16-block-list','v16-inspector','v16-save-reusable','v16-library-list','v16-feedback-file'])ok(ui.includes('id="'+id+'"'),'Control V16 '+id);
+ok(app.includes('Blocks.renderInto(')&&app.includes('Blocks.saveReusable(')&&app.includes('Blocks.move('),'Inspector y renderizado real conectados');
+ok(app.includes('Preflight.inspect(files)')&&app.includes("files['CALIDAD-V16.txt']"),'Cada exportación pasa preflight automático y emite informe');
+ok(read('scripts/check-v6.mjs').includes('data.DEMOS.length===25'),'Suite de 25 demos sigue presente');
+console.log('V16 Business Ultimate: '+count+' comprobaciones correctas.');

@@ -15,7 +15,9 @@ function safeProject(raw){
  const V15=globalThis.AbelPageStudioV15;
  const v15=V15?V15.normalize(raw?.v15||{}):undefined;
  if(v15)v15.media=[]; // This local library is not encrypted. Images stay in explicit export only.
- return {...p,email:'',phone:'',location:'',customPhoto:'',v14,...(v15?{v15}:{})};
+ const Blocks=globalThis.AbelBlocksV16;
+ const v16=Blocks?Blocks.normalize(raw?.v16||{}):undefined;
+ return {...p,email:'',phone:'',location:'',customPhoto:'',v14,...(v15?{v15}:{}),...(v16?{v16}:{})};
 }
 const cleanName=x=>String(x||'').replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,65)||'Proyecto sin nombre';
 function safeRecord(x){

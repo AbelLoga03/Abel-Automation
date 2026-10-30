@@ -1,11 +1,11 @@
 /* Abel Automation V12 · editor real de sitios sin servicios externos */
 (()=>{
 'use strict';
-const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13,Templates=globalThis.AbelTemplatesV14,Multipage=globalThis.AbelMultipageV14,Pages=globalThis.AbelPageStudioV15;
+const Core=globalThis.AbelBuilderV9,Engine=globalThis.AbelWebExportV12,Proposal=globalThis.AbelProposalV8,Store=globalThis.AbelProjectsV13,Templates=globalThis.AbelTemplatesV14,Multipage=globalThis.AbelMultipageV14,Pages=globalThis.AbelPageStudioV15,Blocks=globalThis.AbelBlocksV16,Review=globalThis.AbelReviewV16,Preflight=globalThis.AbelPreflightV16;
 if(!Core||!Engine||!Proposal)return;
 const $=id=>document.getElementById(id);
 let state=Engine.defaults(),runtimeCss='',runtimeJs='',tab='brand',renderVersion=0,busy=false;
-let past=[],future=[],lastEditKey='',lastEditTime=0,saveTimer=null,selectedText=null;state.v14=Multipage.normalize({});state.v15=Pages.normalize({});
+let past=[],future=[],lastEditKey='',lastEditTime=0,saveTimer=null,selectedText=null;state.v14=Multipage.normalize({});state.v15=Pages.normalize({});state.v16=Blocks.normalize({});let selectedBlockId=null;
 const status=message=>{$('status').textContent=message;};
 const el=(tag,text='',className='')=>{const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;};
 function saveFile(content,name,mime){
@@ -24,17 +24,17 @@ function remember(next,key=''){
  lastEditKey=key;lastEditTime=now;future=[];historyUI();return true;
 }
 function update(values,refresh=true,key=''){
- const next=Engine.normalize({...state,...values});next.v14=Multipage.normalize(values.v14||state.v14);next.v15=Pages.normalize(values.v15||state.v15);if(!remember(next,key))return;
+ const next=Engine.normalize({...state,...values});next.v14=Multipage.normalize(values.v14||state.v14);next.v15=Pages.normalize(values.v15||state.v15);next.v16=Blocks.normalize(values.v16||state.v16);if(!remember(next,key))return;
  state=next;renderPreview();quote();if(refresh)syncControls();saveSoon();
 }
 function replaceProject(next,track=true){
- const normalized=Engine.normalize(next);normalized.v14=Multipage.normalize(next.v14||{});normalized.v15=Pages.normalize(next.v15||{});
+ const normalized=Engine.normalize(next);normalized.v14=Multipage.normalize(next.v14||{});normalized.v15=Pages.normalize(next.v15||{});normalized.v16=Blocks.normalize(next.v16||{});
  if(track)remember(normalized);
  state=normalized;renderPreview();quote();syncControls();saveSoon();historyUI();
 }
 function stepHistory(stack,to){
  if(!stack.length)return;const item=stack.pop();to.push(JSON.stringify(state));if(to.length>35)to.shift();
- const raw=JSON.parse(item);state=Engine.importProject(item);state.v14=Multipage.normalize(raw.v14||{});state.v15=Pages.normalize(raw.v15||{});lastEditKey='';renderPreview();quote();syncControls();historyUI();saveSoon();
+ const raw=JSON.parse(item);state=Engine.importProject(item);state.v14=Multipage.normalize(raw.v14||{});state.v15=Pages.normalize(raw.v15||{});state.v16=Blocks.normalize(raw.v16||{});lastEditKey='';renderPreview();quote();syncControls();historyUI();saveSoon();
 }
 
 function setTab(which,focus=false){
@@ -63,7 +63,7 @@ function syncControls(){
   $('color-'+key).value=state.colors[key];
  }
  for(const button of document.querySelectorAll('[data-device]'))button.setAttribute('aria-pressed',String(button.dataset.device===state.device));
- renderBlocks();renderPageControls();renderTemplateGallery();syncPageEditor();
+ renderBlocks();renderPageControls();renderTemplateGallery();syncPageEditor();syncBlocksV16();
 }
 function renderTemplateGallery(){
  const box=$('v14-template-gallery');box.replaceChildren();
@@ -76,7 +76,7 @@ function renderTemplateGallery(){
   const accent=el('span','','v14-preset-accent');accent.style.background=theme.accent;
   canvas.append(top,heading,accent);btn.append(canvas,el('small',preset.name.split(' · ')[1]||preset.name));
   if(state.style===preset.style&&state.layout===preset.layout&&state.theme===preset.theme)btn.classList.add('active');
-  btn.addEventListener('click',()=>{replaceProject({...Templates.apply(preset.id,state),v14:state.v14});$('v14-template').value=preset.id;status('Estilo visual '+preset.name+' aplicado.');});
+  btn.addEventListener('click',()=>{replaceProject({...Templates.apply(preset.id,state),v14:state.v14,v15:state.v15,v16:state.v16,formMode:state.formMode});$('v14-template').value=preset.id;status('Estilo visual '+preset.name+' aplicado.');});
   box.append(btn);
  }
 }
@@ -219,18 +219,95 @@ function bindPageEditor(){
  });
 }
 
+
+/* V16 component inspector. Reusing a block copies its contents, not a shared live reference. */
+function currentBlockPage(){return state.v14?.multipage?currentPage():'home';}
+function updateBlocksV16(next){update({v16:Blocks.normalize(next)});status('Componente actualizado en la página '+currentBlockPage()+'.');}
+function syncBlocksV16(){
+ const page=currentBlockPage(),data=Blocks.normalize(state.v16),list=data.pages[page];
+ const count=$('v16-count'),area=$('v16-block-list'),library=$('v16-library-list');
+ if(!count)return;
+ count.textContent=list.length+' / '+Blocks.MAX;area.replaceChildren();
+ if(selectedBlockId&&!list.some(b=>b.id===selectedBlockId))selectedBlockId=null;
+ if(!list.length)area.append(el('p','Todavía no hay bloques extra. Añade uno arriba.','v16-empty'));
+ for(const [i,item] of list.entries()){
+  const entry=el('div','','v16-block-entry');
+  const choose=el('button',(i+1)+'. '+item.title+(selectedBlockId===item.id?' ✓':''));choose.type='button';
+  choose.setAttribute('aria-label','Editar bloque '+item.title);
+  choose.addEventListener('click',()=>{selectedBlockId=item.id;syncBlocksV16();});
+  entry.append(choose);
+  for(const [glyph,delta]of [['↑',-1],['↓',1]]){
+   const move=el('button',glyph);move.type='button';move.disabled=delta<0?i===0:i===list.length-1;
+   move.setAttribute('aria-label',(delta<0?'Subir ':'Bajar ')+item.title);
+   move.addEventListener('click',()=>{updateBlocksV16(Blocks.move(state.v16,page,item.id,delta));});
+   entry.append(move);
+  }
+  area.append(entry);
+ }
+ const selected=list.find(b=>b.id===selectedBlockId),inspector=$('v16-inspector');
+ inspector.hidden=!selected;
+ if(selected){
+  $('v16-current').textContent='Editar: '+selected.title;
+  for(const key of ['title','description','button','href','align','tone'])$('v16-'+key).value=selected[key];
+ }
+ $('v16-library-count').textContent=data.library.length+' / '+Blocks.LIBMAX;library.replaceChildren();
+ if(!data.library.length)library.append(el('p','La biblioteca está vacía. Guarda uno de los bloques de arriba.','v16-empty'));
+ data.library.forEach((item,index)=>{
+  const row=el('div','','v16-library-item');row.append(el('strong',item.title));
+  const use=el('button','Insertar copia'),remove=el('button','Eliminar');use.type='button';remove.type='button';
+  use.addEventListener('click',()=>{try{const next=Blocks.add(state.v16,page,item);selectedBlockId=next.pages[page].at(-1).id;updateBlocksV16(next);}catch(e){status(e.message)}});
+  remove.addEventListener('click',()=>{const next=Blocks.normalize(state.v16);next.library.splice(index,1);updateBlocksV16(next);});
+  row.append(use,remove);library.append(row);
+ });
+}
+function bindBlocksV16(){
+ $('v16-add').addEventListener('click',()=>{
+  try{const next=Blocks.add(state.v16,currentBlockPage(),Blocks.create($('v16-type').value));
+   selectedBlockId=next.pages[currentBlockPage()].at(-1).id;updateBlocksV16(next);}
+  catch(e){status('No se pudo añadir: '+e.message);}
+ });
+ $('v16-apply').addEventListener('click',()=>{
+  if(!selectedBlockId)return;
+  const changes=Object.fromEntries(['title','description','button','href','align','tone'].map(k=>[k,$('v16-'+k).value]));
+  try{updateBlocksV16(Blocks.patch(state.v16,currentBlockPage(),selectedBlockId,changes));}catch(e){status(e.message);}
+ });
+ $('v16-save-reusable').addEventListener('click',()=>{
+  if(!selectedBlockId)return;try{updateBlocksV16(Blocks.saveReusable(state.v16,currentBlockPage(),selectedBlockId));status('Copia guardada en la biblioteca reutilizable.');}catch(e){status(e.message)}
+ });
+ $('v16-duplicate').addEventListener('click',()=>{
+  const item=Blocks.normalize(state.v16).pages[currentBlockPage()].find(b=>b.id===selectedBlockId);if(!item)return;
+  try{const next=Blocks.add(state.v16,currentBlockPage(),item);selectedBlockId=next.pages[currentBlockPage()].at(-1).id;updateBlocksV16(next);}catch(e){status(e.message)}
+ });
+ $('v16-delete').addEventListener('click',()=>{
+  if(!selectedBlockId||!confirm('¿Eliminar este bloque de la página?'))return;
+  updateBlocksV16(Blocks.remove(state.v16,currentBlockPage(),selectedBlockId));selectedBlockId=null;syncBlocksV16();
+ });
+ $('v16-feedback-file').addEventListener('change',async e=>{
+  const file=e.target.files?.[0];e.target.value='';if(!file)return;
+  if(file.size>25000){$('v16-review-results').textContent='Archivo demasiado grande.';return;}
+  try{
+   const review=Review.normalizeReview(JSON.parse(await file.text()));
+   if(review.type!=='abel-offline-review'||review.version!==16||!review.entries.length)throw Error('Sin comentarios válidos');
+   const box=$('v16-review-results');box.replaceChildren();
+   box.append(el('strong','Comentarios revisados de '+review.project+' (no constituyen firma ni aprobación formal):'));
+   for(const item of review.entries)box.append(el('p',item.page+' · '+item.decision+' · '+item.note));
+   status('Comentarios importados localmente. No se han enviado al CRM ni guardado datos personales.');
+  }catch{$('v16-review-results').textContent='No se pudo leer una revisión V16 válida.';}
+ });
+}
+
 function renderPreview(){
  if(!runtimeCss||!runtimeJs)return;
  const config=Multipage.normalize(state.v14),selected=$('v14-page-preview')?.value||'home';
- $('live-preview').srcdoc=config.multipage?Multipage.makePage(state,{...config,v15:state.v15},config.pages.includes(selected)?selected:'home',true,runtimeCss,runtimeJs):Engine.htmlText(state,true,runtimeCss,runtimeJs);
+ $('live-preview').srcdoc=config.multipage?Multipage.makePage(state,{...config,v15:state.v15,v16:state.v16},config.pages.includes(selected)?selected:'home',true,runtimeCss,runtimeJs):Blocks.renderInto(Engine.htmlText(state,true,runtimeCss,runtimeJs),state.v16,'home',true);
  $('live-preview').dataset.device=state.device;
 }
 function bindFields(){
  $('v14-template').addEventListener('change',e=>{if(!e.target.value)return;
-  replaceProject({...Templates.apply(e.target.value,state),v14:state.v14});status('Plantilla premium aplicada; puedes modificarla libremente.');});
+  replaceProject({...Templates.apply(e.target.value,state),v14:state.v14,v15:state.v15,v16:state.v16,formMode:state.formMode});status('Plantilla premium aplicada; puedes modificarla libremente.');});
  $('v14-multipage').addEventListener('change',e=>{update({v14:{...state.v14,multipage:e.target.checked}});status(e.target.checked?'Modo multipágina activado; selecciona las páginas.':'Modo de una sola página activado.');});
- $('v14-page-preview').addEventListener('change',()=>{syncPageEditor();renderPreview();});
- bindPageEditor();
+ $('v14-page-preview').addEventListener('change',()=>{syncPageEditor();renderPreview();syncBlocksV16();selectedBlockId=null;});
+ bindPageEditor();bindBlocksV16();
  $('v15-form-mode').addEventListener('change',e=>{
   const next=e.target.value,model=Pages.normalize(state.v15);
   if(next==='formsubmit'){
@@ -244,7 +321,7 @@ function bindFields(){
  $('sector').addEventListener('change',e=>{
   const newSector=e.target.value,prev=state;
   replaceProject({...Engine.defaults(newSector),theme:prev.theme,style:prev.style,font:prev.font,layout:prev.layout,
-   custom:prev.custom,colors:prev.colors,sections:prev.sections,order:prev.order,maintenance:prev.maintenance,email:prev.email,phone:prev.phone,location:prev.location,v14:prev.v14,v15:prev.v15,formMode:prev.formMode});
+   custom:prev.custom,colors:prev.colors,sections:prev.sections,order:prev.order,maintenance:prev.maintenance,email:prev.email,phone:prev.phone,location:prev.location,v14:prev.v14,v15:prev.v15,v16:prev.v16,formMode:prev.formMode});
   status('Plantilla de sector actualizada. Tus colores, bloques y datos de contacto se han conservado.');
  });
  for(const field of ['brand','headline','intro','cta','email','phone','location','font','layout','style','image','maintenance']){
@@ -285,6 +362,9 @@ function bindFields(){
 function refresh(){renderPreview();quote();syncControls();}
 function onInlineEdit(event){
  const iframe=$('live-preview');if(event.source!==iframe.contentWindow||!event.data)return;
+ if(event.data.type==='ABEL_V16_SELECT'){
+  if(typeof event.data.id==='string'&&Blocks.normalize(state.v16).pages[currentBlockPage()].some(b=>b.id===event.data.id)){selectedBlockId=event.data.id;syncBlocksV16();$('v16-inspector').scrollIntoView({behavior:'smooth',block:'nearest'});}return;
+ }
  if(event.data.type==='ABEL_V14_SELECT'){
   const {kind,key,value}=event.data;if(typeof value!=='string'||value.length>240)return;
   selectedText={kind,key};$('v14-selected-label').textContent='Editando '+kind+' · '+key;
@@ -315,7 +395,7 @@ async function exportZip(){
  if(busy)return;busy=true;$('export').disabled=true;status('Preparando los archivos del proyecto.');
  try{
   if(!runtimeCss||!runtimeJs)throw Error('No se han cargado las plantillas');
-  const files=Multipage.generate(state,{...state.v14,v15:state.v15},runtimeCss,runtimeJs);
+  const files=Multipage.generate(state,{...state.v14,v15:state.v15,v16:state.v16},runtimeCss,runtimeJs);
   const assets=Engine.IMAGES;
   for(const name of assets){
    const response=await fetch('../assets/'+name,{cache:'default'});
@@ -324,9 +404,27 @@ async function exportZip(){
    files['assets/'+name]=bin;
   }
   if(state.customPhoto)files['assets/'+Engine.imageName(state)]=Engine.imageBytes(state.customPhoto);
+  const audit=Preflight.inspect(files);
+  if(!audit.passed)throw Error('Revisión automática: '+audit.errors.slice(0,3).join('; '));
+  files['CALIDAD-V16.txt']=Preflight.report(audit);
+  const estimate=Core.quote(state,Proposal),parts=Blocks.report(state.v16);
+  const pages=Multipage.normalize(state.v14);
+  files['FICHA-V16.txt']=[
+   'ABEL AUTOMATION · FICHA COMERCIAL ORIENTATIVA V16','',
+   'Proyecto: '+state.brand,
+   'Sector: '+Core.SECTORS[state.sector].name,
+   'Modalidad: '+(pages.multipage?'Multipágina':'Página única'),
+   'Páginas elegidas: '+(pages.multipage?pages.pages.length:1),
+   'Componentes adicionales: '+parts.total,
+   'Presupuesto inicial orientativo: '+Proposal.euro(estimate.total),
+   'Mantenimiento: '+(estimate.maintenance?.price?Proposal.euro(estimate.maintenance.price)+'/mes':'No seleccionado'),
+   'Estado: BORRADOR · pendiente de revisión y aceptación del alcance.',
+   'No incluye datos privados de contacto ni confirma contratación, alojamiento o pagos.',
+   'Revisa también CALIDAD-V16.txt y las condiciones de publicación antes de entregar.'
+  ].join('\n');
   const zip=Engine.buildZip(files);
-  saveFile(zip,state.v14?.multipage?'Abel-Automation-Multipagina-V15.zip':'Abel-Automation-Web-V15.zip','application/zip');
-  status('Web real exportada en ZIP con '+Object.keys(files).length+' archivos. No se ha publicado nada.');
+  saveFile(zip,state.v14?.multipage?'Abel-Automation-Multipagina-V16.zip':'Abel-Automation-Web-V16.zip','application/zip');
+  status('ZIP comprobado: '+audit.metrics.pages+' páginas, '+audit.metrics.links+' enlaces y '+Object.keys(files).length+' archivos. Avisos: '+audit.warnings.length+'. No se ha publicado nada.');
  }catch(e){status('No se pudo exportar: '+(e?.message||'error desconocido')+'. Ejecuta el proyecto desde un servidor local.');}
  finally{busy=false;$('export').disabled=false;}
 }
@@ -334,25 +432,25 @@ function downloadPdf(){
  try{
   const ids=Core.priceIds(state);
   const document={...ids,client:'Por definir',project:'Web para '+state.brand,scope:Core.brief(state)+
-   '\nV12: web estática exportable. Contacto: '+(state.email?'correo configurado':'sin correo')+'. Reservas, QR, mapas y automatizaciones sujetos a desarrollo adicional.'};
-  saveFile(Proposal.pdfDocument(document),'Propuesta-Abel-Automation-V12.pdf','application/pdf');
+   '\nV16: '+(state.v14?.multipage?'web multipágina':'web estática')+' con '+Blocks.report(state.v16).total+' bloques adicionales. Contacto: '+(state.email?'correo configurado':'sin correo')+'. Reservas, QR, mapas y automatizaciones sujetos a desarrollo adicional.'};
+  saveFile(Proposal.pdfDocument(document),'Propuesta-Abel-Automation-V16.pdf','application/pdf');
   status('Propuesta PDF descargada con los precios orientativos actuales.');
  }catch{status('No se pudo crear el presupuesto PDF.');}
 }
 function crmDraft(){
  try{
   const q=Core.quote(state,Proposal),draft={version:9,name:state.brand,sector:Core.SECTORS[state.sector].name,estimate:q.total,
-   notes:(Core.brief(state)+'\nCódigo exportable: Web Builder V12.').slice(0,3500)};
+   notes:(Core.brief(state)+'\nStudio V16: '+Blocks.report(state.v16).total+' bloques editables. Estado: proyecto no publicado.').slice(0,3500)};
   sessionStorage.setItem('abel-v9-crm-draft',JSON.stringify(draft));
   location.href='../herramientas/crm.html#studio-v9';
  }catch{status('No se pudo preparar el CRM en esta sesión.');}
 }
-function saveJson(){saveFile(JSON.stringify({...Engine.normalize(state),v14:Multipage.normalize(state.v14),v15:Pages.normalize(state.v15)},null,2),'Abel-Automation-Proyecto-V15.json','application/json');status('Proyecto completo y estructura de páginas guardados en este dispositivo.');}
+function saveJson(){saveFile(JSON.stringify({...Engine.normalize(state),v14:Multipage.normalize(state.v14),v15:Pages.normalize(state.v15),v16:Blocks.normalize(state.v16)},null,2),'Abel-Automation-Proyecto-V16.json','application/json');status('Proyecto completo y estructura de páginas guardados en este dispositivo.');}
 function importJson(file){
  if(!file)return;
  if(file.size>4_800_000){status('Archivo demasiado grande.');return;}
  file.text().then(text=>{const raw=JSON.parse(text),base=raw.version===14?raw.project:raw;
-  replaceProject({...Engine.importProject(JSON.stringify(base)),v14:Multipage.normalize(raw.v14||raw.pages&&{multipage:true,pages:raw.pages}||{}),v15:Pages.normalize(raw.v15||{})});status('Proyecto importado. Revisa contenidos antes de exportar.');})
+  replaceProject({...Engine.importProject(JSON.stringify(base)),v14:Multipage.normalize(raw.v14||raw.pages&&{multipage:true,pages:raw.pages}||{}),v15:Pages.normalize(raw.v15||{}),v16:Blocks.normalize(raw.v16||{})});status('Proyecto importado. Revisa contenidos antes de exportar.');})
  .catch(()=>status('No se pudo abrir un JSON V12 o V9 válido.'));
 }
 async function init(){
@@ -366,15 +464,15 @@ async function init(){
  try{
   const fromStudio=sessionStorage.getItem('abel-v13-open-project');
   const raw=sessionStorage.getItem('abel-v12-from-v9');
-  if(fromStudio){const data=JSON.parse(fromStudio);state=Engine.importProject(fromStudio);state.v14=Multipage.normalize(data.v14||{});state.v15=Pages.normalize(data.v15||{});sessionStorage.removeItem('abel-v13-open-project');}
+  if(fromStudio){const data=JSON.parse(fromStudio);state=Engine.importProject(fromStudio);state.v14=Multipage.normalize(data.v14||{});state.v15=Pages.normalize(data.v15||{});state.v16=Blocks.normalize(data.v16||{});sessionStorage.removeItem('abel-v13-open-project');}
   else if(raw){const parsed=JSON.parse(raw);state=Engine.fromV9(parsed);sessionStorage.removeItem('abel-v12-from-v9');}
-  else if(!new URLSearchParams(location.search).has('new')&&!new URLSearchParams(location.search).has('sector')&&Store?.draft()){state=Store.draft();state.v14=Multipage.normalize(state.v14||{});state.v15=Pages.normalize(state.v15||{});status('Se ha recuperado el diseño autoguardado de este navegador.');}
+  else if(!new URLSearchParams(location.search).has('new')&&!new URLSearchParams(location.search).has('sector')&&Store?.draft()){state=Store.draft();state.v14=Multipage.normalize(state.v14||{});state.v15=Pages.normalize(state.v15||{});state.v16=Blocks.normalize(state.v16||{});status('Se ha recuperado el diseño autoguardado de este navegador.');}
   else if(new URLSearchParams(location.search).has('sector')){
    const sector=new URLSearchParams(location.search).get('sector');
    if(Object.prototype.hasOwnProperty.call(Core.SECTORS,sector))state=Engine.defaults(sector);
   }
  }catch{status('No se pudo recuperar la configuración anterior. Se usará la plantilla inicial.');}
- state.v14=Multipage.normalize(state.v14||{});state.v15=Pages.normalize(state.v15||{});refresh();historyUI();
+ state.v14=Multipage.normalize(state.v14||{});state.v15=Pages.normalize(state.v15||{});state.v16=Blocks.normalize(state.v16||{});refresh();historyUI();
  try{
   const [css,js]=await Promise.all(['../assets/site-runtime-v12.css','../assets/site-runtime-v12.js'].map(async url=>{
    const r=await fetch(url);if(!r.ok)throw Error('No se pudo cargar '+url);return r.text();
