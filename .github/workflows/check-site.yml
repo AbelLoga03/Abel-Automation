@@ -1,4 +1,4 @@
-name: Validate Abel Automation V13
+name: Validate Abel Automation V14
 on:
   push:
     branches: [main, "feature/**"]
@@ -33,3 +33,5 @@ jobs:
         run: node scripts/check-v12.mjs
       - name: Validate V13 project library, safe local autosave, editor UX and publish review
         run: node scripts/check-v13.mjs
+      - name: Validate V14 multi-page real ZIP, templates and safe project versioning
+        run: node scripts/check-v14.mjs
