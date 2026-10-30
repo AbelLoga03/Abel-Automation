@@ -1,0 +1,49 @@
+name: V15 Lighthouse Performance and Accessibility
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lighthouse-v15:
+    name: Lighthouse local Studio and Builder
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Lighthouse and Chromium launcher
+        run: npm install --no-save --ignore-scripts lighthouse@13.6.0 @playwright/test@1.56.1
+      - name: Install local Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Audit Studio and Builder on local HTTP (no personal data)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p lighthouse-v15
+          python3 -m http.server 8766 --bind 127.0.0.1 > lighthouse-v15/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 3
+          export CHROME_PATH
+          CHROME_PATH="$(node -p "require('@playwright/test').chromium.executablePath()")"
+          for target in "estudio/studio-v13.html" "estudio/builder-v12.html?new=1"; do
+            if [[ "$target" == *studio-v13* ]]; then name=studio; else name=builder; fi
+            npx lighthouse "http://127.0.0.1:8766/$target" \
+              --chrome-flags="--headless --no-sandbox --disable-gpu" \
+              --only-categories=performance,accessibility,best-practices,seo \
+              --output=json --output-path="lighthouse-v15/$name.json" --quiet
+          done
+          node scripts/summarize-lighthouse-v15.mjs
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v15-lighthouse-reports
+          path: lighthouse-v15/
+          retention-days: 14
